@@ -312,6 +312,8 @@ int task_main_write(int argc, char* argv[])
 
 		sp.run_pos_control = true;
 
+		sp.yaw = ang + M_PI / 2.0f;
+
 		sp.sp_x = R * cosf(ang);
 		sp.sp_y = R * sinf(ang);
 		sp.sp_z = -50.0f;
