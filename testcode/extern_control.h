@@ -138,4 +138,6 @@ static int crc16_check(uint8_t *buff, uint8_t len, uint16_t crc16);
 
 static int set_opt(int fd, int nSpeed, int nBits, char nEvent, int nStop);
 
+static int create_points();
+
 #endif /* SRC_DRIVERS_Extern_CONTROL_EXTERN_CONTROL_H_ */

@@ -9,6 +9,18 @@
 
 uint16_t crc16table[256] = { 0x2ae2, 0xf965, 0xa429, 0x1b33, 0xd0ce, 0xd13a, 0x69c2, 0xe829, 0xa785, 0xbec6, 0xe141, 0x3093, 0xb528, 0x94d3, 0xdfb9, 0x5c62, 0x98c2, 0x6fad, 0x234b, 0x8f03, 0xba66, 0x1ebb, 0x2060, 0xb68e, 0x68c9, 0xa3b5, 0xbceb, 0x17dc, 0x7b28, 0x63ba, 0x91aa, 0xa60b, 0x5d20, 0x35d4, 0xc13e, 0x2def, 0x870e, 0x2b01, 0x9618, 0xae94, 0x69c7, 0x775a, 0xdf27, 0x1ef1, 0x0c2e, 0x3ee1, 0xfb52, 0x24f0, 0xae8e, 0x1e9e, 0x33f3, 0xe8f4, 0xbd58, 0xd452, 0x1f83, 0x2622, 0x7808, 0x5c6f, 0x3dfe, 0x7331, 0xc029, 0x4fa8, 0x193d, 0x1d4a, 0x057d, 0xda7b, 0xcb38, 0x8c8b, 0x857d, 0x6151, 0x3b20, 0x6f44, 0x58ab, 0x9a47, 0x8e35, 0xe4d9, 0x5928, 0x0988, 0x09ca, 0x87b6, 0xa825, 0xbdbd, 0x70ab, 0x657e, 0x9210, 0x102f, 0x0ba1, 0x8a19, 0x6c9e, 0xc99e, 0xfd4a, 0x2cc8, 0x1948, 0x9687, 0xca11, 0x1ec5, 0xf102, 0x954a, 0x2b50, 0x7680, 0x769b, 0xe670, 0xe5c5, 0xcf46, 0x00b8, 0xf3fa, 0x3420, 0x59e1, 0x7d83, 0xbdea, 0xe197, 0x25a9, 0x7ba8, 0xd243, 0x8b28, 0x8db8, 0xe272, 0x96c9, 0x17d2, 0x4f11, 0xe067, 0x951c, 0x7bd9, 0xf9af, 0x2ba4, 0x45eb, 0x9874, 0x9ca7, 0x5b35, 0xc3c5, 0x9327, 0x51d0, 0x2a36, 0x78ed, 0x2117, 0x2aee, 0xece8, 0xd537, 0x84cf, 0xea6b, 0x9322, 0xe667, 0x1015, 0x0ecb, 0xb8ab, 0x9b3d, 0x9c83, 0x9b1e, 0xb206, 0x3456, 0xea2f, 0x126f, 0x4972, 0xe608, 0x0c1f, 0xf516, 0xabf3, 0x2494, 0x91be, 0x0729, 0x6859, 0x24e6, 0xd8f8, 0x928f, 0x1dd4, 0x7a0f, 0xbd7d, 0x8abc, 0x4f47, 0xc24d, 0x7528, 0xe269, 0x28b5, 0x853d, 0xf134, 0xe160, 0xa07b, 0x0db9, 0x7c7f, 0xd281, 0xc20e, 0xe6ae, 0xe4f0, 0x0b81, 0xccb7, 0x7110, 0x0098, 0xf8aa, 0x95a4, 0x1256, 0x7fd3, 0xfdfd, 0x373d, 0x58cc, 0x908d, 0xd510, 0xd2db, 0xce0a, 0x5fcd, 0x2224, 0x1058, 0xd4f5, 0x048e, 0x390d, 0xda32, 0x75c3, 0x9a6d, 0xfaad, 0x837c, 0x16ed, 0xcd30, 0xc58a, 0x7d9b, 0x3221, 0xd10b, 0xca52, 0xa331, 0x51a4, 0xc2fd, 0x38d6, 0xe3f9, 0x42d1, 0xb6d3, 0x1b37, 0x9b9d, 0xc760, 0x7047, 0x6e7a, 0x956c, 0xd014, 0x109e, 0x25c4, 0x250a, 0x952b, 0xded1, 0x7f3d, 0x0aef, 0x793f, 0x79eb, 0x0e6b, 0x902d, 0xc71b, 0xd3f5, 0x8dc8, 0xf93d, 0x2502, 0x581c, 0x9c6f, 0xf6a5, 0x1b1a, 0x5546, 0xda9f, 0x5dec, 0x8c19, 0x75d7, 0x7989 };
 
+typedef struct point_s
+{
+	float x;
+	float y;
+	float z;
+	float yaw;
+} point_s;
+
+point_s *points = NULL;
+uint32_t pcount = 0;
+uint32_t pindex = 0;
+
 s_buff _recv;
 uint8_t _buff[SIZE_BUFF];
 
@@ -24,6 +36,9 @@ static int frame_pos_crc0 = 0;
 static int frame_pos_crc1 = 0;
 static int frame_pos_foot0 = 0;
 static int frame_pos_foot1 = 0;
+
+static vehicle_pos_s pos = { 0 };
+static vehicle_sp_s sp = { 0 };
 
 int frame_pos(int len_data)
 {
@@ -106,6 +121,8 @@ int send_frame_data(char *frame, int len)
 
 int start(int argc, char *argv[])
 {
+	create_points();
+
 	_recv.head = 0;
 	_recv.tail = 0;
 	_recv.size = SIZE_BUFF;
@@ -260,9 +277,6 @@ int task_main_read(int argc, char* argv[])
 	pthread_t pthddr;
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &task_main_write, NULL);
 
-	vehicle_sp_s sp = { 0 };
-	vehicle_pos_s pos = { 0 };
-
 	while (!_should_exit)
 	{
 		frame_read_data();
@@ -272,11 +286,11 @@ int task_main_read(int argc, char* argv[])
 			{
 				case DATA_TYPE_POS:
 					memcpy(&pos, &_buff[frame_pos_data], sizeof(vehicle_pos_s));
-					printf("%7.3f, %7.3f, %7.3f ", pos.x, pos.y, pos.z);
-					printf("%7.3f, %7.3f, %7.3f ", pos.vx, pos.vy, pos.vz);
+//					printf("%7.3f, %7.3f, %7.3f ", pos.x, pos.y, pos.z);
+//					printf("%7.3f, %7.3f, %7.3f ", pos.vx, pos.vy, pos.vz);
 					//printf("%15.7f, %15.7f, %7.3f ", pos.lat, pos.lon, pos.alt);
 					//printf("%7.3f, %7.3f, %7.3f ", pos.vel_n, pos.vel_e, pos.vel_d);
-					printf("\n");
+//					printf("\n");
 					break;
 
 				case DATA_TYPE_SP:
@@ -299,24 +313,99 @@ int task_main_read(int argc, char* argv[])
 	return 0;
 }
 
-float R = 175.0f;
-float ang = 0.0f;
+float spx = 0.0f;
+float spy = 0.0f;
+
+float last_spx = 0.0f;
+float last_spy = 0.0f;
+
+float tspx = 0.0f;
+float tspy = 0.0f;
+
+float accept_r = 25.0f;
+
+int create_points()
+{
+	float r = 500.0f;
+	float alt = -50.0f;
+	float angle = 0.0f;
+	float det = 0.01f;
+	pcount = (int) (M_PI * 2.0 / det);
+	points = malloc(sizeof(point_s) * pcount);
+	int j = 0;
+	for (int i = 0; i < pcount; i++)
+	{
+		angle += det;
+
+		float x = r * cosf(angle);
+		float y = r * sinf(angle);
+		float dis = sqrt(pow(points[j].x - x, 2.0) + pow(points[j].y - y, 2.0));
+		if (j > 0)
+		{
+			if (dis > accept_r)
+			{
+				points[j].x = x;
+				points[j].y = y;
+				points[j].z = alt;
+				points[j].yaw = angle + M_PI / 2.0f;
+				j++;
+			}
+		}
+		else
+		{
+			points[j].x = x;
+			points[j].y = y;
+			points[j].z = alt;
+			points[j].yaw = angle + M_PI / 2.0f;
+			j++;
+		}
+
+		//printf("%3u %7.3f %7.3f %7.3f\n", i, angle, points[i].x, points[i].y);
+	}
+	pcount = j;
+}
+
+int is_reached()
+{
+//	float dis = sqrt(pow(pos.x - points[pindex % pcount].x, 2.0) + pow(pos.y - points[pindex % pcount].y, 2.0));
+	float dis = sqrt(pow(pos.x - tspx, 2.0) + pow(pos.y - tspy, 2.0));
+	printf("::: %3u %7.3f %7.3f %7.3f %7.3f %7.3f\n", pindex, pos.x, tspx, pos.y, tspy, dis);
+	if (dis < accept_r)
+	{
+		return 1;
+	}
+	return 0;
+}
 
 int task_main_write(int argc, char* argv[])
 {
 	vehicle_sp_s sp = { 0 };
 
+	spx = points[pindex % pcount].x;
+	spy = points[pindex % pcount].y;
+
 	while (!_should_exit)
 	{
-		ang += 0.001;
+		if (is_reached())
+		{
+			pindex++;
+
+			last_spx = spx;
+			last_spy = spy;
+
+			spx = points[pindex % pcount].x;
+			spy = points[pindex % pcount].y;
+		}
 
 		sp.run_pos_control = true;
 
-		sp.yaw = ang + M_PI / 2.0f;
+		sp.yaw = points[pindex % pcount].yaw;
 
-		sp.sp_x = R * cosf(ang);
-		sp.sp_y = R * sinf(ang);
-		sp.sp_z = -50.0f;
+		tspx = last_spx * 0.99 + spx * 0.01;
+		tspy = last_spy * 0.99 + spy * 0.01;
+		sp.sp_x = tspx; //points[pindex % pcount].x;
+		sp.sp_y = tspy; //points[pindex % pcount].y;
+		sp.sp_z = points[pindex % pcount].z;
 
 		sp.vel_sp_x = 0.0f;
 		sp.vel_sp_y = 0.0f;
