@@ -322,96 +322,221 @@ float last_spy = 0.0f;
 float tspx = 0.0f;
 float tspy = 0.0f;
 
-float accept_r = 25.0f;
+float accept_r = 3.0f;
 
 int create_points()
 {
-	float r = 500.0f;
+//	float r = 50.0f;
+//	float alt = -50.0f;
+//	float angle = 0.0f;
+//	float det = 0.01f;
+//	pcount = (int) (M_PI * 2.0 / det);
+//	points = malloc(sizeof(point_s) * pcount);
+//	int j = 0;
+//	for (int i = 0; i < pcount; i++)
+//	{
+//		angle += det;
+//
+//		float x = r * cosf(angle);
+//		float y = r * sinf(angle);
+//		float dis = sqrt(pow(points[j].x - x, 2.0) + pow(points[j].y - y, 2.0));
+//		if (j > 0)
+//		{
+//			if (dis > accept_r)
+//			{
+//				points[j].x = x;
+//				points[j].y = y;
+//				points[j].z = alt;
+//				points[j].yaw = angle + M_PI / 2.0f;
+//				j++;
+//			}
+//		}
+//		else
+//		{
+//			points[j].x = x;
+//			points[j].y = y;
+//			points[j].z = alt;
+//			points[j].yaw = angle + M_PI / 2.0f;
+//			j++;
+//		}
+//
+//		//printf("%3u %7.3f %7.3f %7.3f\n", i, angle, points[i].x, points[i].y);
+//	}
+//	pcount = j;
+
 	float alt = -50.0f;
-	float angle = 0.0f;
-	float det = 0.01f;
-	pcount = (int) (M_PI * 2.0 / det);
+
+	pcount = 4;
 	points = malloc(sizeof(point_s) * pcount);
+
 	int j = 0;
-	for (int i = 0; i < pcount; i++)
-	{
-		angle += det;
+	points[j].x = 50.0;
+	points[j].y = 0.0f;
+	points[j].z = alt;
+	points[j].yaw = 0.0f;
+	j++;
 
-		float x = r * cosf(angle);
-		float y = r * sinf(angle);
-		float dis = sqrt(pow(points[j].x - x, 2.0) + pow(points[j].y - y, 2.0));
-		if (j > 0)
-		{
-			if (dis > accept_r)
-			{
-				points[j].x = x;
-				points[j].y = y;
-				points[j].z = alt;
-				points[j].yaw = angle + M_PI / 2.0f;
-				j++;
-			}
-		}
-		else
-		{
-			points[j].x = x;
-			points[j].y = y;
-			points[j].z = alt;
-			points[j].yaw = angle + M_PI / 2.0f;
-			j++;
-		}
+	points[j].x = 100.0;
+	points[j].y = 0.0f;
+	points[j].z = alt;
+	points[j].yaw = 0.0f;
+	j++;
 
-		//printf("%3u %7.3f %7.3f %7.3f\n", i, angle, points[i].x, points[i].y);
-	}
-	pcount = j;
+	points[j].x = 100.0;
+	points[j].y = 10.0f;
+	points[j].z = alt;
+	points[j].yaw = 0.0f;
+	j++;
+
+	points[j].x = 50.0;
+	points[j].y = 10.0f;
+	points[j].z = alt;
+	points[j].yaw = 0.0f;
+	j++;
+
+	pindex = 0;
+}
+
+float dis()
+{
+	return sqrt(pow(pos.x - points[pindex % pcount].x, 2.0) + pow(pos.y - points[pindex % pcount].y, 2.0));
 }
 
 int is_reached()
 {
 //	float dis = sqrt(pow(pos.x - points[pindex % pcount].x, 2.0) + pow(pos.y - points[pindex % pcount].y, 2.0));
-	float dis = sqrt(pow(pos.x - tspx, 2.0) + pow(pos.y - tspy, 2.0));
-	printf("::: %3u %7.3f %7.3f %7.3f %7.3f %7.3f\n", pindex, pos.x, tspx, pos.y, tspy, dis);
-	if (dis < accept_r)
+//	float dis = sqrt(pow(pos.x - tspx, 2.0) + pow(pos.y - tspy, 2.0));
+//	printf("%3u %7.3f %7.3f %7.3f %7.3f %7.3f\n", pindex, pos.x, tspx, pos.y, tspy, dis);
+	float d = dis();
+	//printf("%3u %7.3f %7.3f %7.3f %7.3f %7.3f\n", pindex % pcount, pos.x, points[pindex % pcount].x, pos.y, points[pindex % pcount].y, dis);
+	if (d < accept_r)
 	{
 		return 1;
 	}
 	return 0;
 }
 
+int mode = 0;
+float angle = -M_PI / 2.0f;
+
 int task_main_write(int argc, char* argv[])
 {
 	vehicle_sp_s sp = { 0 };
 
-	spx = points[pindex % pcount].x;
-	spy = points[pindex % pcount].y;
+//	spx = points[pindex % pcount].x;
+//	spy = points[pindex % pcount].y;
 
 	while (!_should_exit)
 	{
-		if (is_reached())
+//		if (is_reached())
+//		{
+//			pindex++;
+//
+//			last_spx = spx;
+//			last_spy = spy;
+//
+//			spx = points[pindex % pcount].x;
+//			spy = points[pindex % pcount].y;
+//		}
+//		sp.run_pos_control = true;
+//		sp.run_alt_control = true;
+//
+//		sp.yaw = points[pindex % pcount].yaw;
+//
+//		tspx = last_spx * 0.99 + spx * 0.01;
+//		tspy = last_spy * 0.99 + spy * 0.01;
+//		sp.sp_x = tspx; //points[pindex % pcount].x;
+//		sp.sp_y = tspy; //points[pindex % pcount].y;
+//		sp.sp_z = points[pindex % pcount].z;
+//
+//		sp.vel_sp_x = 0.0f;
+//		sp.vel_sp_y = 0.0f;
+//		sp.vel_sp_z = 0.0f;
+//
+//		send_data_sp(&sp);
+
+		//printf("%d %f %d\n", mode, dis(), pindex % pcount);
+
+		if (mode == 0 && (dis() < 10.0f) && (pindex % pcount == 1))
 		{
-			pindex++;
-
-			last_spx = spx;
-			last_spy = spy;
-
-			spx = points[pindex % pcount].x;
-			spy = points[pindex % pcount].y;
+			mode = 1;
 		}
 
-		sp.run_pos_control = true;
+		if (mode == 0)
+		{
+			if (is_reached())
+			{
+				pindex++;
+			}
+		}
 
-		sp.yaw = points[pindex % pcount].yaw;
+		if (mode == 0)
+		{
+			sp.run_pos_control = true;
+			sp.run_alt_control = true;
 
-		tspx = last_spx * 0.99 + spx * 0.01;
-		tspy = last_spy * 0.99 + spy * 0.01;
-		sp.sp_x = tspx; //points[pindex % pcount].x;
-		sp.sp_y = tspy; //points[pindex % pcount].y;
-		sp.sp_z = points[pindex % pcount].z;
+			sp.sp_x = points[pindex % pcount].x;
+			sp.sp_y = points[pindex % pcount].y;
+			sp.sp_z = points[pindex % pcount].z;
 
-		sp.vel_sp_x = 0.0f;
-		sp.vel_sp_y = 0.0f;
-		sp.vel_sp_z = 0.0f;
+			sp.yaw = 0;
+			sp.vel_sp_x = 0.0f;
+			sp.vel_sp_y = 0.0f;
+			sp.vel_sp_z = 0.0f;
 
-		send_data_sp(&sp);
+			send_data_sp(&sp);
+		}
+
+		if (mode == 1)
+		{
+			printf("%f %f %f\n", (points[1].x - pos.x) / 2, (points[1].y - pos.y) / 2, dis());
+			sp.run_pos_control = false;
+			sp.run_alt_control = true;
+
+			sp.sp_x = 0.0;
+			sp.sp_y = 0.0f;
+			sp.sp_z = points[pindex % pcount].z;
+
+			sp.yaw = 0;
+
+			sp.vel_sp_x = (points[1].x - pos.x) / 2.0f;
+			sp.vel_sp_y = (points[1].y - pos.y) / 2.0f;
+
+			send_data_sp(&sp);
+
+			if (dis() < 3.0f)
+			{
+				angle = -M_PI / 2.0f;
+				mode = 2;
+				pindex++;
+			}
+		}
+
+		if (mode == 2)
+		{
+			if (angle > M_PI / 2.0f)
+			{
+				mode = 0;
+				pindex = 2;
+				continue;
+			}
+			printf("MODE 2 %.7f\n", angle);
+			angle += 0.003;
+
+			sp.run_pos_control = true;
+			sp.run_alt_control = true;
+
+			sp.sp_x = 5.0f * cosf(angle) + 100.0f;
+			sp.sp_y = 5.0f * sinf(angle) + 5.0f;
+			sp.sp_z = points[pindex % pcount].z;
+
+			sp.yaw = 0;
+			sp.vel_sp_x = 0.0f;
+			sp.vel_sp_y = 0.0f;
+			sp.vel_sp_z = 0.0f;
+
+			send_data_sp(&sp);
+		}
 
 		usleep(DEV_RW_USLEEP);
 	}

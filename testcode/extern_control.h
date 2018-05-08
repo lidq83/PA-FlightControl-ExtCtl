@@ -84,6 +84,7 @@ typedef struct vehicle_pos_s
 typedef struct vehicle_sp_s
 {
 	bool run_pos_control;
+	bool run_alt_control;
 	float yaw;
 	struct
 	{
