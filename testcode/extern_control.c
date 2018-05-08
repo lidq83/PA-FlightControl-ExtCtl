@@ -39,6 +39,7 @@ static int frame_pos_foot1 = 0;
 
 static vehicle_pos_s pos = { 0 };
 static vehicle_sp_s sp = { 0 };
+static rc_s rc = { 0 };
 
 int frame_pos(int len_data)
 {
@@ -275,6 +276,8 @@ int task_main_read(int argc, char* argv[])
 	_serial_fd = open(DEV_NAME, O_RDWR);
 	set_opt(_serial_fd, DEV_BAUDRATE, 8, 'N', 1);
 	pthread_t pthddr;
+	rc_s rc_temp = { 0 };
+
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &task_main_write, NULL);
 
 	while (!_should_exit)
@@ -296,6 +299,30 @@ int task_main_read(int argc, char* argv[])
 				case DATA_TYPE_SP:
 					memcpy(&sp, &_buff[frame_pos_data], sizeof(vehicle_sp_s));
 					//printf("%.4f %.4f %.4f\n", );
+					break;
+
+				case DATA_TYPE_RC:
+					memcpy(&rc_temp, &_buff[frame_pos_data], sizeof(rc_s));
+
+					int st = 1;
+					for (uint32_t i = 0; i < rc_temp.channel_count; i++)
+					{
+						if (rc_temp.values[i] < 500 || rc_temp.values[i] > 2500)
+						{
+							st = 0;
+							break;
+						}
+					}
+					if (st && rc_temp.channel_count > 4)
+					{
+//						printf("%d %d %d ", rc.rc_failsafe, rc.rc_lost, rc.channel_count);
+//						for (int i = 0; i < rc.channel_count; i++)
+//						{
+//							printf("%8u ", rc.values[i]);
+//						}
+//						printf("\n");
+						memcpy(&rc, &rc_temp, sizeof(rc_s));
+					}
 					break;
 
 				default:
@@ -457,87 +484,108 @@ int task_main_write(int argc, char* argv[])
 
 		//printf("%d %f %d\n", mode, dis(), pindex % pcount);
 
-		if (mode == 0 && (dis() < 10.0f) && (pindex % pcount == 1))
-		{
-			mode = 1;
-		}
-
-		if (mode == 0)
-		{
-			if (is_reached())
-			{
-				pindex++;
-			}
-		}
-
-		if (mode == 0)
+		if (rc.values[11] < 1500)
 		{
 			sp.run_pos_control = true;
 			sp.run_alt_control = true;
 
-			sp.sp_x = points[pindex % pcount].x;
-			sp.sp_y = points[pindex % pcount].y;
-			sp.sp_z = points[pindex % pcount].z;
-
 			sp.yaw = 0;
-			sp.vel_sp_x = 0.0f;
-			sp.vel_sp_y = 0.0f;
-			sp.vel_sp_z = 0.0f;
 
-			send_data_sp(&sp);
-		}
-
-		if (mode == 1)
-		{
-			printf("%f %f %f\n", (points[1].x - pos.x) / 2, (points[1].y - pos.y) / 2, dis());
-			sp.run_pos_control = false;
-			sp.run_alt_control = true;
-
-			sp.sp_x = 0.0;
+			sp.sp_x = 0.0f;
 			sp.sp_y = 0.0f;
-			sp.sp_z = points[pindex % pcount].z;
+			sp.sp_z = -50.0f;
 
-			sp.yaw = 0;
-
-			sp.vel_sp_x = (points[1].x - pos.x) / 2.0f;
-			sp.vel_sp_y = (points[1].y - pos.y) / 2.0f;
-
-			send_data_sp(&sp);
-
-			if (dis() < 3.0f)
-			{
-				angle = -M_PI / 2.0f;
-				mode = 2;
-				pindex++;
-			}
-		}
-
-		if (mode == 2)
-		{
-			if (angle > M_PI / 2.0f)
-			{
-				mode = 0;
-				pindex = 2;
-				continue;
-			}
-			printf("MODE 2 %.7f\n", angle);
-			angle += 0.003;
-
-			sp.run_pos_control = true;
-			sp.run_alt_control = true;
-
-			sp.sp_x = 5.0f * cosf(angle) + 100.0f;
-			sp.sp_y = 5.0f * sinf(angle) + 5.0f;
-			sp.sp_z = points[pindex % pcount].z;
-
-			sp.yaw = 0;
 			sp.vel_sp_x = 0.0f;
 			sp.vel_sp_y = 0.0f;
 			sp.vel_sp_z = 0.0f;
 
 			send_data_sp(&sp);
-		}
 
+		}
+		else
+		{
+
+			if (mode == 0 && (dis() < 10.0f) && (pindex % pcount == 1))
+			{
+				mode = 1;
+			}
+
+			if (mode == 0)
+			{
+				if (is_reached())
+				{
+					pindex++;
+				}
+			}
+
+			if (mode == 0)
+			{
+				sp.run_pos_control = true;
+				sp.run_alt_control = true;
+
+				sp.sp_x = points[pindex % pcount].x;
+				sp.sp_y = points[pindex % pcount].y;
+				sp.sp_z = points[pindex % pcount].z;
+
+				sp.yaw = 0;
+				sp.vel_sp_x = 0.0f;
+				sp.vel_sp_y = 0.0f;
+				sp.vel_sp_z = 0.0f;
+
+				send_data_sp(&sp);
+			}
+
+			if (mode == 1)
+			{
+				printf("%f %f %f\n", (points[1].x - pos.x) / 2, (points[1].y - pos.y) / 2, dis());
+				sp.run_pos_control = false;
+				sp.run_alt_control = true;
+
+				sp.sp_x = 0.0;
+				sp.sp_y = 0.0f;
+				sp.sp_z = points[pindex % pcount].z;
+
+				sp.yaw = 0;
+
+				sp.vel_sp_x = (points[1].x - pos.x) / 2.0f;
+				sp.vel_sp_y = (points[1].y - pos.y) / 2.0f;
+
+				send_data_sp(&sp);
+
+				if (dis() < 5.0f)
+				{
+					angle = -M_PI / 2.0f;
+					mode = 2;
+					pindex++;
+				}
+			}
+
+			if (mode == 2)
+			{
+				if (angle > M_PI / 2.0f)
+				{
+					mode = 0;
+					pindex = 2;
+					continue;
+				}
+				printf("MODE 2 %.7f\n", angle);
+				angle += 0.004;
+
+				sp.run_pos_control = true;
+				sp.run_alt_control = true;
+
+				sp.sp_x = 5.0f * cosf(angle) + 100.0f;
+				sp.sp_y = 5.0f * sinf(angle) + 5.0f;
+				sp.sp_z = points[pindex % pcount].z;
+
+				sp.yaw = 0;
+				sp.vel_sp_x = 0.0f;
+				sp.vel_sp_y = 0.0f;
+				sp.vel_sp_z = 0.0f;
+
+				send_data_sp(&sp);
+			}
+		}
 		usleep(DEV_RW_USLEEP);
 	}
 

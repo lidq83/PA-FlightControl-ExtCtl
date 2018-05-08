@@ -100,10 +100,19 @@ typedef struct vehicle_sp_s
 	};
 } vehicle_sp_s;
 
+typedef struct rc_s
+{
+	bool rc_failsafe;
+	bool rc_lost;
+	uint32_t channel_count;
+	uint16_t values[18];
+} rc_s;
+
 enum data_type
 {
 	DATA_TYPE_POS = 0,
 	DATA_TYPE_SP,
+	DATA_TYPE_RC,
 	DATA_TYPE_END,
 };
 
