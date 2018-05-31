@@ -24,6 +24,7 @@ uint32_t pindex = 0;
 s_buff _recv;
 uint8_t _buff[SIZE_BUFF];
 
+sem_t sem_r;
 sem_t sem_w;
 
 static bool _should_exit = false;
@@ -124,6 +125,10 @@ int send_frame_data(char *frame, int len)
 
 int start(int argc, char *argv[])
 {
+	sem_init(&sem_r, 0, 1);
+	sem_init(&sem_w, 0, 1);
+
+
 	create_points();
 
 	_recv.head = 0;
@@ -228,11 +233,9 @@ int frame_parse()
 					if (crc16_check(&_buff[frame_pos_head0], frameLen - 4, crc16))
 					{
 						ret = 1;
-						goto _ret;
 					}
 					parse_packet_step = PAR_HEAD;
 					packet_index = 0;
-
 				}
 				break;
 
@@ -241,9 +244,6 @@ int frame_parse()
 		}
 		tail = (tail + 1) % _recv.size;
 	}
-
-	_ret: ;
-
 	if (ret == 1)
 	{
 		_recv.tail = tail;
@@ -283,6 +283,8 @@ int task_main_read(int argc, char* argv[])
 	_serial_fd = open(DEV_NAME, O_RDWR);
 	set_opt(_serial_fd, DEV_BAUDRATE, 8, 'N', 1);
 	pthread_t pthddr;
+	rc_s rc_temp = { 0 };
+
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &task_main_write, NULL);
 
 	while (!_should_exit)
@@ -296,8 +298,8 @@ int task_main_read(int argc, char* argv[])
 					memcpy(&pos, &_buff[frame_pos_data], sizeof(vehicle_pos_s));
 //					printf("%7.3f, %7.3f, %7.3f ", pos.x, pos.y, pos.z);
 //					printf("%7.3f, %7.3f, %7.3f ", pos.vx, pos.vy, pos.vz);
-//					printf("%15.7f, %15.7f, %7.3f ", pos.lat, pos.lon, pos.alt);
-//					printf("%7.3f, %7.3f, %7.3f ", pos.vel_n, pos.vel_e, pos.vel_d);
+					//printf("%15.7f, %15.7f, %7.3f ", pos.lat, pos.lon, pos.alt);
+					//printf("%7.3f, %7.3f, %7.3f ", pos.vel_n, pos.vel_e, pos.vel_d);
 //					printf("\n");
 					break;
 
@@ -307,13 +309,27 @@ int task_main_read(int argc, char* argv[])
 					break;
 
 				case DATA_TYPE_RC:
-					memcpy(&rc, &_buff[frame_pos_data], sizeof(rc_s));
-//					printf("%d %d %d ", rc.rc_failsafe, rc.rc_lost, rc.channel_count);
-//					for (int i = 0; i < rc.channel_count; i++)
-//					{
-//						printf("%8u ", rc.values[i]);
-//					}
-//					printf("\n");
+					memcpy(&rc_temp, &_buff[frame_pos_data], sizeof(rc_s));
+
+					int st = 1;
+					for (uint32_t i = 0; i < rc_temp.channel_count; i++)
+					{
+						if (rc_temp.values[i] < 500 || rc_temp.values[i] > 2500)
+						{
+							st = 0;
+							break;
+						}
+					}
+					if (st && rc_temp.channel_count > 4)
+					{
+//						printf("%d %d %d ", rc.rc_failsafe, rc.rc_lost, rc.channel_count);
+//						for (int i = 0; i < rc.channel_count; i++)
+//						{
+//							printf("%8u ", rc.values[i]);
+//						}
+//						printf("\n");
+						memcpy(&rc, &rc_temp, sizeof(rc_s));
+					}
 					break;
 
 				default:
@@ -439,8 +455,6 @@ float angle = -M_PI / 2.0f;
 
 int task_main_write(int argc, char* argv[])
 {
-	sem_init(&sem_w, 0, 1);
-
 	vehicle_sp_s sp = { 0 };
 
 //	spx = points[pindex % pcount].x;
@@ -475,7 +489,7 @@ int task_main_write(int argc, char* argv[])
 //
 //		send_data_sp(&sp);
 
-printf("%d %f %d\n", mode, dis(), pindex % pcount);
+		//printf("%d %f %d\n", mode, dis(), pindex % pcount);
 
 		if (rc.values[11] < 1500)
 		{
@@ -492,9 +506,8 @@ printf("%d %f %d\n", mode, dis(), pindex % pcount);
 			sp.vel_sp_y = 0.0f;
 			sp.vel_sp_z = 0.0f;
 
-			sem_wait(&sem_w);
 			send_data_sp(&sp);
-			sem_post(&sem_w);
+
 		}
 		else
 		{
@@ -526,9 +539,7 @@ printf("%d %f %d\n", mode, dis(), pindex % pcount);
 				sp.vel_sp_y = 0.0f;
 				sp.vel_sp_z = 0.0f;
 
-				sem_wait(&sem_w);
 				send_data_sp(&sp);
-				sem_post(&sem_w);
 			}
 
 			if (mode == 1)
@@ -546,9 +557,7 @@ printf("%d %f %d\n", mode, dis(), pindex % pcount);
 				sp.vel_sp_x = (points[1].x - pos.x) / 2.0f;
 				sp.vel_sp_y = (points[1].y - pos.y) / 2.0f;
 
-				sem_wait(&sem_w);
 				send_data_sp(&sp);
-				sem_post(&sem_w);
 
 				if (dis() < 5.0f)
 				{
@@ -581,9 +590,7 @@ printf("%d %f %d\n", mode, dis(), pindex % pcount);
 				sp.vel_sp_y = 0.0f;
 				sp.vel_sp_z = 0.0f;
 
-				sem_wait(&sem_w);
 				send_data_sp(&sp);
-				sem_post(&sem_w);
 			}
 		}
 		usleep(DEV_RW_USLEEP);

@@ -23,6 +23,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <termios.h>
+#include <semaphore.h>
 
 #define DEV_NAME		"/dev/ttyUSB0"
 #define DEV_BAUDRATE	(B115200)
