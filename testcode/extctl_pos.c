@@ -8,6 +8,7 @@
 #include "extctl_pos.h"
 
 extern bool _extctl_should_exit;
+vehicle_pos_s _pos = { 0 };
 
 int extctl_pos_handle(void *data)
 {
@@ -16,8 +17,7 @@ int extctl_pos_handle(void *data)
 	{
 		return -1;
 	}
-
-	printf("%5.2f %5.2f %5.2f %12.8f %12.8f %5.2f\n", pos->x, pos->y, pos->z, pos->lat, pos->lon, pos->alt);
+	memcpy(&_pos, pos, sizeof(vehicle_pos_s));
 
 	return 0;
 }

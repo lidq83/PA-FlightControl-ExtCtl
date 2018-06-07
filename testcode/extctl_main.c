@@ -34,7 +34,14 @@ int start(int argc, char *argv[])
 	_recv.size = SIZE_BUFF;
 	memset(_recv.buff, 0x00, SIZE_BUFF);
 
-	_serial_fd = open(DEV_NAME, O_RDWR | O_NONBLOCK);
+	if (argc > 1)
+	{
+		_serial_fd = open(argv[1], O_RDWR | O_NONBLOCK);
+	}
+	else
+	{
+		_serial_fd = open(DEV_NAME, O_RDWR | O_NONBLOCK);
+	}
 	if (_serial_fd < 0)
 	{
 		return -1;
@@ -46,6 +53,7 @@ int start(int argc, char *argv[])
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_sp_send, NULL);
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_pos_send, NULL);
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_rc_send, NULL);
+	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_cmd_send, NULL);
 
 	return 0;
 }
@@ -72,6 +80,14 @@ int extctl_read(void)
 
 				case DATA_TYPE_SP:
 					p_handle = &extctl_sp_handle;
+					break;
+
+				case DATA_TYPE_CMD:
+					p_handle = &extctl_cmd_handle;
+					break;
+
+				case DATA_TYPE_LAND:
+					p_handle = &extctl_land_handle;
 					break;
 
 				default:
@@ -389,9 +405,31 @@ int set_opt(int fd, int nSpeed, int nBits, char nEvent, int nStop)
 	return 0;
 }
 
+void start_test()
+{
+	extctl_cmd_sw_ext_mode();
+	printf("Switch Ext Mode.\n");
+	sleep(1);
+
+	extctl_cmd_arm();
+	printf("Armed.\n");
+	sleep(1);
+
+	extctl_cmd_takeoff(100.0f);
+	printf("Takeoff.\n");
+	sleep(10);
+
+	extctl_cmd_falloff();
+	printf("Falloff.\n");
+	sleep(1);
+}
+
 int main(int argc, char *argv[])
 {
 	start(argc, argv);
+
+	start_test();
+
 	while (1)
 	{
 		sleep(1);
