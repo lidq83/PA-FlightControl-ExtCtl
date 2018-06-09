@@ -75,7 +75,7 @@ int extctl_cmd_takeoff(float alt)
 
 	_sp.sp_x = 0.0f;
 	_sp.sp_y = 0.0f;
-	_sp.sp_z = -alt;
+	_sp.sp_z = alt;
 
 	_sp.vel_sp_x = 0.0f;
 	_sp.vel_sp_y = 0.0f;
@@ -84,19 +84,19 @@ int extctl_cmd_takeoff(float alt)
 	_sp.sp_yaw = 0.0f;
 }
 
-int extctl_cmd_falloff(void)
+int extctl_cmd_falloff(bool altctl, float speed)
 {
 	_sp.run_pos_control = true;
-	_sp.run_alt_control = true;
+	_sp.run_alt_control = altctl;
 	_sp.run_yaw_control = false;
 
 	_sp.sp_x = 0.0f;
 	_sp.sp_y = 0.0f;
-	_sp.sp_z = 5.0f;
+	_sp.sp_z = 1.0f;
 
 	_sp.vel_sp_x = 0.0f;
 	_sp.vel_sp_y = 0.0f;
-	_sp.vel_sp_z = 0.0f;
+	_sp.vel_sp_z = speed;
 
 	_sp.sp_yaw = 0.0f;
 }

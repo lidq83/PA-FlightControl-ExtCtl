@@ -30,6 +30,6 @@ int extctl_cmd_disarm(void);
 
 int extctl_cmd_takeoff(float alt);
 
-int extctl_cmd_falloff();
+int extctl_cmd_falloff(bool altctl, float speed);
 
 #endif /* SRC_MODULES_EXTCTL_EXTCTL_CMD_H_ */
