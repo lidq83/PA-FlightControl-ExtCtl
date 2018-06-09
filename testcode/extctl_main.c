@@ -46,6 +46,7 @@ int start(int argc, char *argv[])
 	}
 	if (_serial_fd < 0)
 	{
+		printf("can not open dev.\n");
 		return -1;
 	}
 	set_opt(_serial_fd, DEV_BAUDRATE, 8, 'N', 1);
@@ -407,20 +408,119 @@ int set_opt(int fd, int nSpeed, int nBits, char nEvent, int nStop)
 	return 0;
 }
 
+float dis_alt(float sp_z, float pos_z)
+{
+	return (float) sqrt(pow(sp_z - pos_z, 2));
+}
+
+float dis_xy(float sp_x, float sp_y, float pos_x, float pos_y)
+{
+	return (float) sqrt(pow(sp_x - pos_x, 2) + pow(sp_y - pos_y, 2));
+}
+
+float _wrap_pi(float bearing)
+{
+	if (!isfinite(bearing))
+	{
+		return bearing;
+	}
+	int c = 0;
+	while (bearing >= M_PI)
+	{
+		bearing -= M_PI * 2;
+
+		if (c++ > 3)
+		{
+			return NAN;
+		}
+	}
+	c = 0;
+	while (bearing < -M_PI)
+	{
+		bearing += M_PI * 2;
+
+		if (c++ > 3)
+		{
+			return NAN;
+		}
+	}
+	return bearing;
+}
+
+float calc_yaw(float sp_x, float sp_y, float pos_x, float pos_y)
+{
+	float d_y = sp_y - pos_y;
+	float theta = atan2f(sin(d_y) * cos(sp_x), cos(pos_x) * sin(sp_x) - sin(pos_x) * cos(sp_x) * cos(d_y));
+	theta = _wrap_pi(theta);
+	return theta * 180.0f / M_PI;
+}
+
 void start_test()
 {
-	extctl_cmd_sw_ext_mode();
 	printf("Switch Ext Mode.\n");
+	extctl_cmd_sw_ext_mode();
 	sleep(1);
 
-	extctl_cmd_arm();
 	printf("Armed.\n");
+	extctl_cmd_arm();
 	sleep(1);
 
-	extctl_cmd_takeoff(-100.0f);
-	printf("Takeoff.\n");
-	sleep(10);
+	printf("Takeoff -10m.\n");
+	float sp_z = -10.0f;
+	extctl_cmd_takeoff(sp_z);
 
+	while (1)
+	{
+		if (dis_alt(sp_z, _pos.z) < 2.0)
+		{
+			break;
+		}
+		usleep(100 * 1000);
+	}
+	printf("tackoff reached %5.2f.\n", _pos.z);
+
+	float x = 400.0f, y = 400.0f, z = -30.0f;
+	float yaw = calc_yaw(x, y, _pos.x, _pos.y);
+	extctl_cmd_setpoint(x, y, z, yaw);
+	printf("set point %5.2f %5.2f %5.2f %5.2f\n", x, y, z, yaw);
+	while (1)
+	{
+		printf("yaw %5.2f\n", yaw);
+		if (dis_xy(x, y, _pos.x, _pos.y) < 5.0)
+		{
+			break;
+		}
+		usleep(100 * 1000);
+	}
+	printf("set point reached %5.2f %5.2f %5.2f\n", _pos.x, _pos.y, _pos.z);
+
+	for (int i = 0; i < 10; i++)
+	{
+		printf("stay at current pos %2ds.\n", 60 - i);
+		sleep(1);
+	}
+
+	x = 0.0f;
+	y = 0.0f;
+	z = _pos.z;
+	yaw = calc_yaw(x, y, _pos.x, _pos.y);
+	extctl_cmd_setpoint(x, y, z, yaw);
+	printf("return to home %5.2f %5.2f %5.2f %5.2f\n", x, y, z, yaw);
+	while (1)
+	{
+		printf("yaw %5.2f\n", yaw);
+		if (dis_xy(x, y, _pos.x, _pos.y) < 5.0)
+		{
+			break;
+		}
+		usleep(100 * 1000);
+	}
+
+	x = 0.0f;
+	y = 0.0f;
+	z = 0.0f;
+	yaw = 0.0f;
+	printf("falloff %5.2f %5.2f %5.2f %5.2f\n", x, y, z, yaw);
 	while (1)
 	{
 		float z = _pos.z;
@@ -439,8 +539,8 @@ void start_test()
 		}
 		usleep(100 * 1000);
 	}
-//
-//	printf("Falloff.\n");
+
+	printf("Falloff finished.\n");
 	sleep(1);
 }
 

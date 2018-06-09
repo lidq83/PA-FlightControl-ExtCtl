@@ -100,3 +100,20 @@ int extctl_cmd_falloff(bool altctl, float speed)
 
 	_sp.sp_yaw = 0.0f;
 }
+
+int extctl_cmd_setpoint(float x, float y, float z, float yaw)
+{
+	_sp.run_pos_control = true;
+	_sp.run_alt_control = true;
+	_sp.run_yaw_control = false;
+
+	_sp.sp_x = x;
+	_sp.sp_y = y;
+	_sp.sp_z = z;
+
+	_sp.vel_sp_x = 0.0f;
+	_sp.vel_sp_y = 0.0f;
+	_sp.vel_sp_z = 0.0f;
+
+	_sp.sp_yaw = yaw;
+}

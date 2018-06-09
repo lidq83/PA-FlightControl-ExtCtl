@@ -32,4 +32,6 @@ int extctl_cmd_takeoff(float alt);
 
 int extctl_cmd_falloff(bool altctl, float speed);
 
+int extctl_cmd_setpoint(float x, float y, float z, float yaw);
+
 #endif /* SRC_MODULES_EXTCTL_EXTCTL_CMD_H_ */
