@@ -56,6 +56,8 @@
 
 #define M_DEG_TO_RAD 							0.01745329251994
 #define M_RAD_TO_DEG 							57.2957795130823
+#define M_PI_F									3.14159265358979323846f
+#define M_TWOPI_F								(M_PI_F * 2.0f)
 
 struct crosstrack_error_s
 {
@@ -106,5 +108,17 @@ int map_projection_project(const struct map_projection_reference_s *ref, double 
  * @return 0 if map_projection_init was called before, -1 else
  */
 int map_projection_reproject(const struct map_projection_reference_s *ref, float x, float y, double *lat, double *lon);
+
+/**
+ * Returns the bearing to the next waypoint in radians.
+ *
+ * @param lat_now current position in degrees (47.1234567°, not 471234567°)
+ * @param lon_now current position in degrees (8.1234567°, not 81234567°)
+ * @param lat_next next waypoint position in degrees (47.1234567°, not 471234567°)
+ * @param lon_next next waypoint position in degrees (8.1234567°, not 81234567°)
+ */
+float get_bearing_to_next_waypoint(double lat_now, double lon_now, double lat_next, double lon_next);
+
+float _wrap_pi(float bearing);
 
 #endif

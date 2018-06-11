@@ -418,45 +418,14 @@ float dis_xy(float sp_x, float sp_y, float pos_x, float pos_y)
 	return (float) sqrt(pow(sp_x - pos_x, 2) + pow(sp_y - pos_y, 2));
 }
 
-float _wrap_pi(float bearing)
-{
-	if (!isfinite(bearing))
-	{
-		return bearing;
-	}
-	int c = 0;
-	while (bearing >= M_PI)
-	{
-		bearing -= M_PI * 2;
-
-		if (c++ > 3)
-		{
-			return NAN;
-		}
-	}
-	c = 0;
-	while (bearing < -M_PI)
-	{
-		bearing += M_PI * 2;
-
-		if (c++ > 3)
-		{
-			return NAN;
-		}
-	}
-	return bearing;
-}
-
-float calc_yaw(float sp_x, float sp_y, float pos_x, float pos_y)
-{
-	float d_y = sp_y - pos_y;
-	float theta = atan2f(sin(d_y) * cos(sp_x), cos(pos_x) * sin(sp_x) - sin(pos_x) * cos(sp_x) * cos(d_y));
-	theta = _wrap_pi(theta);
-	return theta * 180.0f / M_PI;
-}
-
 void start_test()
 {
+	double lat = 41.8782246;
+	double lon = 123.4143249;
+
+	struct map_projection_reference_s _ref_pos;
+	map_projection_init(&_ref_pos, lat, lon);
+
 	printf("Switch Ext Mode.\n");
 	extctl_cmd_sw_ext_mode();
 	sleep(1);
@@ -480,8 +449,11 @@ void start_test()
 	printf("tackoff reached %5.2f.\n", _pos.z);
 
 	float x = 50.0f, y = 50.0f, z = -30.0f;
-	float yaw = 0.0f;
+
+	map_projection_reproject(&_ref_pos, x, y, &lat, &lon);
+	float yaw = get_bearing_to_next_waypoint(_pos.lat, _pos.lon, lat, lon);
 	extctl_cmd_setpoint(x, y, z, yaw);
+
 	printf("set point %5.2f %5.2f %5.2f\n", x, y, z);
 	while (1)
 	{
@@ -499,12 +471,10 @@ void start_test()
 		sleep(1);
 	}
 
-	struct map_projection_reference_s _ref_pos;
-	map_projection_init(&_ref_pos, 41.8782246, 123.4143249);
-
-	double lat = 41.8763246;
-	double lon = 123.4124249;
+	lat = 41.8762246;
+	lon = 123.4163249;
 	map_projection_project(&_ref_pos, lat, lon, &x, &y);
+	yaw = get_bearing_to_next_waypoint(_pos.lat, _pos.lon, lat, lon);
 	printf("set pos %lf %lf %f %f\n", lat, lon, x, y);
 	extctl_cmd_setpoint(x, y, z, yaw);
 
@@ -516,14 +486,12 @@ void start_test()
 		}
 		usleep(100 * 1000);
 	}
-	double d_lat, d_lon;
-	map_projection_reproject(&_ref_pos, x, y, &d_lat, &d_lon);
-	printf("set pos reached %lf %lf %f %f %lf %lf \n", lat, lon, x, y, d_lat, d_lon);
 
 	x = 0.0f;
 	y = 0.0f;
 	z = _pos.z;
-	yaw = 0.0f;
+	map_projection_reproject(&_ref_pos, 0, 0, &lat, &lon);
+	yaw = get_bearing_to_next_waypoint(_pos.lat, _pos.lon, lat, lon);
 	extctl_cmd_setpoint(x, y, z, yaw);
 	printf("return to home %5.2f %5.2f %5.2f %5.2f\n", x, y, z, yaw);
 	while (1)
