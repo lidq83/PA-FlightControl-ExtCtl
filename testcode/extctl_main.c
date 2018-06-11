@@ -479,13 +479,12 @@ void start_test()
 	}
 	printf("tackoff reached %5.2f.\n", _pos.z);
 
-	float x = 400.0f, y = 400.0f, z = -30.0f;
-	float yaw = calc_yaw(x, y, _pos.x, _pos.y);
+	float x = 50.0f, y = 50.0f, z = -30.0f;
+	float yaw = 0.0f;
 	extctl_cmd_setpoint(x, y, z, yaw);
-	printf("set point %5.2f %5.2f %5.2f %5.2f\n", x, y, z, yaw);
+	printf("set point %5.2f %5.2f %5.2f\n", x, y, z);
 	while (1)
 	{
-		printf("yaw %5.2f\n", yaw);
 		if (dis_xy(x, y, _pos.x, _pos.y) < 5.0)
 		{
 			break;
@@ -494,21 +493,41 @@ void start_test()
 	}
 	printf("set point reached %5.2f %5.2f %5.2f\n", _pos.x, _pos.y, _pos.z);
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 3; i++)
 	{
-		printf("stay at current pos %2ds.\n", 60 - i);
+		printf("stay at current pos %2ds.\n", 3 - i);
 		sleep(1);
 	}
+
+	struct map_projection_reference_s _ref_pos;
+	map_projection_init(&_ref_pos, 41.8782246, 123.4143249);
+
+	double lat = 41.8763246;
+	double lon = 123.4124249;
+	map_projection_project(&_ref_pos, lat, lon, &x, &y);
+	printf("set pos %lf %lf %f %f\n", lat, lon, x, y);
+	extctl_cmd_setpoint(x, y, z, yaw);
+
+	while (1)
+	{
+		if (dis_xy(x, y, _pos.x, _pos.y) < 5.0)
+		{
+			break;
+		}
+		usleep(100 * 1000);
+	}
+	double d_lat, d_lon;
+	map_projection_reproject(&_ref_pos, x, y, &d_lat, &d_lon);
+	printf("set pos reached %lf %lf %f %f %lf %lf \n", lat, lon, x, y, d_lat, d_lon);
 
 	x = 0.0f;
 	y = 0.0f;
 	z = _pos.z;
-	yaw = calc_yaw(x, y, _pos.x, _pos.y);
+	yaw = 0.0f;
 	extctl_cmd_setpoint(x, y, z, yaw);
 	printf("return to home %5.2f %5.2f %5.2f %5.2f\n", x, y, z, yaw);
 	while (1)
 	{
-		printf("yaw %5.2f\n", yaw);
 		if (dis_xy(x, y, _pos.x, _pos.y) < 5.0)
 		{
 			break;
@@ -520,7 +539,7 @@ void start_test()
 	y = 0.0f;
 	z = 0.0f;
 	yaw = 0.0f;
-	printf("falloff %5.2f %5.2f %5.2f %5.2f\n", x, y, z, yaw);
+	printf("falloff %5.2f %5.2f %5.2f\n", x, y, z);
 	while (1)
 	{
 		float z = _pos.z;

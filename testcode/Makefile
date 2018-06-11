@@ -5,7 +5,8 @@ all:
 		extctl_pos.c	\
 		extctl_rc.c	\
 		extctl_cmd.c	\
-		extctl_land.c
+		extctl_land.c	\
+		geo.c
 
 clean:
 	rm -rvf build/extctl
