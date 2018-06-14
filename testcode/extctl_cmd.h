@@ -30,7 +30,7 @@ int extctl_cmd_disarm(void);
 
 int extctl_cmd_takeoff(float alt);
 
-int extctl_cmd_falloff(bool altctl, float speed);
+int extctl_cmd_falloff(float sp_x, float sp_y, float sp_z, float sp_yaw, bool altctl, float speed);
 
 int extctl_cmd_setpoint(float x, float y, float z, float yaw);
 

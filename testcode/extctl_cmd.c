@@ -84,21 +84,21 @@ int extctl_cmd_takeoff(float alt)
 	_sp.sp_yaw = 0.0f;
 }
 
-int extctl_cmd_falloff(bool altctl, float speed)
+int extctl_cmd_falloff(float sp_x, float sp_y, float sp_z, float sp_yaw, bool altctl, float speed)
 {
 	_sp.run_pos_control = true;
 	_sp.run_alt_control = altctl;
 	_sp.run_yaw_control = true;
 
-	_sp.sp_x = 0.0f;
-	_sp.sp_y = 0.0f;
-	_sp.sp_z = 1.0f;
+	_sp.sp_x = sp_x;
+	_sp.sp_y = sp_y;
+	_sp.sp_z = sp_z;
 
 	_sp.vel_sp_x = 0.0f;
 	_sp.vel_sp_y = 0.0f;
 	_sp.vel_sp_z = speed;
 
-	_sp.sp_yaw = 0.0f;
+	_sp.sp_yaw = sp_yaw;
 }
 
 int extctl_cmd_setpoint(float x, float y, float z, float yaw)

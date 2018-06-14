@@ -15,6 +15,7 @@
 #include "extctl_rc.h"
 #include "extctl_cmd.h"
 #include "extctl_status.h"
+#include "extctl_airline.h"
 #include "geo.h"
 
 static int start(int argc, char *argv[]);
