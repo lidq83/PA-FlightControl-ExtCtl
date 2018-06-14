@@ -411,7 +411,7 @@ int main(int argc, char *argv[])
 {
 	start(argc, argv);
 
-	airline_test01();
+	airline_test01(-5.0f);
 
 	while (1)
 	{

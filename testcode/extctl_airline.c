@@ -74,7 +74,7 @@ void wait_reached_z(float sp_z)
 	}
 }
 
-void airline_test01()
+void airline_test01(float airline_alt)
 {
 	struct map_projection_reference_s _ref_pos;
 	map_projection_init(&_ref_pos, HOME_LAT, HOME_LON);
@@ -109,7 +109,7 @@ void airline_test01()
 	//takeoff begin
 	float sp_x = 0.0f;
 	float sp_y = 0.0f;
-	float sp_z = -5.0f;
+	float sp_z = airline_alt;
 	float sp_yaw = 0.0f;
 
 	extctl_cmd_setpoint(sp_x, sp_y, sp_z, sp_yaw);
@@ -120,33 +120,37 @@ void airline_test01()
 	float r = 5.0f;
 	sp_x = r * 2.0f;
 	sp_y = 0.0f;
-	sp_z = -5.0f;
+	sp_z = airline_alt;
 	sp_yaw = 0.0f;
+	//sp_yaw = - M_PI / 2.0f;
 	extctl_cmd_setpoint(sp_x, sp_y, sp_z, sp_yaw);
 	printf("Fly to %4.2f %4.2f.\n", sp_x, sp_y);
 	wait_reached_xyz(sp_x, sp_y, sp_z);
 	for (int i = 10; i > 0; i--)
 	{
-		printf("Wait %d secs.\n", i);
+		printf("Wait %3d secs.\n", i);
 		sleep(1);
 	}
 
-	for (float angle = M_PI / 2; angle < M_PI * 6 + M_PI / 2; angle += 0.02)
+	for (float angle = M_PI / 2; angle < M_PI * 6 + M_PI / 2; angle += 0.025)
 	{
 		sp_x = r * sinf(angle) + r;
 		sp_y = r * cosf(angle);
+		//sp_yaw = -angle;
 		extctl_cmd_setpoint(sp_x, sp_y, sp_z, sp_yaw);
+		printf("angle: %+6.2f\tsp: %+6.2f %+6.2f %+6.2f\n", angle, sp_x, sp_y, sp_z);
 		usleep(100 * 1000);
 	}
 
 	//return to home
 	sp_x = 0.0f;
 	sp_y = 0.0f;
-	sp_z = _pos.z;
-	double lat = HOME_LAT;
-	double lon = HOME_LON;
-	map_projection_reproject(&_ref_pos, 0.0f, 0.0f, &lat, &lon);
-	sp_yaw = get_bearing_to_next_waypoint(_pos.lat, _pos.lon, lat, lon);
+	sp_z = airline_alt;
+	sp_yaw = 0.0f;
+//	double lat = HOME_LAT;
+//	double lon = HOME_LON;
+//	map_projection_reproject(&_ref_pos, 0.0f, 0.0f, &lat, &lon);
+//	sp_yaw = get_bearing_to_next_waypoint(_pos.lat, _pos.lon, lat, lon);
 
 	extctl_cmd_setpoint(sp_x, sp_y, sp_z, sp_yaw);
 	printf("Return to home.\n", sp_y, sp_z, sp_z, sp_yaw);
@@ -173,6 +177,11 @@ void airline_test01()
 		else
 		{
 			extctl_cmd_falloff(sp_x, sp_y, sp_z, sp_yaw, false, 0.05f);
+		}
+
+		if (_pos.z >= 0)
+		{
+			break;
 		}
 		usleep(100 * 1000);
 	}
