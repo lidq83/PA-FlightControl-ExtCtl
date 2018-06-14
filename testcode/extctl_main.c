@@ -8,6 +8,7 @@
 #include "extctl_main.h"
 
 extern vehicle_pos_s _pos;
+extern sys_status_s _status;
 
 bool _extctl_should_exit = false;
 
@@ -57,6 +58,7 @@ int start(int argc, char *argv[])
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_pos_send, NULL);
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_rc_send, NULL);
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_cmd_send, NULL);
+	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_status_send, NULL);
 
 	return 0;
 }
@@ -89,8 +91,8 @@ int extctl_read(void)
 					p_handle = &extctl_cmd_handle;
 					break;
 
-				case DATA_TYPE_LAND:
-					p_handle = &extctl_land_handle;
+				case DATA_TYPE_STATUS:
+					p_handle = &extctl_status_handle;
 					break;
 
 				default:
@@ -426,13 +428,33 @@ void start_test()
 	struct map_projection_reference_s _ref_pos;
 	map_projection_init(&_ref_pos, lat, lon);
 
-	printf("Switch Ext Mode.\n");
-	extctl_cmd_sw_ext_mode();
-	sleep(1);
+	//MAIN_STATE_EXTCTL == 13
+	for (int i = 0; i < 3 && _status.main_state != 13; i++)
+	{
+		printf("Switch Ext Mode.\n");
+		extctl_cmd_sw_ext_mode();
+		sleep(1);
+	}
+	if (_status.main_state != 13)
+	{
+		printf("Switch Ext Mode Err.\n");
+		return;
+	}
+	printf("Switch Ext Mode OK.\n");
 
-	printf("Armed.\n");
-	extctl_cmd_arm();
-	sleep(1);
+	//MAIN_STATE_EXTCTL == 13
+	for (int i = 0; i < 3 && !_status.armed; i++)
+	{
+		printf("FCS try to Armed.\n");
+		extctl_cmd_arm();
+		sleep(1);
+	}
+	if (!_status.armed)
+	{
+		printf("FCS Armed Err.\n");
+		return;
+	}
+	printf("FCS Armed OK.\n");
 
 	printf("Takeoff -10m.\n");
 	float sp_z = -10.0f;
@@ -440,7 +462,7 @@ void start_test()
 
 	while (1)
 	{
-		if (dis_alt(sp_z, _pos.z) < 2.0)
+		if (dis_alt(sp_z, _pos.z) < 2.0 && dis_xy(0.0f, 0.0f, _pos.x, _pos.y) < 5.0)
 		{
 			break;
 		}
@@ -448,7 +470,7 @@ void start_test()
 	}
 	printf("tackoff reached %5.2f.\n", _pos.z);
 
-	float x = 50.0f, y = 50.0f, z = -30.0f;
+	float x = 80.0f, y = -120.0f, z = -50.0f;
 
 	map_projection_reproject(&_ref_pos, x, y, &lat, &lon);
 	float yaw = get_bearing_to_next_waypoint(_pos.lat, _pos.lon, lat, lon);
@@ -457,7 +479,7 @@ void start_test()
 	printf("set point %5.2f %5.2f %5.2f\n", x, y, z);
 	while (1)
 	{
-		if (dis_xy(x, y, _pos.x, _pos.y) < 5.0)
+		if (dis_alt(z, _pos.z) < 2.0 && dis_xy(x, y, _pos.x, _pos.y) < 5.0)
 		{
 			break;
 		}
@@ -471,11 +493,12 @@ void start_test()
 		sleep(1);
 	}
 
-	lat = 41.8762246;
-	lon = 123.4163249;
+	lat = 41.8776246;
+	lon = 123.4153249;
 	map_projection_project(&_ref_pos, lat, lon, &x, &y);
 	yaw = get_bearing_to_next_waypoint(_pos.lat, _pos.lon, lat, lon);
 	printf("set pos %lf %lf %f %f\n", lat, lon, x, y);
+	z = -100.0f;
 	extctl_cmd_setpoint(x, y, z, yaw);
 
 	while (1)
@@ -496,7 +519,7 @@ void start_test()
 	printf("return to home %5.2f %5.2f %5.2f %5.2f\n", x, y, z, yaw);
 	while (1)
 	{
-		if (dis_xy(x, y, _pos.x, _pos.y) < 5.0)
+		if (dis_xy(x, y, _pos.x, _pos.y) < 5.0 && dis_alt(z, _pos.z) < 2.0)
 		{
 			break;
 		}

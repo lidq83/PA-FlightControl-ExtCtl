@@ -5,7 +5,7 @@ all:
 		extctl_pos.c	\
 		extctl_rc.c	\
 		extctl_cmd.c	\
-		extctl_land.c	\
+		extctl_status.c	\
 		geo.c
 
 clean:
