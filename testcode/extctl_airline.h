@@ -20,9 +20,6 @@
 //accept r
 #define ACCEPT_XY		(5.0f)
 #define ACCEPT_Z		(2.0f)
-//home
-#define HOME_LAT		(41.8782246)
-#define HOME_LON		(123.4143249)
 //FCS MODE
 #define MODE_EXTCTL		(13)
 //switch mode or armed try times

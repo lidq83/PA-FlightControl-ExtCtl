@@ -112,6 +112,10 @@ typedef struct sys_status_s
 	uint8_t nav_state;
 	bool armed;
 	bool landed;
+	bool homed;
+	double home_lat;
+	double home_lon;
+	float home_alt;
 } sys_status_s;
 
 typedef struct rc_s

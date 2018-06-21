@@ -77,7 +77,23 @@ void wait_reached_z(float sp_z)
 void airline_test01(float airline_alt)
 {
 	struct map_projection_reference_s _ref_pos;
-	map_projection_init(&_ref_pos, HOME_LAT, HOME_LON);
+
+	for (int i = 1; i <= 60; i++)
+	{
+		if (_status.homed)
+		{
+			map_projection_init(&_ref_pos, _status.home_lat, _status.home_lon);
+			break;
+		}
+		printf("Wait home position vaild %3ds.\n", i);
+		sleep(1);
+	}
+	if (!_status.homed)
+	{
+		printf("Home position invaild.\n");
+		return;
+	}
+	printf("Set home position %f %f %f.\n", _status.home_lat, _status.home_lon, _status.home_alt);
 
 	//switch ext mode
 	for (int i = 0; i < TRY_TIMES && _status.main_state != MODE_EXTCTL; i++)
@@ -132,13 +148,19 @@ void airline_test01(float airline_alt)
 		sleep(1);
 	}
 
+	uint32_t i = 0;
 	for (float angle = M_PI / 2; angle < M_PI * 6 + M_PI / 2; angle += 0.025)
 	{
 		sp_x = r * sinf(angle) + r;
 		sp_y = r * cosf(angle);
 		//sp_yaw = -angle;
 		extctl_cmd_setpoint(sp_x, sp_y, sp_z, sp_yaw);
-		printf("angle: %+6.2f\tsp: %+6.2f %+6.2f %+6.2f\n", angle, sp_x, sp_y, sp_z);
+		if (i++ % 10 == 0)
+		{
+			int circle = (int)((angle - M_PI / 2) / (2 * M_PI));
+			float angle_dis = angle * 180.0 / M_PI;
+			printf("circle %d  angle: %+6.2f\tsp: %+6.2f %+6.2f %+6.2f\n", circle, angle_dis, sp_x, sp_y, sp_z);
+		}
 		usleep(100 * 1000);
 	}
 
