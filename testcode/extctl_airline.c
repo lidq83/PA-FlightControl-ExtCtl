@@ -109,6 +109,12 @@ void airline_test01(float airline_alt)
 	}
 	printf("Switch Ext Mode.\n");
 
+	for (int i = 10; i > 0; i--)
+	{
+		printf("ExtCtl will start by %2ds.\n", i);
+		sleep(1);
+	}
+
 	//switch fcs armed
 	for (int i = 0; i < TRY_TIMES && !_status.armed; i++)
 	{
@@ -157,7 +163,7 @@ void airline_test01(float airline_alt)
 		extctl_cmd_setpoint(sp_x, sp_y, sp_z, sp_yaw);
 		if (i++ % 10 == 0)
 		{
-			int circle = (int)((angle - M_PI / 2) / (2 * M_PI));
+			int circle = (int) ((angle - M_PI / 2) / (2 * M_PI));
 			float angle_dis = angle * 180.0 / M_PI;
 			printf("circle %d  angle: %+6.2f\tsp: %+6.2f %+6.2f %+6.2f\n", circle, angle_dis, sp_x, sp_y, sp_z);
 		}
