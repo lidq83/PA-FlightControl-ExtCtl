@@ -18,8 +18,8 @@
 #include "geo.h"
 
 //accept r
-#define ACCEPT_XY		(5.0f)
-#define ACCEPT_Z		(2.0f)
+#define ACCEPT_XY		(2.0f)
+#define ACCEPT_Z		(1.8f)
 //FCS MODE
 #define MODE_EXTCTL		(13)
 //switch mode or armed try times
