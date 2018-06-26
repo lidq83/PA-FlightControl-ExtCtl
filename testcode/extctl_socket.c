@@ -6,8 +6,11 @@
  */
 #include "extctl_socket.h"
 
-static struct sockaddr_un servaddr;
 int _socket_id = -1;
+
+#ifdef __PX4_POSIX
+
+static struct sockaddr_un servaddr;
 
 int client_start()
 {
@@ -19,7 +22,7 @@ int client_start()
 //	signal(SIGPIPE, (void (*)(int)) &client_exception);
 
 	printf("client init.\n");
-	//创建套接字
+//创建套接字
 	_socket_id = socket(PF_UNIX, SOCK_STREAM, 0);
 	if (_socket_id == -1)
 	{
@@ -80,3 +83,5 @@ void client_exception()
 	_socket_id = -1;
 	exit(0);
 }
+
+#endif
