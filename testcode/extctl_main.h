@@ -18,6 +18,7 @@
 #include "extctl_airline.h"
 #include "extctl_socket.h"
 #include "geo.h"
+#include "example_airline.h"
 
 static int start(int argc, char *argv[]);
 

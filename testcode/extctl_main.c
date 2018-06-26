@@ -438,15 +438,13 @@ int main(int argc, char *argv[])
 {
 	start(argc, argv);
 
-//	airline_test01(-15.0f);
-//	airline_test02(-15.0f);
+	airline_test01(-10.0f);
+	airline_test02(-10.0f);
 
-//	while (1)
-//	{
-//		sleep(1);
-//	}
-
-	airline_test03(-15.0);
+	while (1)
+	{
+		sleep(1);
+	}
 
 	return 0;
 }

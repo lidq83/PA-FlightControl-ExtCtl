@@ -8,7 +8,8 @@ all:
 		extctl_status.c	\
 		extctl_airline.c	\
 		extctl_socket.c	\
-		geo.c
+		geo.c	\
+		example_airline.c
 
 clean:
 	rm -rvf build/extctl

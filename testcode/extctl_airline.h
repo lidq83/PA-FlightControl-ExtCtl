@@ -41,10 +41,4 @@ void wait_reached_xy(float sp_x, float sp_y);
 
 void wait_reached_z(float sp_z);
 
-void airline_test01(float airline_alt);
-
-void airline_test02(float airline_alt);
-
-void airline_test03(float airline_alt);
-
 #endif /* TESTCODE_EXTCTL_AIRLINE_H_ */
