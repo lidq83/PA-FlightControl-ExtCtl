@@ -7,6 +7,7 @@ all:
 		extctl_cmd.c	\
 		extctl_status.c	\
 		extctl_airline.c	\
+		extctl_socket.c	\
 		geo.c
 
 clean:

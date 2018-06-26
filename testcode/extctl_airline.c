@@ -109,7 +109,7 @@ void airline_test01(float airline_alt)
 	}
 	printf("Switch Ext Mode.\n");
 
-	for (int i = 10; i > 0; i--)
+	for (int i = 3; i > 0; i--)
 	{
 		printf("ExtCtl will start by %2ds.\n", i);
 		sleep(1);
@@ -155,7 +155,7 @@ void airline_test01(float airline_alt)
 	}
 
 	uint32_t i = 0;
-	for (float angle = M_PI / 2; angle < M_PI * 6 + M_PI / 2; angle += 0.015)
+	for (float angle = M_PI / 2; angle < M_PI * 6 + M_PI / 2; angle += 0.025)
 	{
 		sp_x = r * sinf(angle) + r;
 		sp_y = r * cosf(angle);
@@ -198,16 +198,10 @@ void airline_test01(float airline_alt)
 		{
 			extctl_cmd_falloff(sp_x, sp_y, sp_z, sp_yaw, true, 0.0f);
 		}
-		else if (z < -1.0f)
-		{
-			float vel_z_sp = -z / 10.0;
-			extctl_cmd_falloff(sp_x, sp_y, sp_z, sp_yaw, false, vel_z_sp);
-		}
 		else
 		{
-			extctl_cmd_falloff(sp_x, sp_y, sp_z, sp_yaw, false, 0.05f);
+			extctl_cmd_falloff(sp_x, sp_y, sp_z, sp_yaw, false, 0.2f);
 		}
-
 		if (_pos.z >= 0)
 		{
 			break;
@@ -253,7 +247,7 @@ void airline_test02(float airline_alt)
 	}
 	printf("Switch Ext Mode.\n");
 
-	for (int i = 10; i > 0; i--)
+	for (int i = 3; i > 0; i--)
 	{
 		printf("ExtCtl will start by %2ds.\n", i);
 		sleep(1);
@@ -343,14 +337,9 @@ void airline_test02(float airline_alt)
 		{
 			extctl_cmd_falloff(sp_x, sp_y, sp_z, sp_yaw, true, 0.0f);
 		}
-		else if (z < -1.0f)
-		{
-			float vel_z_sp = -z / 10.0;
-			extctl_cmd_falloff(sp_x, sp_y, sp_z, sp_yaw, false, vel_z_sp);
-		}
 		else
 		{
-			extctl_cmd_falloff(sp_x, sp_y, sp_z, sp_yaw, false, 0.05f);
+			extctl_cmd_falloff(sp_x, sp_y, sp_z, sp_yaw, false, 0.2f);
 		}
 
 		if (_pos.z >= 0)
@@ -361,4 +350,65 @@ void airline_test02(float airline_alt)
 	}
 
 	printf("Landed.\n");
+}
+
+void airline_test03(float airline_alt)
+{
+	struct map_projection_reference_s _ref_pos;
+
+	for (int i = 1; i <= 60; i++)
+	{
+		if (_status.homed)
+		{
+			map_projection_init(&_ref_pos, _status.home_lat, _status.home_lon);
+			break;
+		}
+		printf("Wait home position vaild %3ds.\n", i);
+		usleep(10 * 1000);
+	}
+	if (!_status.homed)
+	{
+		printf("Home position invaild.\n");
+		return;
+	}
+	printf("Set home position %f %f %f.\n", _status.home_lat, _status.home_lon, _status.home_alt);
+
+	//switch ext mode
+	for (int i = 0; i < TRY_TIMES && _status.main_state != MODE_EXTCTL; i++)
+	{
+
+		extctl_cmd_sw_ext_mode();
+		usleep(100 * 1000);
+	}
+	if (_status.main_state != MODE_EXTCTL)
+	{
+		printf("Switch Ext Mode Err.\n");
+		return;
+	}
+	printf("Switch Ext Mode.\n");
+	usleep(10 * 1000);
+
+	//switch fcs armed
+	for (int i = 0; i < TRY_TIMES && !_status.armed; i++)
+	{
+		extctl_cmd_arm();
+		usleep(10 * 1000);
+	}
+	if (!_status.armed)
+	{
+		printf("Try to Armed Err.\n");
+		return;
+	}
+	printf("Armed.\n");
+
+	//airline
+	float sp_x = 0.0f;
+	float sp_y = 0.0f;
+	float sp_z = airline_alt;
+	float sp_yaw = 0.0f;
+
+	extctl_cmd_setpoint(sp_x, sp_y, sp_z, sp_yaw);
+	printf("Fly to %4.2f %4.2f.\n", sp_x, sp_y);
+
+	usleep(100 * 1000);
 }

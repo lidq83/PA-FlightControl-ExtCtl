@@ -14,7 +14,9 @@ static s_buff _recv;
 static uint8_t _buff[SIZE_BUFF];
 static sem_t _sem_w;
 
+extern int _socket_id;
 static int _serial_fd = -1;
+
 static int _frame_pos_head0 = 0;
 static int _frame_pos_head1 = 0;
 static int _frame_pos_len_frame = 0;
@@ -34,20 +36,22 @@ int start(int argc, char *argv[])
 	_recv.size = SIZE_BUFF;
 	memset(_recv.buff, 0x00, SIZE_BUFF);
 
-	if (argc > 1)
+#ifdef __PX4_POSIX
+	if (client_start() < 0)
 	{
-		_serial_fd = open(argv[1], O_RDWR | O_NONBLOCK);
+		printf("can not connect socket server.\n");
+		return -1;
 	}
-	else
-	{
-		_serial_fd = open(DEV_NAME, O_RDWR | O_NONBLOCK);
-	}
+#else
+	_serial_fd = open(DEV_NAME, O_RDWR | O_NONBLOCK);
 	if (_serial_fd < 0)
 	{
 		printf("can not open dev.\n");
 		return -1;
 	}
+
 	set_opt(_serial_fd, DEV_BAUDRATE, 8, 'N', 1);
+#endif
 
 	pthread_t pthddr;
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_read, NULL);
@@ -63,7 +67,6 @@ int start(int argc, char *argv[])
 int extctl_read(void)
 {
 	int (*p_handle)(void *) = NULL;
-
 	while (!_extctl_should_exit)
 	{
 		frame_read_data();
@@ -176,11 +179,16 @@ int send_data_buff(void *data, int data_type, int data_len)
 
 int send_frame_write(char *frame, int len)
 {
-	int wlen = 0;
-	if (_serial_fd > 0)
+#ifdef __PX4_POSIX
+	_serial_fd = _socket_id;
+#else
+#endif
+
+	if (_serial_fd < 0)
 	{
-		wlen = write(_serial_fd, frame, len);
+		return 0;
 	}
+	int wlen = write(_serial_fd, frame, len);
 	return wlen;
 }
 
@@ -304,8 +312,27 @@ int frame_parse()
 
 void frame_read_data(void)
 {
+#ifdef __PX4_POSIX
+	_serial_fd = _socket_id;
+#else
+#endif
+
+	if (_serial_fd < 0)
+	{
+		return;
+	}
+
 	uint8_t tmp_serial_buf[SIZE_BUFF];
 	int len = read(_serial_fd, tmp_serial_buf, SIZE_BUFF);
+//	if (len > 0)
+//	{
+//		for (int i = 0; i < len; i++)
+//		{
+//			printf("%02x ", tmp_serial_buf[i]);
+//		}
+//		printf("\n");
+//	}
+
 	for (int i = 0; i < len; i++)
 	{
 		_recv.buff[_recv.head] = tmp_serial_buf[i];
@@ -411,12 +438,15 @@ int main(int argc, char *argv[])
 {
 	start(argc, argv);
 
-	airline_test01(-5.0f);
-	//airline_test02(-5.0f);
+//	airline_test01(-15.0f);
+//	airline_test02(-15.0f);
 
-	while (1)
-	{
-		sleep(1);
-	}
+//	while (1)
+//	{
+//		sleep(1);
+//	}
+
+	airline_test03(-15.0);
+
 	return 0;
 }

@@ -15,17 +15,49 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/stat.h>
 #include <string.h>
 #include <pthread.h>
 #include <poll.h>
 #include <errno.h>
-#include <stdio.h>
 #include <math.h>
 #include <unistd.h>
 #include <termios.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <errno.h>
+#include <unistd.h>
+#include <pthread.h>
+#include <string.h>
+#include <semaphore.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/select.h>
+#include <sys/time.h>
+#include <netinet/in.h>
+#include<sys/un.h>
+#include <arpa/inet.h>
+#include <setjmp.h>
+#include <sys/syscall.h>
+#include <signal.h>
+#include <fcntl.h>
+#include <dirent.h>
+#include <poll.h>
 #include <semaphore.h>
 
-#define DEV_NAME			"/dev/ttyS2"
+#define __PX4_POSIX
+
+#ifdef __PX4_POSIX
+#define UNIX_DOMAIN 		"/tmp/UNIX.domain"
+#else
+#define DEV_NAME			"/dev/ttyUSB0"
+#endif
+
 #define DEV_BAUDRATE		(B115200)
 #define DEV_RATE_BASE		(1000 * 1000)
 #define DEV_RATE_READ		(DEV_RATE_BASE / 30)

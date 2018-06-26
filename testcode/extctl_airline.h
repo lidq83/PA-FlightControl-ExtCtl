@@ -45,4 +45,6 @@ void airline_test01(float airline_alt);
 
 void airline_test02(float airline_alt);
 
+void airline_test03(float airline_alt);
+
 #endif /* TESTCODE_EXTCTL_AIRLINE_H_ */
