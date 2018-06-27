@@ -8,6 +8,7 @@ all:
 		extctl_status.c	\
 		extctl_airline.c	\
 		extctl_socket.c	\
+		extctl_protocol.c	\
 		geo.c	\
 		example_airline.c
 

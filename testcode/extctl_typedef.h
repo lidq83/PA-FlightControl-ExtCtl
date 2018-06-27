@@ -66,28 +66,6 @@
 #define DEV_RATE_SP			(DEV_RATE_BASE / 10)
 #define DEV_RATE_STATUS		(DEV_RATE_BASE / 5)
 
-#define FRM_HEAD_0			0X55
-#define FRM_HEAD_1			0XAA
-#define FRM_FOOT_0			0XA5
-#define FRM_FOOT_1			0X5A
-
-#define PAR_HEAD			0
-#define PAR_LEN				1
-#define PAR_END				2
-
-#define SIZE_BUFF			(0x200)
-
-typedef struct s_buff
-{
-	int16_t head;
-	int16_t tail;
-	int16_t size;
-	uint8_t buff[SIZE_BUFF];
-	uint32_t total_len;
-	uint32_t over;
-	uint32_t user_buf_over;
-} s_buff;
-
 typedef struct vehicle_pos_s
 {
 	//position local

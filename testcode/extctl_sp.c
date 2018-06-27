@@ -25,7 +25,7 @@ int extctl_sp_send(void)
 {
 	while (!_extctl_should_exit)
 	{
-		send_data_buff(&_sp, DATA_TYPE_SP, sizeof(vehicle_sp_s));
+		extctl_protocal_write(&_sp, DATA_TYPE_SP, sizeof(vehicle_sp_s));
 		usleep(DEV_RATE_SP);
 	}
 	return 0;

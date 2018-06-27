@@ -48,7 +48,7 @@ int extctl_cmd_sw_ext_mode(void)
 	_cmd.param1 = VEHICLE_CMD_DO_SET_MODE_CUSTOM_ENABLE;
 	_cmd.param2 = VEHICLE_CMD_DO_SET_MODE_CUSTOM_MAIN_EXTCTL;
 
-	send_data_buff(&_cmd, DATA_TYPE_CMD, sizeof(cmd_s));
+	extctl_protocal_write(&_cmd, DATA_TYPE_CMD, sizeof(cmd_s));
 }
 
 int extctl_cmd_arm(void)
@@ -56,7 +56,7 @@ int extctl_cmd_arm(void)
 	_cmd.command = VEHICLE_CMD_COMPONENT_ARM_DISARM;
 	_cmd.param1 = VEHICLE_CMD_COMPONENT_ARM_DISARM_PARAM_ARM;
 
-	send_data_buff(&_cmd, DATA_TYPE_CMD, sizeof(cmd_s));
+	extctl_protocal_write(&_cmd, DATA_TYPE_CMD, sizeof(cmd_s));
 }
 
 int extctl_cmd_disarm(void)
@@ -64,7 +64,7 @@ int extctl_cmd_disarm(void)
 	_cmd.command = VEHICLE_CMD_COMPONENT_ARM_DISARM;
 	_cmd.param1 = VEHICLE_CMD_COMPONENT_ARM_DISARM_PARAM_DISARM;
 
-	send_data_buff(&_cmd, DATA_TYPE_CMD, sizeof(cmd_s));
+	extctl_protocal_write(&_cmd, DATA_TYPE_CMD, sizeof(cmd_s));
 }
 
 int extctl_cmd_takeoff(float alt)
