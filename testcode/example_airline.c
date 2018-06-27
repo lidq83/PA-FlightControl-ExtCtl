@@ -96,7 +96,7 @@ void airline_test01(float airline_alt)
 	}
 
 	uint32_t i = 0;
-	for (float angle = M_PI / 2; angle < M_PI * 6 + M_PI / 2; angle += 0.05)
+	for (float angle = M_PI / 2; angle < M_PI * 6 + M_PI / 2; angle += 0.025)
 	{
 		sp_x = r * sinf(angle) + r;
 		sp_y = r * cosf(angle);
@@ -250,7 +250,7 @@ void airline_test02(float airline_alt)
 	}
 
 	uint32_t i = 0;
-	for (float angle = M_PI / 2; angle < M_PI * 4 + M_PI / 2; angle += 0.005)
+	for (float angle = M_PI / 2; angle < M_PI * 4 + M_PI / 2; angle += 0.003)
 	{
 		float p = a * cosf(3 * angle);
 		sp_x = p * sinf(angle);
