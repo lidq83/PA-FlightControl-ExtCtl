@@ -219,7 +219,7 @@ int extctl_start(void *arg)
 {
 	start(arg);
 
-	airline_test01(-20);
+	airline_test02(-10);
 
 	return 0;
 }

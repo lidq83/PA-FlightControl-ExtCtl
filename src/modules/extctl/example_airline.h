@@ -10,7 +10,7 @@
 
 #include "extctl_airline.h"
 
-#define WAIT_TIME_SEC	(10)
+#define WAIT_TIME_SEC	(1)
 
 void airline_test01(float airline_alt);
 
