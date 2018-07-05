@@ -1,12 +1,9 @@
-INCLUDE_DIRECTORIES(
-	../../../src
-)
-
-SET(SOURCE_FILES
-	extctl_main.c
+add_library(extctl
+	SHARED
 	example_airline.c
 	extctl_airline.c
 	extctl_cmd.c
+	extctl_main.c
 	extctl_pos.c
 	extctl_protocol.c
 	extctl_rc.c
@@ -15,4 +12,6 @@ SET(SOURCE_FILES
 	extctl_status.c
 )
 
-ADD_LIBRARY(modules_extctl ${SOURCE_FILES})
+target_link_libraries(extctl
+	${STD_LIBS}
+)

@@ -9,5 +9,7 @@
 
 int commander_main(int argc, char *argv[])
 {
+	//orb_advertise(ORB_ID(survey_information));
+	printf("commander main !!!\n");
 	return 0;
 }

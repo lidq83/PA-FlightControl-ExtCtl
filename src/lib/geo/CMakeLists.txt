@@ -1,9 +1,8 @@
-INCLUDE_DIRECTORIES(
-	../../../src
-)
-
-SET(SOURCE_FILES
+add_library(geo
+	SHARED
 	geo.c
 )
 
-ADD_LIBRARY(lib_geo ${SOURCE_FILES})
+target_link_libraries (geo
+	${STD_LIBS}
+)

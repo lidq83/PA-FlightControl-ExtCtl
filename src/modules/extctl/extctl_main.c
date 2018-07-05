@@ -23,7 +23,7 @@ static int _frame_pos_crc1 = 0;
 static int _frame_pos_foot0 = 0;
 static int _frame_pos_foot1 = 0;
 
-int start(void *arg)
+int start(void)
 {
 #ifdef __USE_SOCKET
 	if (client_start() < 0)
@@ -215,11 +215,9 @@ int set_opt(int fd, int nSpeed, int nBits, char nEvent, int nStop)
 	return 0;
 }
 
-int extctl_start(void *arg)
+int extctl_main(int argc, char *argv[])
 {
-	start(arg);
-
-	airline_test02(-10);
+	start();
 
 	return 0;
 }

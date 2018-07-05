@@ -1,9 +1,8 @@
-INCLUDE_DIRECTORIES(
-	../../../src
-)
-
-SET(SOURCE_FILES
+add_library(commander
+	SHARED
 	commander.c
 )
 
-ADD_LIBRARY(modules_commander ${SOURCE_FILES})
+target_link_libraries(commander
+	${STD_LIBS}
+)

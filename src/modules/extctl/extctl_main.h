@@ -19,9 +19,9 @@
 #include "extctl_status.h"
 #include "extctl_typedef.h"
 
-int extctl_start(void *arg);
+int extctl_main(int argc, char *argv[]);
 
-static int start(void *arg);
+static int start(void);
 
 static int extctl_read(void);
 
