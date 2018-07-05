@@ -1,0 +1,9 @@
+INCLUDE_DIRECTORIES(
+	../../../src
+)
+
+SET(SOURCE_FILES
+	geo.c
+)
+
+ADD_LIBRARY(lib_geo ${SOURCE_FILES})

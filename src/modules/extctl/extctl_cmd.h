@@ -8,8 +8,8 @@
 #ifndef SRC_MODULES_EXTCTL_EXTCTL_CMD_H_
 #define SRC_MODULES_EXTCTL_EXTCTL_CMD_H_
 
-#include "extctl_typedef.h"
 #include "extctl_protocol.h"
+#include "extctl_typedef.h"
 
 #define VEHICLE_CMD_COMPONENT_ARM_DISARM				(400)
 #define VEHICLE_CMD_COMPONENT_ARM_DISARM_PARAM_ARM		(1)

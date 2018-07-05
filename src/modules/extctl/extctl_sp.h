@@ -8,8 +8,8 @@
 #ifndef SRC_MODULES_EXTCTL_EXTCTL_SP_H_
 #define SRC_MODULES_EXTCTL_EXTCTL_SP_H_
 
-#include "extctl_typedef.h"
 #include "extctl_protocol.h"
+#include "extctl_typedef.h"
 
 int extctl_sp_handle(void *data);
 

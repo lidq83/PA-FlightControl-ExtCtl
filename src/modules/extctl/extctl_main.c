@@ -23,9 +23,9 @@ static int _frame_pos_crc1 = 0;
 static int _frame_pos_foot0 = 0;
 static int _frame_pos_foot1 = 0;
 
-int start(int argc, char *argv[])
+int start(void *arg)
 {
-#ifdef __PX4_POSIX
+#ifdef __USE_SOCKET
 	if (client_start() < 0)
 	{
 		printf("can not connect socket server.\n");
@@ -215,17 +215,11 @@ int set_opt(int fd, int nSpeed, int nBits, char nEvent, int nStop)
 	return 0;
 }
 
-int main(int argc, char *argv[])
+int extctl_start(void *arg)
 {
-	start(argc, argv);
+	start(arg);
 
-	airline_test01(-10.0f);
-	airline_test02(-10.0f);
-
-	while (1)
-	{
-		sleep(1);
-	}
+	airline_test01(-20);
 
 	return 0;
 }

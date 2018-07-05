@@ -8,7 +8,7 @@
 
 int _socket_id = -1;
 
-#ifdef __PX4_POSIX
+#ifdef __USE_SOCKET
 
 static struct sockaddr_un servaddr;
 

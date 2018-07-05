@@ -43,13 +43,6 @@
  */
 
 #include "geo.h"
-#include <unistd.h>
-#include <pthread.h>
-#include <stdio.h>
-#include <math.h>
-#include <stdbool.h>
-#include <string.h>
-#include <float.h>
 
 uint64_t hrt_absolute_time()
 {
@@ -195,3 +188,4 @@ float _wrap_pi(float bearing)
 
 	return bearing;
 }
+

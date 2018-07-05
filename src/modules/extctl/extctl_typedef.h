@@ -8,51 +8,35 @@
 #ifndef SRC_MODULES_EXTCTL_EXTCTL_TYPEDEF_H_
 #define SRC_MODULES_EXTCTL_EXTCTL_TYPEDEF_H_
 
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <string.h>
-#include <pthread.h>
-#include <poll.h>
-#include <errno.h>
-#include <math.h>
-#include <unistd.h>
-#include <termios.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <errno.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <string.h>
-#include <semaphore.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/select.h>
-#include <sys/time.h>
-#include <netinet/in.h>
-#include<sys/un.h>
 #include <arpa/inet.h>
-#include <setjmp.h>
-#include <sys/syscall.h>
-#include <signal.h>
-#include <fcntl.h>
 #include <dirent.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <math.h>
+#include <netinet/in.h>
 #include <poll.h>
+#include <pthread.h>
 #include <semaphore.h>
+#include <setjmp.h>
+#include <signal.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/select.h>
+#include <sys/stat.h>
+#include <sys/syscall.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/un.h>
+#include <termios.h>
+#include <unistd.h>
 
-#define __PX4_POSIX
 
-#ifdef __PX4_POSIX
+#define __USE_SOCKET
+
+#ifdef __USE_SOCKET
 #define UNIX_DOMAIN 		"/tmp/UNIX.domain"
 #else
 #define DEV_NAME			"/dev/ttyUSB0"

@@ -5,12 +5,12 @@
  *      Author: lidq
  */
 
-#ifndef TESTCODE_EXTCTL_SOCKET_H_
-#define TESTCODE_EXTCTL_SOCKET_H_
+#ifndef EXTCTL_EXTCTL_SOCKET_H_
+#define EXTCTL_EXTCTL_SOCKET_H_
 
 #include "extctl_typedef.h"
 
-#ifdef __PX4_POSIX
+#ifdef __USE_SOCKET
 
 int client_start(void);
 
@@ -20,4 +20,4 @@ static void client_exception(void);
 
 #endif
 
-#endif /* TESTCODE_EXTCTL_SOCKET_H_ */
+#endif /* EXTCTL_EXTCTL_SOCKET_H_ */

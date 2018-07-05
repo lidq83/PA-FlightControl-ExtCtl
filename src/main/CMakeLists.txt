@@ -1,0 +1,9 @@
+INCLUDE_DIRECTORIES(
+	../../src
+)
+
+SET(SOURCE_FILES
+	main.c
+)
+
+ADD_LIBRARY(main ${SOURCE_FILES})

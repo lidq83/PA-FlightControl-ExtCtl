@@ -5,17 +5,16 @@
  *      Author: lidq
  */
 
-#ifndef TESTCODE_EXTCTL_AIRLINE_H_
-#define TESTCODE_EXTCTL_AIRLINE_H_
+#ifndef EXTCTL_EXTCTL_AIRLINE_H_
+#define EXTCTL_EXTCTL_AIRLINE_H_
 
-#include "extctl_typedef.h"
-
-#include "extctl_sp.h"
+#include "extctl_cmd.h"
 #include "extctl_pos.h"
 #include "extctl_rc.h"
-#include "extctl_cmd.h"
+#include "extctl_sp.h"
 #include "extctl_status.h"
-#include "geo.h"
+#include "extctl_typedef.h"
+#include <lib/geo/geo.h>
 
 //accept r
 #define ACCEPT_XY		(2.0f)
@@ -41,4 +40,4 @@ void wait_reached_xy(float sp_x, float sp_y);
 
 void wait_reached_z(float sp_z);
 
-#endif /* TESTCODE_EXTCTL_AIRLINE_H_ */
+#endif /* EXTCTL_EXTCTL_AIRLINE_H_ */

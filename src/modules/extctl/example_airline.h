@@ -5,8 +5,8 @@
  *      Author: lidq
  */
 
-#ifndef TESTCODE_EXAMPLE_AIRLINE_H_
-#define TESTCODE_EXAMPLE_AIRLINE_H_
+#ifndef EXTCTL_EXAMPLE_AIRLINE_H_
+#define EXTCTL_EXAMPLE_AIRLINE_H_
 
 #include "extctl_airline.h"
 
@@ -19,4 +19,4 @@ void airline_test02(float airline_alt);
 //void airline_test03(float airline_alt);
 
 
-#endif /* TESTCODE_EXAMPLE_AIRLINE_H_ */
+#endif /* EXTCTL_EXAMPLE_AIRLINE_H_ */
