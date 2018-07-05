@@ -11,6 +11,8 @@ int main(int argc, char *argv[])
 {
 	printf("[PA3] Start...\n");
 
+	orb_main(argc, argv);
+
 	extctl_main(argc, argv);
 
 	commander_main(argc, argv);

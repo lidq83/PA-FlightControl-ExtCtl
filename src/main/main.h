@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <orb_manager.h>
 #include <commander.h>
 #include <extctl_main.h>
 

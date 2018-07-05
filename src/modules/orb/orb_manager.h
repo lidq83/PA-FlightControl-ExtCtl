@@ -8,24 +8,22 @@
 #ifndef SRC_MODULES_ORB_ORB_MANAGER_H_
 #define SRC_MODULES_ORB_ORB_MANAGER_H_
 
-#include <stdio.h>
-#include <stdint.h>
-#include <stdbool.h>
+#include <orb_typedef.h>
 
-#include <uORB/uORB.h>
+int orb_main(int argc, char *argv[]);
 
 int orb_advertise(const struct orb_metadata *meta);
 
-int orb_unadvertise(const struct orb_metadata *meta);
+int orb_unadvertise(int fd);
+
+int orb_publish(const struct orb_metadata *meta, int fd, void *data);
 
 int orb_subscribe(const struct orb_metadata *meta);
 
-int orb_unsubscribe(int handle);
+int orb_unsubscribe(int fd);
 
-int orb_publish(const struct orb_metadata *meta, void *data);
+int orb_check(int fd, bool *updated);
 
-int orb_check(int handle, bool *updated);
-
-int orb_copy(const struct orb_metadata *meta, int handle, void *data);
+int orb_copy(const struct orb_metadata *meta, int fd, void *data);
 
 #endif /* SRC_GORB_GORB_MANAGER_H_ */

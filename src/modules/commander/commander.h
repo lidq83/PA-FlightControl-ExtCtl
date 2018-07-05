@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
-
+#include <pthread.h>
 #include <orb_manager.h>
 #include <uORB/topics/survey_information.h>
 
