@@ -17,6 +17,7 @@ void cmd_test01(void)
 	{
 		si.timestamp = tt++;
 		orb_publish(ORB_ID(survey_information), pub, &si);
+		printf("[commander] si 1 tt %6u.\n", si.timestamp);
 		usleep(10 * 1000);
 	}
 }
@@ -60,11 +61,8 @@ int commander_main(int argc, char *argv[])
 {
 	pthread_t pthddr;
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &cmd_test01, NULL);
-	usleep(1000);
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &cmd_test02, NULL);
-	usleep(1000);
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &cmd_test03, NULL);
-	usleep(1000);
 
 	return 0;
 }

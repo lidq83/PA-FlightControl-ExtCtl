@@ -7,11 +7,37 @@
 
 #include <orb_manager.h>
 
-sem_t sem_rw;
+static sem_t sem_rw;
 
 int orb_main(int argc, char *argv[])
 {
 	sem_init(&sem_rw, 0, 1);
+
+	DIR *dp;
+	struct dirent *dirp;
+	if ((dp = opendir(ORB_PATH_BASE)) == NULL)
+	{
+		return 0;
+	}
+	char filepath[ORB_SIZE_NAME];
+
+	while ((dirp = readdir(dp)) != NULL)
+	{
+		if ((strcmp(dirp->d_name, ".") == 0) || (strcmp(dirp->d_name, "..") == 0))
+		{
+			continue;
+		}
+		snprintf(filepath, ORB_SIZE_NAME, "%s/%s", ORB_PATH_BASE, dirp->d_name);
+		if (dirp->d_type == DT_DIR)
+		{
+			continue;
+		}
+		printf("RM File: %s\n", filepath);
+		remove(filepath);
+	}
+	closedir(dp);
+
+	return 0;
 }
 
 orb_advert_t orb_advertise(const struct orb_metadata *meta)
@@ -24,27 +50,35 @@ orb_advert_t orb_advertise(const struct orb_metadata *meta)
 
 	char path[ORB_SIZE_NAME];
 	snprintf(path, ORB_SIZE_NAME, "%s/%s", ORB_PATH_BASE, meta->o_name);
-
-	//printf("[orb] %s\n", meta->o_name);
-	s_orb_sub *sub = malloc(sizeof(s_orb_sub));
-	s_orb_pub *pub = malloc(sizeof(s_orb_pub));
-
-	pub->meta = malloc(sizeof(meta->o_size));
+	orb_advert_t orb_adv = NULL;
 
 	sem_wait(&sem_rw);
 
-	int fd = open(path, O_CREAT | O_WRONLY, 0666);
-
-	sem_init(&pub->sem_rw, 0, 1);
-	sub->pub = pub;
-	memset(pub->sub_updated, 0, ORB_SUB_MAX_NUM);
-	lseek(fd, 0, SEEK_SET);
-	write(fd, &sub, sizeof(void*));
-	close(fd);
-
+	FILE *fp = NULL;
+	if ((access(path, F_OK)) != EOF)
+	{
+		int fd = open(path, O_RDONLY, 0666);
+		s_orb_sub *sub = NULL;
+		lseek(fd, 0, SEEK_SET);
+		read(fd, &sub, sizeof(void*));
+		close(fd);
+		orb_adv = (orb_advert_t) sub;
+	}
+	else
+	{
+		s_orb_sub *sub = malloc(sizeof(s_orb_sub));
+		s_orb_pub *pub = malloc(sizeof(s_orb_pub));
+		pub->meta = malloc(sizeof(meta->o_size));
+		int fd = open(path, O_CREAT | O_WRONLY, 0666);
+		sem_init(&pub->sem_rw, 0, 1);
+		sub->pub = pub;
+		memset(pub->sub_updated, 0, ORB_SUB_MAX_NUM);
+		lseek(fd, 0, SEEK_SET);
+		write(fd, &sub, sizeof(void*));
+		close(fd);
+		orb_adv = (orb_advert_t) sub;
+	}
 	sem_post(&sem_rw);
-
-	orb_advert_t orb_adv = (orb_advert_t) sub;
 	return orb_adv;
 }
 
@@ -84,12 +118,9 @@ int orb_publish(const struct orb_metadata *meta, orb_advert_t orb_adv, void *dat
 	}
 
 	s_orb_pub *pub = sub->pub;
-
 	sem_wait(&pub->sem_rw);
-
 	memset(pub->sub_updated, 1, ORB_SUB_MAX_NUM);
 	memcpy(pub->meta, data, meta->o_size);
-
 	sem_post(&pub->sem_rw);
 
 	return 0;
@@ -105,19 +136,28 @@ orb_advert_t orb_subscribe(const struct orb_metadata *meta)
 
 	char path[ORB_SIZE_NAME];
 	snprintf(path, ORB_SIZE_NAME, "%s/%s", ORB_PATH_BASE, meta->o_name);
-
-	s_orb_sub *sub = malloc(sizeof(s_orb_sub));
-
 	sem_wait(&sem_rw);
-
-	sub->fd = open(path, O_CREAT | O_RDONLY, 0666);
+	FILE *fp = NULL;
+	if ((access(path, F_OK)) == EOF)
+	{
+		s_orb_sub *sub = malloc(sizeof(s_orb_sub));
+		s_orb_pub *pub = malloc(sizeof(s_orb_pub));
+		pub->meta = malloc(sizeof(meta->o_size));
+		int fd = open(path, O_CREAT | O_WRONLY, 0666);
+		sem_init(&pub->sem_rw, 0, 1);
+		sub->pub = pub;
+		memset(pub->sub_updated, 0, ORB_SUB_MAX_NUM);
+		lseek(fd, 0, SEEK_SET);
+		write(fd, &sub, sizeof(void*));
+		close(fd);
+	}
+	s_orb_sub *sub = malloc(sizeof(s_orb_sub));
+	sub->fd = open(path, O_RDONLY, 0666);
 	s_orb_sub *pub_sub = NULL;
 	lseek(sub->fd, 0, SEEK_SET);
 	read(sub->fd, &pub_sub, sizeof(void*));
-
-	sem_post(&sem_rw);
-
 	sub->pub = pub_sub->pub;
+	sem_post(&sem_rw);
 	orb_advert_t orb_adv = (orb_advert_t) sub;
 	return orb_adv;
 }
