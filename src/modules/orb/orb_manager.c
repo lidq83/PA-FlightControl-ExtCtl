@@ -7,62 +7,61 @@
 
 #include <orb_manager.h>
 
-static sem_t sem_rw;
+sem_t sem_rw;
 
 int orb_main(int argc, char *argv[])
 {
 	sem_init(&sem_rw, 0, 1);
 }
 
-int orb_advertise(const struct orb_metadata *meta)
+orb_advert_t orb_advertise(const struct orb_metadata *meta)
 {
 	if (meta == NULL)
 	{
 		printf("[orb] %s meta is null.\n", __func__);
-		return -1;
+		return NULL;
 	}
-
-	//printf("[orb] %s\n", meta->o_name);
 
 	char path[ORB_SIZE_NAME];
 	snprintf(path, ORB_SIZE_NAME, "%s/%s", ORB_PATH_BASE, meta->o_name);
-	int fd = open(path, O_CREAT | O_WRONLY, 0666);
-	if (fd < 0)
-	{
-		printf("[orb] %s can not create orb node file %s.\n", __func__, path);
-		return -1;
-	}
 
-	char orb_sub_updated[ORB_SUB_MAX_NUM];
-	memset(orb_sub_updated, false, ORB_SUB_MAX_NUM);
+	//printf("[orb] %s\n", meta->o_name);
+	s_orb_sub *sub = malloc(sizeof(s_orb_sub));
+	s_orb_pub *pub = malloc(sizeof(s_orb_pub));
 
-	char buff[meta->o_size];
-	memset(buff, 0, meta->o_size);
+	pub->meta = malloc(sizeof(meta->o_size));
 
 	sem_wait(&sem_rw);
 
+	int fd = open(path, O_CREAT | O_WRONLY, 0666);
+
+	sem_init(&pub->sem_rw, 0, 1);
+	sub->pub = pub;
+	memset(pub->sub_updated, 0, ORB_SUB_MAX_NUM);
 	lseek(fd, 0, SEEK_SET);
-	write(fd, &fd, sizeof(int));
-	write(fd, orb_sub_updated, ORB_SUB_MAX_NUM);
-	write(fd, buff, meta->o_size);
-	fsync(fd);
+	write(fd, &sub, sizeof(void*));
+	close(fd);
 
 	sem_post(&sem_rw);
 
-	return fd;
+	orb_advert_t orb_adv = (orb_advert_t) sub;
+	return orb_adv;
 }
 
-int orb_unadvertise(int fd)
+int orb_unadvertise(orb_advert_t orb_adv)
 {
-	if (fd < 0)
+	s_orb_sub *sub = (s_orb_sub *) orb_adv;
+	if (sub == NULL || sub->pub == NULL || sub->pub->meta == NULL)
 	{
-		printf("[orb] %s fd is %d.\n", __func__, fd);
 		return -1;
 	}
-	return close(fd);
+	sem_destroy(&sub->pub->sem_rw);
+	free(sub->pub->meta);
+	free(sub->pub);
+	free(sub);
 }
 
-int orb_publish(const struct orb_metadata *meta, int fd, void *data)
+int orb_publish(const struct orb_metadata *meta, orb_advert_t orb_adv, void *data)
 {
 	if (meta == NULL)
 	{
@@ -70,9 +69,11 @@ int orb_publish(const struct orb_metadata *meta, int fd, void *data)
 		return -1;
 	}
 
-	if (fd < 0)
+	s_orb_sub *sub = (s_orb_sub *) orb_adv;
+
+	if (sub == NULL || sub->pub == NULL)
 	{
-		printf("[orb] %s fd is invaild.\n", __func__);
+		printf("[orb] %s pub is null.\n", __func__);
 		return -1;
 	}
 
@@ -82,57 +83,65 @@ int orb_publish(const struct orb_metadata *meta, int fd, void *data)
 		return -1;
 	}
 
-	char orb_sub_updated[ORB_SUB_MAX_NUM];
-	memset(orb_sub_updated, true, ORB_SUB_MAX_NUM);
+	s_orb_pub *pub = sub->pub;
 
-	sem_wait(&sem_rw);
+	sem_wait(&pub->sem_rw);
 
-	lseek(fd, sizeof(fd), SEEK_SET);
-	write(fd, orb_sub_updated, ORB_SUB_MAX_NUM);
-	write(fd, data, meta->o_size);
-	fsync(fd);
+	memset(pub->sub_updated, 1, ORB_SUB_MAX_NUM);
+	memcpy(pub->meta, data, meta->o_size);
 
-	sem_post(&sem_rw);
+	sem_post(&pub->sem_rw);
 
 	return 0;
 }
 
-int orb_subscribe(const struct orb_metadata *meta)
+orb_advert_t orb_subscribe(const struct orb_metadata *meta)
 {
 	if (meta == NULL)
 	{
 		printf("[orb] %s meta is null.\n", __func__);
-		return -1;
+		return NULL;
 	}
 
 	char path[ORB_SIZE_NAME];
 	snprintf(path, ORB_SIZE_NAME, "%s/%s", ORB_PATH_BASE, meta->o_name);
 
-	int fd = open(path, O_CREAT | O_RDWR, 0666);
-	if (fd < 0)
-	{
-		printf("[orb] %s can not open orb node file %s.\n", __func__, path);
-		return -1;
-	}
+	s_orb_sub *sub = malloc(sizeof(s_orb_sub));
 
-	return fd;
+	sem_wait(&sem_rw);
+
+	sub->fd = open(path, O_CREAT | O_RDONLY, 0666);
+	s_orb_sub *pub_sub = NULL;
+	lseek(sub->fd, 0, SEEK_SET);
+	read(sub->fd, &pub_sub, sizeof(void*));
+
+	sem_post(&sem_rw);
+
+	sub->pub = pub_sub->pub;
+	orb_advert_t orb_adv = (orb_advert_t) sub;
+	return orb_adv;
 }
 
-int orb_unsubscribe(int fd)
+int orb_unsubscribe(orb_advert_t orb_adv)
 {
-	if (fd < 0)
+	s_orb_sub *sub = (s_orb_sub *) orb_adv;
+	if (sub == NULL)
 	{
-		printf("[orb] %s fd is %d.\n", __func__, fd);
 		return -1;
 	}
-	return close(fd);
+	if (sub->fd > -1)
+	{
+		close(sub->fd);
+	}
+	free(sub);
 }
 
-int orb_check(int fd, bool *updated)
+int orb_check(orb_advert_t orb_adv, bool *updated)
 {
-	if (fd < 0)
+	s_orb_sub *sub = (s_orb_sub *) orb_adv;
+	if (sub == NULL || sub->pub == NULL)
 	{
-		printf("[orb] %s fd is %d.\n", __func__, fd);
+		printf("[orb] %s sub is null.\n", __func__);
 		return -1;
 	}
 
@@ -144,34 +153,38 @@ int orb_check(int fd, bool *updated)
 
 	*updated = false;
 
-	char orb_sub_updated[ORB_SUB_MAX_NUM];
+	s_orb_pub *pub = sub->pub;
 
-	sem_wait(&sem_rw);
+	sem_wait(&pub->sem_rw);
 
-	lseek(fd, sizeof(fd), SEEK_SET);
-	int len = read(fd, &orb_sub_updated, ORB_SUB_MAX_NUM);
-
-	sem_post(&sem_rw);
-
-	if (orb_sub_updated[fd])
+	if (pub->sub_updated[sub->fd])
 	{
 		*updated = true;
 	}
 
+	sem_post(&pub->sem_rw);
+
 	return 0;
 }
 
-int orb_copy(const struct orb_metadata *meta, int fd, void *data)
+int orb_copy(const struct orb_metadata *meta, orb_advert_t orb_adv, void *data)
 {
+	s_orb_sub *sub = (s_orb_sub *) orb_adv;
+	if (sub == NULL || sub->pub == NULL)
+	{
+		printf("[orb] %s sub is null.\n", __func__);
+		return -1;
+	}
+
 	if (meta == NULL)
 	{
 		printf("[orb] %s meta is null.\n", __func__);
 		return -1;
 	}
 
-	if (fd < 0)
+	if (sub->fd < 0)
 	{
-		printf("[orb] %s fd is %d.\n", __func__, fd);
+		printf("[orb] %s fd is %d.\n", __func__, sub->fd);
 		return -1;
 	}
 
@@ -181,18 +194,14 @@ int orb_copy(const struct orb_metadata *meta, int fd, void *data)
 		return -1;
 	}
 
-	char orb_sub_updated[ORB_SUB_MAX_NUM];
+	s_orb_pub *pub = sub->pub;
 
-	sem_wait(&sem_rw);
+	sem_wait(&pub->sem_rw);
 
-	lseek(fd, sizeof(fd), SEEK_SET);
-	read(fd, &orb_sub_updated, ORB_SUB_MAX_NUM);
-	orb_sub_updated[fd] = false;
-	read(fd, data, meta->o_size);
-	lseek(fd, sizeof(fd), SEEK_SET);
-	write(fd, orb_sub_updated, ORB_SUB_MAX_NUM);
+	memcpy(data, pub->meta, sizeof(meta->o_size));
+	pub->sub_updated[sub->fd] = 0;
 
-	sem_post(&sem_rw);
+	sem_post(&pub->sem_rw);
 
 	return 0;
 }
