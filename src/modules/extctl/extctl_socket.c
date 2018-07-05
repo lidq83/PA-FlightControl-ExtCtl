@@ -14,40 +14,40 @@ static struct sockaddr_un servaddr;
 
 int client_start()
 {
-	printf("client start.\n");
+	printf("[extctl] client start.\n");
 //	for (int i = 0; i < 32; i++)
 //	{
 //		signal(i, (void (*)(int)) &client_exception);
 //	}
 //	signal(SIGPIPE, (void (*)(int)) &client_exception);
 
-	printf("client init.\n");
+	printf("[extctl] client init.\n");
 //创建套接字
 	_socket_id = socket(PF_UNIX, SOCK_STREAM, 0);
 	if (_socket_id == -1)
 	{
-		printf("%s\n", strerror(errno));
+		printf("[extctl] %s\n", strerror(errno));
 		return -1;
 	}
 
 	if (make_socket_non_blocking(_socket_id) < 0)
 	{
-		printf("make noblock error\n");
+		printf("[extctl] make noblock error\n");
 		return -1;
 	}
 
-	printf("inet_pton\n");
+	printf("[extctl] inet_pton\n");
 	//IP地址和端口
 	memset(&servaddr, 0, sizeof(servaddr));
 	servaddr.sun_family = PF_UNIX;
 	strcpy(servaddr.sun_path, UNIX_DOMAIN);
 
-	printf("connect host\n");
+	printf("[extctl] connect host\n");
 	//连接到服务器
 	int conn = connect(_socket_id, (struct sockaddr*) &servaddr, sizeof(servaddr));
 	if (conn < 0)
 	{
-		printf("%s\n", strerror(errno));
+		printf("[extctl] %s\n", strerror(errno));
 		pthread_detach(pthread_self());
 		return -1;
 	}
@@ -62,7 +62,7 @@ int make_socket_non_blocking(int sfd)
 	flags = fcntl(sfd, F_GETFL, 0);
 	if (flags == -1)
 	{
-		printf("fcntl error\n");
+		printf("[extctl] fcntl error\n");
 		return -1;
 	}
 
@@ -70,7 +70,7 @@ int make_socket_non_blocking(int sfd)
 	s = fcntl(sfd, F_SETFL, flags);
 	if (s == -1)
 	{
-		printf("fcntl error\n");
+		printf("[extctl] fcntl error\n");
 		return -1;
 	}
 

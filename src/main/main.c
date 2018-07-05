@@ -5,20 +5,20 @@
  *      Author: lidq
  */
 
-#include "main.h"
+#include <main.h>
 
 int main(int argc, char *argv[])
 {
-	printf("PA3-Extctl\n");
+	printf("[PA3] Start...\n");
 
-//	extctl_start(argc, argv);
-//
+	extctl_main(argc, argv);
+
 	commander_main(argc, argv);
-//
-//	while (1)
-//	{
-//		sleep(1);
-//	}
+
+	while (1)
+	{
+		sleep(1);
+	}
 
 	return 0;
 }

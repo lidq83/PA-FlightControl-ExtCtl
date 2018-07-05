@@ -1,10 +1,10 @@
 all: mkbuild pa3extctl
 
 mkbuild:
-	mkdir -p build
+	@mkdir -p build
 
 pa3extctl:
-	cd build && cmake ../ && make && make pa3extctl_output
+	@cd build && cmake ../ && make pa3extctl_output --silent
 	
 clean:
-	rm -rvf build
+	@rm -rf build

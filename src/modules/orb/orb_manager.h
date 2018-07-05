@@ -5,13 +5,14 @@
  *      Author: lidq
  */
 
-#ifndef SRC_MODULES_UORB_ORB_MANAGER_H_
-#define SRC_MODULES_UORB_ORB_MANAGER_H_
+#ifndef SRC_MODULES_ORB_ORB_MANAGER_H_
+#define SRC_MODULES_ORB_ORB_MANAGER_H_
 
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include "uORB.h"
+
+#include <uORB/uORB.h>
 
 int orb_advertise(const struct orb_metadata *meta);
 

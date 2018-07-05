@@ -28,14 +28,14 @@ int start(void)
 #ifdef __USE_SOCKET
 	if (client_start() < 0)
 	{
-		printf("can not connect socket server.\n");
+		printf("[extctl] can not connect socket server.\n");
 		return -1;
 	}
 #else
 	_serial_fd = open(DEV_NAME, O_RDWR | O_NONBLOCK);
 	if (_serial_fd < 0)
 	{
-		printf("can not open dev.\n");
+		printf("[extctl] can not open dev.\n");
 		return -1;
 	}
 
@@ -125,7 +125,7 @@ int set_opt(int fd, int nSpeed, int nBits, char nEvent, int nStop)
 	//保存测试现有串口参数设置，在这里如果串口号等出错，会有相关的出错信息
 	if (tcgetattr(fd, &oldtio) != 0)
 	{
-		perror("SetupSerial 1");
+		printf("[extctl] SetupSerial 1");
 		return -1;
 	}
 	bzero(&newtio, sizeof(newtio));
@@ -208,10 +208,10 @@ int set_opt(int fd, int nSpeed, int nBits, char nEvent, int nStop)
 	//激活新配置
 	if ((tcsetattr(fd, TCSANOW, &newtio)) != 0)
 	{
-		perror("com set error");
+		printf("[extctl] com set error");
 		return -1;
 	}
-	printf("set done!\n");
+	printf("[extctl] set done!\n");
 	return 0;
 }
 

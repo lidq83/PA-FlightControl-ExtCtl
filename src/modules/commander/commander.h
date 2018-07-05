@@ -13,6 +13,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include <orb_manager.h>
+#include <uORB/topics/survey_information.h>
+
 int commander_main(int argc, char *argv[]);
 
 #endif /* SRC_MODULES_COMMANDER_COMMANDER_H_ */

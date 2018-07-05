@@ -5,16 +5,15 @@
  *      Author: lidq
  */
 
-#include "orb_manager.h"
+#include <orb_manager.h>
 
-//公告
 int orb_advertise(const struct orb_metadata *meta)
 {
 	if (meta == NULL)
 	{
 		return -1;
 	}
-	printf("%s\n", meta->o_name);
+	printf("[orb] %s\n", meta->o_name);
 	//printf("%s\n", meta->o_fields);
 	//printf("%u\n", meta->o_size);
 	//printf("%u\n", meta->o_size_no_padding);

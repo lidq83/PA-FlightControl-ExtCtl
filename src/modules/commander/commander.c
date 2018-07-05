@@ -5,11 +5,13 @@
  *      Author: lidq
  */
 
-#include "commander.h"
+#include <commander.h>
 
 int commander_main(int argc, char *argv[])
 {
-	//orb_advertise(ORB_ID(survey_information));
-	printf("commander main !!!\n");
+	orb_advertise(ORB_ID(survey_information));
+
+	printf("[commander] main running.\n");
+
 	return 0;
 }
