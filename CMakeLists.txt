@@ -13,6 +13,7 @@ set(STD_LIBS
 )
 
 include_directories(
+	${PROJECT_BINARY_DIR}/msg
 	${PROJECT_SOURCE_DIR}/src
 	${PROJECT_SOURCE_DIR}/src/main
 	${PROJECT_SOURCE_DIR}/src/lib/geo
@@ -21,12 +22,12 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/src/modules/orb
 )
 
+add_subdirectory(msg)
 add_subdirectory(src/main)
 add_subdirectory(src/lib/geo)
 add_subdirectory(src/modules/commander)
 add_subdirectory(src/modules/extctl)
 add_subdirectory(src/modules/orb)
-
 
 set(TARGET_FILE
 	${PROJECT_BINARY_DIR}/src/main/pa3extctl

@@ -8,6 +8,10 @@
 #ifndef SRC_GORB_GORB_H_
 #define SRC_GORB_GORB_H_
 
+#include <sys/types.h>
+#include <stdint.h>
+#include <stdbool.h>
+
 /**
  * Object metadata.
  */

@@ -1,0 +1,76 @@
+@###############################################
+@#
+@# PX4 ROS compatible message source code
+@# generation for C++
+@#
+@# EmPy template for generating <msg>.h files
+@# Based on the original template for ROS
+@#
+@###############################################
+@# Start of Template
+@#
+@# Context:
+@#  - file_name_in (String) Source file
+@#  - spec (msggen.MsgSpec) Parsed specification of the .msg file
+@#  - md5sum (String) MD5Sum of the .msg specification
+@#  - search_path (dict) search paths for genmsg
+@#  - topics (List of String) multi-topic names
+@###############################################
+
+@{
+import genmsg.msgs
+import gencpp
+from px_generate_uorb_topic_helper import * # this is in Tools/
+
+uorb_struct = '%s_s'%spec.short_name
+topic_name = spec.short_name
+}@
+
+#pragma once
+
+@##############################
+@# Generic Includes
+@##############################
+
+#include <uORB/uORB.h>
+
+@##############################
+@# Includes for dependencies
+@##############################
+@{
+for field in spec.parsed_fields():
+    if (not field.is_builtin):
+        if (not field.is_header):
+            (package, name) = genmsg.names.package_resource_name(field.base_type)
+            package = package or spec.package # convert '' to package
+            print('#include <uORB/topics/%s.h>'%(name))
+}@
+
+@# Constants c style
+
+@##############################
+@# Main struct of message
+@##############################
+@{
+
+def print_parsed_fields():
+    # sort fields (using a stable sort)
+    sorted_fields = sorted(spec.parsed_fields(), key=sizeof_field_type, reverse=True)
+    struct_size, padding_end_size = add_padding_bytes(sorted_fields, search_path)
+    # loop over all fields and print the type and name
+    for field in sorted_fields:
+        if (not field.is_header):
+            print_field_def(field)
+}@
+
+typedef struct @(uorb_struct)
+{
+@# timestamp at the beginning of each topic is required for logger
+	uint64_t timestamp; // required for logger
+@print_parsed_fields()
+} @(uorb_struct);
+
+/* register this as object request broker structure */
+@[for multi_topic in topics]@
+ORB_DECLARE(@multi_topic);
+@[end for]

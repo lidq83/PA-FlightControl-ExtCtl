@@ -14,7 +14,7 @@
 #include <stdbool.h>
 #include <pthread.h>
 #include <orb_manager.h>
-#include <uORB/topics/survey_information.h>
+#include <uORB/topics/vehicle_pos.h>
 
 int commander_main(int argc, char *argv[]);
 

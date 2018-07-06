@@ -32,7 +32,8 @@
 #include <sys/un.h>
 #include <termios.h>
 #include <unistd.h>
-
+#include <uORB/topics/vehicle_pos.h>
+#include <uORB/topics/vehicle_sp.h>
 
 #define __USE_SOCKET
 
@@ -50,55 +51,55 @@
 #define DEV_RATE_SP			(DEV_RATE_BASE / 10)
 #define DEV_RATE_STATUS		(DEV_RATE_BASE / 5)
 
-typedef struct vehicle_pos_s
-{
-	//position local
-	struct
-	{
-		float x;
-		float y;
-		float z;
-	};
-	struct
-	{
-		float vx;
-		float vy;
-		float vz;
-	};
-	//position global
-	struct
-	{
-		double lat;
-		double lon;
-		float alt;
-	};
-	struct
-	{
-		float vel_n;
-		float vel_e;
-		float vel_d;
-	};
-} vehicle_pos_s;
-
-typedef struct vehicle_sp_s
-{
-	bool run_pos_control;
-	bool run_alt_control;
-	bool run_yaw_control;
-	float sp_yaw;
-	struct
-	{
-		float sp_x;
-		float sp_y;
-		float sp_z;
-	};
-	struct
-	{
-		float vel_sp_x;
-		float vel_sp_y;
-		float vel_sp_z;
-	};
-} vehicle_sp_s;
+//typedef struct vehicle_pos_s
+//{
+//	//position local
+//	struct
+//	{
+//		float x;
+//		float y;
+//		float z;
+//	};
+//	struct
+//	{
+//		float vx;
+//		float vy;
+//		float vz;
+//	};
+//	//position global
+//	struct
+//	{
+//		double lat;
+//		double lon;
+//		float alt;
+//	};
+//	struct
+//	{
+//		float vel_n;
+//		float vel_e;
+//		float vel_d;
+//	};
+//} vehicle_pos_s;
+//
+//typedef struct vehicle_sp_s
+//{
+//	bool run_pos_control;
+//	bool run_alt_control;
+//	bool run_yaw_control;
+//	float sp_yaw;
+//	struct
+//	{
+//		float sp_x;
+//		float sp_y;
+//		float sp_z;
+//	};
+//	struct
+//	{
+//		float vel_sp_x;
+//		float vel_sp_y;
+//		float vel_sp_z;
+//	};
+//} vehicle_sp_s;
 
 typedef struct sys_status_s
 {
