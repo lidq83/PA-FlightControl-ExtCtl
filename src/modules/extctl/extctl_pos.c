@@ -8,16 +8,16 @@
 #include "extctl_pos.h"
 
 extern bool _extctl_should_exit;
-vehicle_pos_s _pos = { 0 };
+ext_vehicle_pos_s _pos = { 0 };
 
 int extctl_pos_handle(void *data)
 {
-	vehicle_pos_s *pos = data;
+	ext_vehicle_pos_s *pos = data;
 	if (pos == NULL)
 	{
 		return -1;
 	}
-	memcpy(&_pos, pos, sizeof(vehicle_pos_s));
+	memcpy(&_pos, pos, sizeof(ext_vehicle_pos_s));
 
 	return 0;
 }

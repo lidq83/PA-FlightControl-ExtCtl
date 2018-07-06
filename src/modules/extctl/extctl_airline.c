@@ -7,8 +7,8 @@
 
 #include "extctl_airline.h"
 
-extern vehicle_pos_s _pos;
-extern sys_status_s _status;
+extern ext_vehicle_pos_s _pos;
+extern ext_sys_status_s _status;
 
 float dis_z(float sp_z, float pos_z)
 {

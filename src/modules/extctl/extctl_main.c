@@ -219,5 +219,7 @@ int extctl_main(int argc, char *argv[])
 {
 	start();
 
+	airline_test01(-10);
+
 	return 0;
 }

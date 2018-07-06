@@ -7,8 +7,8 @@
 
 #include "example_airline.h"
 
-extern vehicle_pos_s _pos;
-extern sys_status_s _status;
+extern ext_vehicle_pos_s _pos;
+extern ext_sys_status_s _status;
 
 void airline_test01(float airline_alt)
 {
@@ -314,7 +314,7 @@ void airline_test02(float airline_alt)
 
 	printf("[extctl] Landed.\n");
 
-	for (int i = 0; i < _status.armed; i++)
+	for (int i = 0; _status.armed; i++)
 	{
 		extctl_cmd_disarm();
 		usleep(200 * 1000);

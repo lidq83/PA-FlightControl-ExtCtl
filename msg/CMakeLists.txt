@@ -1,7 +1,10 @@
 set(msg_files
-	vehicle_pos.msg
-	vehicle_sp.msg
-	)
+	ext_cmd.msg
+	ext_rc.msg
+	ext_sys_status.msg
+	ext_vehicle_pos.msg
+	ext_vehicle_sp.msg
+)
 
 # headers
 set(msg_out_path ${PROJECT_BINARY_DIR}/uORB/topics)

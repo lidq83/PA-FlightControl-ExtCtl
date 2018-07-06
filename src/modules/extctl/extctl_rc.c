@@ -11,7 +11,7 @@ extern bool _extctl_should_exit;
 
 int extctl_rc_handle(void *data)
 {
-	rc_s *rc = data;
+	ext_rc_s *rc = data;
 	if (rc == NULL)
 	{
 		return -1;
