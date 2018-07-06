@@ -68,7 +68,7 @@ orb_advert_t orb_advertise(const struct orb_metadata *meta)
 	{
 		s_orb_sub *sub = malloc(sizeof(s_orb_sub));
 		s_orb_pub *pub = malloc(sizeof(s_orb_pub));
-		pub->meta = malloc(sizeof(meta->o_size));
+		pub->meta = malloc(meta->o_size);
 		int fd = open(path, O_CREAT | O_WRONLY, 0666);
 		sem_init(&pub->sem_rw, 0, 1);
 		sub->pub = pub;
@@ -120,8 +120,11 @@ int orb_publish(const struct orb_metadata *meta, orb_advert_t orb_adv, void *dat
 
 	s_orb_pub *pub = sub->pub;
 	sem_wait(&pub->sem_rw);
+
 	memset(pub->sub_updated, 1, ORB_SUB_MAX_NUM);
+
 	memcpy(pub->meta, data, meta->o_size);
+
 	sem_post(&pub->sem_rw);
 
 	return 0;
@@ -143,7 +146,7 @@ orb_advert_t orb_subscribe(const struct orb_metadata *meta)
 	{
 		s_orb_sub *sub = malloc(sizeof(s_orb_sub));
 		s_orb_pub *pub = malloc(sizeof(s_orb_pub));
-		pub->meta = malloc(sizeof(meta->o_size));
+		pub->meta = malloc(meta->o_size);
 		int fd = open(path, O_CREAT | O_WRONLY, 0666);
 		sem_init(&pub->sem_rw, 0, 1);
 		sub->pub = pub;
