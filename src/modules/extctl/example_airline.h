@@ -10,7 +10,7 @@
 
 #include "extctl_airline.h"
 
-#define WAIT_TIME_SEC	(1)
+#define WAIT_TIME_SEC	(3)
 
 void airline_test01(void);
 
