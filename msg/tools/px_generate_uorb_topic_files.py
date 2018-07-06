@@ -76,9 +76,9 @@ __license__ = "BSD"
 __email__ = "thomasgubler@gmail.com"
 
 
-TEMPLATE_FILE = ['msg.h.template', 'msg.cpp.template']
-TOPICS_LIST_TEMPLATE_FILE = 'uORBTopics.cpp.template'
-OUTPUT_FILE_EXT = ['.h', '.cpp']
+TEMPLATE_FILE = ['msg.h.template', 'msg.c.template']
+TOPICS_LIST_TEMPLATE_FILE = 'uORBTopics.c.template'
+OUTPUT_FILE_EXT = ['.h', '.c']
 INCL_DEFAULT = ['std_msgs:./msg/std_msgs']
 PACKAGE = 'px4'
 TOPICS_TOKEN = '# TOPICS '

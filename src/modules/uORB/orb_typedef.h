@@ -5,8 +5,8 @@
  *      Author: lidq
  */
 
-#ifndef SRC_MODULES_ORB_ORB_TYPEDEF_H_
-#define SRC_MODULES_ORB_ORB_TYPEDEF_H_
+#ifndef SRC_MODULES_UORB_ORB_TYPEDEF_H_
+#define SRC_MODULES_UORB_ORB_TYPEDEF_H_
 
 #include <stdio.h>
 #include <stdint.h>
@@ -17,7 +17,8 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <semaphore.h>
-#include <uORB/uORB.h>
+
+#include "../uORB/uORB.h"
 
 #define ORB_PATH_BASE		"/data/mnt/x"
 #define ORB_SIZE_NAME		(0x200)
@@ -38,4 +39,4 @@ typedef struct s_orb_sub
 	s_orb_pub *pub;
 } s_orb_sub;
 
-#endif /* SRC_MODULES_ORB_ORB_TYPEDEF_H_ */
+#endif /* SRC_MODULES_UORB_ORB_TYPEDEF_H_ */

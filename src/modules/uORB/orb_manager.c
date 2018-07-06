@@ -5,7 +5,7 @@
  *      Author: lidq
  */
 
-#include <orb_manager.h>
+#include "../uORB/orb_manager.h"
 
 static sem_t sem_rw;
 
@@ -75,6 +75,7 @@ orb_advert_t orb_advertise(const struct orb_metadata *meta)
 		memset(pub->sub_updated, 0, ORB_SUB_MAX_NUM);
 		lseek(fd, 0, SEEK_SET);
 		write(fd, &sub, sizeof(void*));
+		fsync(fd);
 		close(fd);
 		orb_adv = (orb_advert_t) sub;
 	}
@@ -149,6 +150,7 @@ orb_advert_t orb_subscribe(const struct orb_metadata *meta)
 		memset(pub->sub_updated, 0, ORB_SUB_MAX_NUM);
 		lseek(fd, 0, SEEK_SET);
 		write(fd, &sub, sizeof(void*));
+		fsync(fd);
 		close(fd);
 	}
 	s_orb_sub *sub = malloc(sizeof(s_orb_sub));

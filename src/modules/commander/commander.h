@@ -13,8 +13,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <pthread.h>
-#include <orb_manager.h>
 #include <uORB/topics/vehicle_pos.h>
+#include "../uORB/orb_manager.h"
 
 int commander_main(int argc, char *argv[]);
 

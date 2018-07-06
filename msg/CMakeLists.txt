@@ -2,7 +2,7 @@ set(msg_files
 	vehicle_pos.msg
 	vehicle_sp.msg
 	)
-	
+
 # headers
 set(msg_out_path ${PROJECT_BINARY_DIR}/uORB/topics)
 set(msg_source_out_path	${CMAKE_CURRENT_BINARY_DIR}/topics_sources)
@@ -11,7 +11,7 @@ set(uorb_headers)
 foreach(msg_file ${msg_files})
 	get_filename_component(msg ${msg_file} NAME_WE)
 	list(APPEND uorb_headers ${msg_out_path}/${msg}.h)
-	list(APPEND uorb_sources ${msg_source_out_path}/${msg}.cpp)
+	list(APPEND uorb_sources ${msg_source_out_path}/${msg}.c)
 endforeach()
 
 # Generate uORB headers

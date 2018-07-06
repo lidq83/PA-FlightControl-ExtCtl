@@ -6,6 +6,7 @@ target_link_libraries(pa3extctl
 	commander
 	geo
 	extctl
-	orb
+	uORB
+	uorb_msgs
 	${STD_LIBS}
 )

@@ -5,10 +5,10 @@
  *      Author: lidq
  */
 
-#ifndef SRC_MODULES_ORB_ORB_MANAGER_H_
-#define SRC_MODULES_ORB_ORB_MANAGER_H_
+#ifndef SRC_MODULES_UORB_ORB_MANAGER_H_
+#define SRC_MODULES_UORB_ORB_MANAGER_H_
 
-#include <orb_typedef.h>
+#include "../uORB/orb_typedef.h"
 
 int orb_main(int argc, char *argv[]);
 

@@ -10,9 +10,9 @@
 
 #include <stdio.h>
 #include <unistd.h>
-#include <orb_manager.h>
 #include <commander.h>
 #include <extctl_main.h>
+#include "../modules/uORB/orb_manager.h"
 
 int main(int argc, char *argv[]);
 
