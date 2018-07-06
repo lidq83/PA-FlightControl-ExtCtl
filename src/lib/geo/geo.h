@@ -28,6 +28,8 @@
 #include <unistd.h>
 #include <sys/un.h>
 
+#include <hrt.h>
+
 #define CONSTANTS_ONE_G							9.80665f		/* m/s^2		*/
 #define CONSTANTS_AIR_DENSITY_SEA_LEVEL_15C		1.225f			/* kg/m^3		*/
 #define CONSTANTS_AIR_GAS_CONST					287.1f 			/* J/(kg * K)		*/

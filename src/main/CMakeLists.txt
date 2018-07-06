@@ -3,8 +3,10 @@ add_executable(pa3extctl
 )
 
 target_link_libraries(pa3extctl
-	commander
 	geo
+	hrt
+	commander
+	navigator
 	extctl
 	uORB
 	uorb_msgs

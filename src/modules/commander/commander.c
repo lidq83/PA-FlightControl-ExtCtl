@@ -7,60 +7,41 @@
 
 #include <commander.h>
 
-//void cmd_test01(void)
-//{
-//	vehicle_pos_s pos = { 0 };
-//	orb_advert_t pub = orb_advertise(ORB_ID(vehicle_pos));
-//	uint64_t tt = 0;
-//	while (1)
-//	{
-//		pos.timestamp = tt++;
-//		orb_publish(ORB_ID(vehicle_pos), pub, &pos);
-//		printf("[commander] si 1 tt %6u.\n", pos.timestamp);
-//		usleep(10 * 1000);
-//	}
-//}
-//
-//void cmd_test02(void)
-//{
-//	vehicle_pos_s pos = { 0 };
-//	orb_advert_t sub = orb_subscribe(ORB_ID(vehicle_pos));
-//	while (1)
-//	{
-//		bool updated = false;
-//		orb_check(sub, &updated);
-//		if (updated)
-//		{
-//			orb_copy(ORB_ID(vehicle_pos), sub, &pos);
-//			printf("[commander] si 2 tt %6u.\n", pos.timestamp);
-//		}
-//		usleep(10 * 1000);
-//	}
-//}
-//
-//void cmd_test03(void)
-//{
-//	vehicle_pos_s pos = { 0 };
-//	orb_advert_t sub = orb_subscribe(ORB_ID(vehicle_pos));
-//	while (1)
-//	{
-//		bool updated = false;
-//		orb_check(sub, &updated);
-//		if (updated)
-//		{
-//			orb_copy(ORB_ID(vehicle_pos), sub, &pos);
-//			printf("[commander] si 3 tt %6u.\n", pos.timestamp);
-//		}
-//		usleep(10 * 1000);
-//	}
-//}
+static int commander_start(void *arg);
+
+int commander_start(void *arg)
+{
+	ext_sys_status_s st = { 0 };
+	orb_advert_t sub_st = orb_subscribe(ORB_ID(ext_sys_status));
+	bool wasland = true;
+
+	while (1)
+	{
+		bool updated = false;
+		orb_check(sub_st, &updated);
+		if (updated)
+		{
+			orb_copy(ORB_ID(ext_sys_status), sub_st, &st);
+
+			if (wasland != st.landed)
+			{
+				if (st.landed)
+				{
+					extctl_cmd_disarm();
+				}
+				wasland = st.landed;
+			}
+		}
+		usleep(100 * 1000);
+	}
+
+	return 0;
+}
 
 int commander_main(int argc, char *argv[])
 {
-//	pthread_t pthddr;
-//	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &cmd_test01, NULL);
-//	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &cmd_test02, NULL);
-//	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &cmd_test03, NULL);
+	pthread_t pthddr;
+	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &commander_start, NULL);
 
 	return 0;
 }

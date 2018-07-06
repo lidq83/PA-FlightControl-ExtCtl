@@ -10,8 +10,8 @@
 
 #include "extctl_typedef.h"
 
-int extctl_pos_handle(void *data);
+int extctl_pos_init(void);
 
-int extctl_pos_send(void);
+int extctl_pos_handle(void *data);
 
 #endif /* SRC_MODULES_EXTCTL_EXTCTL_POS_H_ */

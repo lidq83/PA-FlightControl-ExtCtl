@@ -18,8 +18,6 @@
 #include <dirent.h>
 #include <semaphore.h>
 
-#include "../uORB/uORB.h"
-
 #define ORB_PATH_BASE		"/data/mnt/x"
 #define ORB_SIZE_NAME		(0x200)
 #define ORB_SUB_MAX_NUM		(0x100)

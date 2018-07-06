@@ -32,6 +32,7 @@
 #include <sys/un.h>
 #include <termios.h>
 #include <unistd.h>
+#include <orb_manager.h>
 #include <uORB/topics/ext_vehicle_pos.h>
 #include <uORB/topics/ext_vehicle_sp.h>
 #include <uORB/topics/ext_rc.h>

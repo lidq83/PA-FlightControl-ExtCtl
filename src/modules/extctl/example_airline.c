@@ -10,8 +10,10 @@
 extern ext_vehicle_pos_s _pos;
 extern ext_sys_status_s _status;
 
-void airline_test01(float airline_alt)
+void airline_test01(void)
 {
+	float airline_alt = -20.0f;
+
 	struct map_projection_reference_s _ref_pos;
 
 	for (int i = 1; i <= WAIT_TIME_SEC; i++)
@@ -164,8 +166,10 @@ void airline_test01(float airline_alt)
 	}
 }
 
-void airline_test02(float airline_alt)
+void airline_test02(void)
 {
+	float airline_alt = -20.0f;
+
 	struct map_projection_reference_s _ref_pos;
 
 	for (int i = 1; i <= WAIT_TIME_SEC; i++)

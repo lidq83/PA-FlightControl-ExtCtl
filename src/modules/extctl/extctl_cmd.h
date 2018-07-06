@@ -19,10 +19,6 @@
 #define VEHICLE_CMD_DO_SET_MODE_CUSTOM_ENABLE			(1)
 #define VEHICLE_CMD_DO_SET_MODE_CUSTOM_MAIN_EXTCTL		(10)
 
-int extctl_cmd_handle(void *data);
-
-int extctl_cmd_send(void);
-
 int extctl_cmd_sw_ext_mode(void);
 
 int extctl_cmd_arm(void);

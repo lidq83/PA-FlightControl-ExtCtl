@@ -11,6 +11,8 @@
 #include "extctl_protocol.h"
 #include "extctl_typedef.h"
 
+int extctl_sp_init(void);
+
 int extctl_sp_handle(void *data);
 
 int extctl_sp_send(void);

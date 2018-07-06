@@ -14,10 +14,6 @@
 
 int client_start(void);
 
-static int make_socket_non_blocking(int sfd);
-
-static void client_exception(void);
-
 #endif
 
 #endif /* EXTCTL_EXTCTL_SOCKET_H_ */

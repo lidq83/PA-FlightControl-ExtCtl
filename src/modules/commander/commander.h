@@ -14,6 +14,7 @@
 #include <stdbool.h>
 #include <pthread.h>
 #include <orb_manager.h>
+#include <uORB/topics/ext_sys_status.h>
 
 int commander_main(int argc, char *argv[]);
 

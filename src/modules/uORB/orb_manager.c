@@ -5,7 +5,7 @@
  *      Author: lidq
  */
 
-#include "../uORB/orb_manager.h"
+#include <orb_manager.h>
 
 static sem_t sem_rw;
 
@@ -125,6 +125,9 @@ int orb_publish(const struct orb_metadata *meta, orb_advert_t orb_adv, void *dat
 
 	memcpy(pub->meta, data, meta->o_size);
 
+	uint64_t *p = (uint64_t *)pub->meta;
+	*p = hrt_absolute_time();
+
 	sem_post(&pub->sem_rw);
 
 	return 0;
@@ -243,7 +246,7 @@ int orb_copy(const struct orb_metadata *meta, orb_advert_t orb_adv, void *data)
 
 	sem_wait(&pub->sem_rw);
 
-	memcpy(data, pub->meta, sizeof(meta->o_size));
+	memcpy(data, pub->meta, meta->o_size);
 	pub->sub_updated[sub->fd] = 0;
 
 	sem_post(&pub->sem_rw);

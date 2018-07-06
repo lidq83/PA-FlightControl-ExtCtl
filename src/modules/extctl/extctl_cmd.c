@@ -12,22 +12,6 @@ extern ext_vehicle_pos_s _pos;
 
 static ext_cmd_s _cmd = { 0 };
 
-int extctl_cmd_handle(void *data)
-{
-	ext_cmd_s *cmd = data;
-	if (cmd == NULL)
-	{
-		return -1;
-	}
-
-	return 0;
-}
-
-int extctl_cmd_send(void)
-{
-	return 0;
-}
-
 int extctl_cmd_sw_ext_mode(void)
 {
 	_sp.run_pos_control = false;

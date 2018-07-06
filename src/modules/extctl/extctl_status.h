@@ -12,10 +12,8 @@
 #include "extctl_cmd.h"
 #include "extctl_typedef.h"
 
+int extctl_status_init(void);
+
 int extctl_status_handle(void *data);
-
-int extctl_status_send(void);
-
-
 
 #endif /* EXTCTL_EXTCTL_STATUS_H_ */

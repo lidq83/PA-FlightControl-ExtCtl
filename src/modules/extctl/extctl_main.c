@@ -23,7 +23,15 @@ static int _frame_pos_crc1 = 0;
 static int _frame_pos_foot0 = 0;
 static int _frame_pos_foot1 = 0;
 
-int start(void)
+static int extctl_start(void);
+
+static int extctl_handle(void);
+
+static int extctl_stop(void);
+
+static int extctl_set_opt(int fd, int nSpeed, int nBits, char nEvent, int nStop);
+
+int extctl_start(void)
 {
 #ifdef __USE_SOCKET
 	if (client_start() < 0)
@@ -39,23 +47,23 @@ int start(void)
 		return -1;
 	}
 
-	set_opt(_serial_fd, DEV_BAUDRATE, 8, 'N', 1);
+	extctl_set_opt(_serial_fd, DEV_BAUDRATE, 8, 'N', 1);
 #endif
 
 	extctl_protocal_init(_serial_fd);
+	extctl_pos_init();
+	extctl_rc_init();
+	extctl_sp_init();
+	extctl_status_init();
 
 	pthread_t pthddr;
-	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_read, NULL);
+	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_handle, NULL);
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_sp_send, NULL);
-	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_pos_send, NULL);
-	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_rc_send, NULL);
-	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_cmd_send, NULL);
-	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_status_send, NULL);
 
 	return 0;
 }
 
-int extctl_read(void)
+int extctl_handle(void)
 {
 	char buff[SIZE_BUFF] = { 0 };
 	int len = 0;
@@ -79,10 +87,6 @@ int extctl_read(void)
 
 				case DATA_TYPE_SP:
 					p_handle = &extctl_sp_handle;
-					break;
-
-				case DATA_TYPE_CMD:
-					p_handle = &extctl_cmd_handle;
 					break;
 
 				case DATA_TYPE_STATUS:
@@ -110,7 +114,7 @@ int extctl_read(void)
 	return 0;
 }
 
-int stop(void)
+int extctl_stop(void)
 {
 	_extctl_should_exit = true;
 	//wait task_main exit
@@ -119,7 +123,7 @@ int stop(void)
 	return 0;
 }
 
-int set_opt(int fd, int nSpeed, int nBits, char nEvent, int nStop)
+int extctl_set_opt(int fd, int nSpeed, int nBits, char nEvent, int nStop)
 {
 	struct termios newtio, oldtio;
 	//保存测试现有串口参数设置，在这里如果串口号等出错，会有相关的出错信息
@@ -217,9 +221,10 @@ int set_opt(int fd, int nSpeed, int nBits, char nEvent, int nStop)
 
 int extctl_main(int argc, char *argv[])
 {
-	start();
+	extctl_start();
 
-	airline_test01(-10);
+	//pthread_t pthddr;
+	//pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &airline_test01, NULL);
 
 	return 0;
 }

@@ -8,7 +8,15 @@
 #include "extctl_sp.h"
 
 extern bool _extctl_should_exit;
+static orb_advert_t _orb_sp = NULL;
 ext_vehicle_sp_s _sp = { 0 };
+
+int extctl_sp_init(void)
+{
+	_orb_sp = orb_advertise(ORB_ID(ext_vehicle_sp));
+
+	return 0;
+}
 
 int extctl_sp_handle(void *data)
 {
@@ -17,6 +25,10 @@ int extctl_sp_handle(void *data)
 	{
 		return -1;
 	}
+
+	memcpy(&_sp, sp, sizeof(ext_vehicle_sp_s));
+
+	orb_publish(ORB_ID(ext_vehicle_sp), _orb_sp, &_sp);
 
 	return 0;
 }

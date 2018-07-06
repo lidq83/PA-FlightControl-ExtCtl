@@ -12,6 +12,10 @@ int _socket_id = -1;
 
 static struct sockaddr_un servaddr;
 
+static int make_socket_non_blocking(int sfd);
+
+static void client_exception(void);
+
 int client_start()
 {
 	printf("[extctl] client start.\n");

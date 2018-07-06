@@ -1,10 +1,5 @@
 #include <geo.h>
 
-uint64_t hrt_absolute_time()
-{
-	return 0;
-}
-
 int map_projection_init_timestamped(struct map_projection_reference_s *ref, double lat_0, double lon_0, uint64_t timestamp) //lat_0, lon_0 are expected to be in correct format: -> 47.1234567 and not 471234567
 {
 

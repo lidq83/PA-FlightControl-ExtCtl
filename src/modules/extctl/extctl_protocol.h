@@ -52,19 +52,4 @@ int extctl_protocal_write(void *data, int data_type, int data_len);
 
 int extctl_protocal_read(char *out_buff, int *out_len, int *out_type);
 
-static int protocal_frame_pos(int len_data);
-
-static int protocal_frame_mk_data(char *frame, int len_frame, char *data, int type, int len_data);
-
-static int protocal_send_frame_write(char *frame, int len);
-
-static int protocal_frame_count(s_buff *lb);
-
-static void protocal_frame_read_data(void);
-
-static uint16_t protocal_crc16_value(uint8_t *buff, uint8_t len);
-
-static int protocal_crc16_check(uint8_t *buff, uint8_t len, uint16_t crc16);
-
-
 #endif /* SRC_DRIVERS_extctl_extctl_PROTOCOL_H_ */

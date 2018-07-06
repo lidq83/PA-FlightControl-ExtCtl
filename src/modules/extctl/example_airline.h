@@ -12,9 +12,9 @@
 
 #define WAIT_TIME_SEC	(1)
 
-void airline_test01(float airline_alt);
+void airline_test01(void);
 
-void airline_test02(float airline_alt);
+void airline_test02(fvoid);
 
 //void airline_test03(float airline_alt);
 

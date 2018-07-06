@@ -8,7 +8,9 @@
 #ifndef SRC_MODULES_UORB_ORB_MANAGER_H_
 #define SRC_MODULES_UORB_ORB_MANAGER_H_
 
-#include "../uORB/orb_typedef.h"
+#include <orb_typedef.h>
+#include <hrt.h>
+#include <uORB/uORB.h>
 
 int orb_main(int argc, char *argv[]);
 

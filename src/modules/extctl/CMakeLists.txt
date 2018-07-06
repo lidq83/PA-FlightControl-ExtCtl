@@ -1,7 +1,7 @@
 add_library(extctl
 	SHARED
-	example_airline.c
-	extctl_airline.c
+	#example_airline.c
+	#extctl_airline.c
 	extctl_cmd.c
 	extctl_main.c
 	extctl_pos.c

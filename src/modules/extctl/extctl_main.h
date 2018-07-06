@@ -21,12 +21,4 @@
 
 int extctl_main(int argc, char *argv[]);
 
-static int start(void);
-
-static int extctl_read(void);
-
-static int stop(void);
-
-static int set_opt(int fd, int nSpeed, int nBits, char nEvent, int nStop);
-
 #endif /* SRC_DRIVERS_Extern_CONTROL_EXTERN_CONTROL_H_ */
