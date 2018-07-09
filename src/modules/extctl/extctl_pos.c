@@ -9,7 +9,7 @@
 
 extern bool _extctl_should_exit;
 static orb_advert_t _orb_pos = NULL;
-ext_vehicle_pos_s _pos = { 0 };
+static ext_vehicle_pos_s _pos = { 0 };
 
 int extctl_pos_init(void)
 {

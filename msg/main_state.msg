@@ -1,0 +1,6 @@
+uint8 MAIN_STATE_INIT = 0
+uint8 MAIN_STATE_STANDBY = 1
+uint8 MAIN_STATE_AUTO_FLY = 2
+uint8 MAIN_STATE_FAILSAFE = 3
+
+uint8 state

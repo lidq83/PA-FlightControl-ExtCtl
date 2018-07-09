@@ -4,6 +4,8 @@ set(msg_files
 	ext_sys_status.msg
 	ext_vehicle_pos.msg
 	ext_vehicle_sp.msg
+	main_state.msg
+	nav_state.msg
 )
 
 # headers

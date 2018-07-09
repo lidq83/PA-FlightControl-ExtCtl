@@ -54,11 +54,13 @@ int extctl_start(void)
 	extctl_pos_init();
 	extctl_rc_init();
 	extctl_sp_init();
+	extctl_cmd_init();
 	extctl_status_init();
 
 	pthread_t pthddr;
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_handle, NULL);
 	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_sp_send, NULL);
+	pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &extctl_cmd_send, NULL);
 
 	return 0;
 }
@@ -84,10 +86,6 @@ int extctl_handle(void)
 
 				case DATA_TYPE_RC:
 					p_handle = &extctl_rc_handle;
-
-				case DATA_TYPE_SP:
-					p_handle = &extctl_sp_handle;
-					break;
 
 				case DATA_TYPE_STATUS:
 					p_handle = &extctl_status_handle;
@@ -222,9 +220,6 @@ int extctl_set_opt(int fd, int nSpeed, int nBits, char nEvent, int nStop)
 int extctl_main(int argc, char *argv[])
 {
 	extctl_start();
-
-	//pthread_t pthddr;
-	//pthread_create(&pthddr, (const pthread_attr_t*) NULL, (void* (*)(void*)) &airline_test01, NULL);
 
 	return 0;
 }

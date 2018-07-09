@@ -11,24 +11,22 @@
 #include "extctl_protocol.h"
 #include "extctl_typedef.h"
 
-#define VEHICLE_CMD_COMPONENT_ARM_DISARM				(400)
-#define VEHICLE_CMD_COMPONENT_ARM_DISARM_PARAM_ARM		(1)
-#define VEHICLE_CMD_COMPONENT_ARM_DISARM_PARAM_DISARM	(0)
+int extctl_cmd_init(void);
 
-#define VEHICLE_CMD_DO_SET_MODE							(176)
-#define VEHICLE_CMD_DO_SET_MODE_CUSTOM_ENABLE			(1)
-#define VEHICLE_CMD_DO_SET_MODE_CUSTOM_MAIN_EXTCTL		(10)
+int extctl_cmd_handle(void *data);
 
-int extctl_cmd_sw_ext_mode(void);
+int extctl_cmd_send(void);
 
-int extctl_cmd_arm(void);
-
-int extctl_cmd_disarm(void);
-
-int extctl_cmd_takeoff(float alt);
-
-int extctl_cmd_falloff(float sp_x, float sp_y, float sp_z, float sp_yaw, bool altctl, float speed);
-
-int extctl_cmd_setpoint(float x, float y, float z, float yaw);
+//int extctl_cmd_sw_ext_mode(void);
+//
+//int extctl_cmd_arm(void);
+//
+//int extctl_cmd_disarm(void);
+//
+//int extctl_cmd_takeoff(float alt);
+//
+//int extctl_cmd_falloff(float sp_x, float sp_y, float sp_z, float sp_yaw, bool altctl, float speed);
+//
+//int extctl_cmd_setpoint(float x, float y, float z, float yaw);
 
 #endif /* SRC_MODULES_EXTCTL_EXTCTL_CMD_H_ */

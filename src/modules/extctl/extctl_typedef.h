@@ -50,9 +50,8 @@
 #define DEV_BAUDRATE		(B115200)
 #define DEV_RATE_BASE		(1000 * 1000)
 #define DEV_RATE_READ		(DEV_RATE_BASE / 30)
-#define DEV_RATE_POS		(DEV_RATE_BASE / 10)
-#define DEV_RATE_RC			(DEV_RATE_BASE / 10)
 #define DEV_RATE_SP			(DEV_RATE_BASE / 10)
+#define DEV_RATE_CMD		(DEV_RATE_BASE / 10)
 #define DEV_RATE_STATUS		(DEV_RATE_BASE / 5)
 
 enum data_type

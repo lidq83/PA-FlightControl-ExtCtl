@@ -47,6 +47,9 @@ for field in spec.parsed_fields():
 }@
 
 @# Constants c style
+@[for constant in spec.constants]@
+#define @(constant.name) @(int(constant.val))
+@[end for]
 
 @##############################
 @# Main struct of message
