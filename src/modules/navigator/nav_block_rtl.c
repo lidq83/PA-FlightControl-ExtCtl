@@ -13,6 +13,7 @@ static nav_rtl_state_s _state = NAV_RTL_STOP;
 static float rtl_climb_alt = -25.0f;
 static float rtl_loiter_alt = -15.0f;
 static int rtl_loiter_secs = 10;
+
 static hrt_abstime rtl_loiter_time = 0;
 
 static bool rtl_is_reached(void);
@@ -91,7 +92,7 @@ bool rtl_is_reached(void)
 	bool is_reached = false;
 
 	ext_vehicle_pos_s *pos = navigator_get_curr_pos();
-	printf("[nav rtl] %d\n", _state);
+
 	switch (_state)
 	{
 		case NAV_RTL_STOP:
@@ -130,7 +131,6 @@ bool rtl_is_reached(void)
 		case NAV_RTL_LOITER:
 		{
 			long long diff = rtl_loiter_time - hrt_absolute_time();
-			printf("loiter times %d\n", diff);
 			if (diff <= 0)
 			{
 				is_reached = true;

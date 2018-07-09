@@ -140,11 +140,6 @@ void cmd_st_pub_disarm(void)
 
 void cmd_st_init(void)
 {
-	if (_ext_state.armed)
-	{
-		cmd_st_pub_disarm();
-	}
-
 	if (!_ext_state.homed)
 	{
 		return;
@@ -158,16 +153,16 @@ void cmd_st_init(void)
 
 void cmd_st_standby(void)
 {
-	if (_ext_state.armed)
-	{
-		cmd_st_pub_disarm();
-	}
-
 	if (!_ext_state.homed)
 	{
 		printf("[cmd] not homed.\n");
 		_main_state.state = MAIN_STATE_INIT;
 		return;
+	}
+
+	if (_ext_state.armed)
+	{
+		cmd_st_pub_disarm();
 	}
 
 	if (_ext_state.main_state != MAIN_STATE_EXTCTL)
