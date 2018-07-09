@@ -1,1 +1,13 @@
+uint8 NAV_STATE_INIT = 0
+uint8 NAV_STATE_TAKEOFF = 1
+uint8 NAV_STATE_MISSION = 2
+uint8 NAV_STATE_LOITER = 3
+uint8 NAV_STATE_RTL = 4
+uint8 NAV_STATE_FAILOFF = 5
+uint8 NAV_STATE_FAILSAFE = 6
+
+#example 01
+uint8 NAV_STATE_EXAM01 = 128
+#example end
+
 uint8 state

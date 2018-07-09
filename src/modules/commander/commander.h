@@ -13,7 +13,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <pthread.h>
-#include <status_machine.h>
+
+#include <orb_manager.h>
+#include <uORB/topics/ext_cmd.h>
+#include <uORB/topics/ext_sys_status.h>
+#include <uORB/topics/main_state.h>
+#include <uORB/topics/nav_state.h>
+#include <cmd_status_machine.h>
 
 int commander_main(int argc, char *argv[]);
 

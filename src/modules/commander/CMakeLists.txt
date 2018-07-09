@@ -1,7 +1,7 @@
 add_library(commander
 	SHARED
 	commander.c
-	status_machine.c
+	cmd_status_machine.c
 )
 
 target_link_libraries(commander
