@@ -10,9 +10,12 @@
 static ext_vehicle_sp_s _sp = { 0 };
 static nav_rtl_state_s _state = NAV_RTL_STOP;
 
-static float rtl_climb_alt = -25.0f;
-static float rtl_loiter_alt = -15.0f;
-static int rtl_loiter_secs = 10;
+static float rtl_climb_alt = -20.0f;
+static float rtl_loiter_alt = -10.0f;
+static int rtl_loiter_secs = 3;
+
+static float rtl_reached_vel_xy = 0.5f;
+static float rtl_reached_vel_z = 0.5f;
 
 static hrt_abstime rtl_loiter_time = 0;
 
@@ -97,7 +100,7 @@ bool rtl_is_reached(void)
 	{
 		case NAV_RTL_STOP:
 		{
-			if (fabsf(pos->vx) < RTL_REACHED_VEL_XY && fabsf(pos->vy) < RTL_REACHED_VEL_XY && fabsf(pos->vz) < RTL_REACHED_VEL_Z)
+			if (fabsf(pos->vx) < rtl_reached_vel_xy && fabsf(pos->vy) < rtl_reached_vel_xy && fabsf(pos->vz) < rtl_reached_vel_z)
 			{
 				is_reached = true;
 			}
@@ -232,10 +235,8 @@ void rtl_ret_home()
 
 void rtl_to_loiter()
 {
-	ext_vehicle_pos_s *pos = navigator_get_curr_pos();
-
-	_sp.sp_x = pos->x;
-	_sp.sp_y = pos->y;
+	_sp.sp_x = 0.0f;
+	_sp.sp_y = 0.0f;
 	_sp.sp_z = rtl_loiter_alt;
 
 	_sp.run_pos_control = true;
@@ -249,10 +250,8 @@ void rtl_loiter()
 {
 	rtl_loiter_time = hrt_absolute_time() + rtl_loiter_secs * 1000 * 1000;
 
-	ext_vehicle_pos_s *pos = navigator_get_curr_pos();
-
-	_sp.sp_x = pos->x;
-	_sp.sp_y = pos->y;
+	_sp.sp_x = 0.0f;
+	_sp.sp_y = 0.0f;
 	_sp.sp_z = rtl_loiter_alt;
 
 	_sp.run_pos_control = true;
@@ -266,10 +265,10 @@ void rtl_landing()
 {
 	ext_vehicle_pos_s *pos = navigator_get_curr_pos();
 
-	_sp.sp_x = pos->x;
-	_sp.sp_y = pos->y;
+	_sp.sp_x = 0.0f;
+	_sp.sp_y = 0.0f;
 
-	_sp.vel_sp_z = 0.5f;
+	_sp.vel_sp_z = 0.3f;
 
 	_sp.run_pos_control = true;
 	_sp.run_alt_control = false;

@@ -86,6 +86,7 @@ int extctl_handle(void)
 
 				case DATA_TYPE_RC:
 					p_handle = &extctl_rc_handle;
+					break;
 
 				case DATA_TYPE_STATUS:
 					p_handle = &extctl_status_handle;

@@ -10,9 +10,6 @@
 
 #include "nav_status_machine.h"
 
-#define RTL_REACHED_VEL_XY	(0.2)
-#define RTL_REACHED_VEL_Z	(0.2)
-
 typedef enum NAV_RTL_STATE
 {
 	NAV_RTL_STOP = 0,
