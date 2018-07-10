@@ -33,9 +33,12 @@
 
 typedef struct nav_state_block_s
 {
+	void (*p_on_init)(void);
+	void (*p_on_desc)(void);
 	void (*p_on_inactive)(void);
 	void (*p_on_activation)(void);
 	void (*p_on_active)(void);
+	bool (*p_is_finished)(void);
 } nav_state_block_s;
 
 void nav_st_machine_init(void);

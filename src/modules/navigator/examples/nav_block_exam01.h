@@ -11,6 +11,12 @@
 #include <nav_block_reached.h>
 #include "nav_status_machine.h"
 
+void nav_exam01_on_init(void);
+
+void nav_exam01_on_desc(void);
+
+bool nav_exam01_is_finished(void);
+
 void nav_exam01_on_inactive(void);
 
 void nav_exam01_on_activation(void);

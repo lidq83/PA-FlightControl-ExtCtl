@@ -9,6 +9,18 @@
 
 static ext_vehicle_sp_s _sp = { 0 };
 
+void nav_failoff_on_init(void)
+{
+}
+
+void nav_failoff_on_desc(void)
+{
+}
+
+bool nav_failoff_is_finished(void)
+{
+}
+
 void nav_failoff_on_inactive(void)
 {
 }

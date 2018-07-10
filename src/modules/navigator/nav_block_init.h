@@ -10,6 +10,12 @@
 
 #include "nav_status_machine.h"
 
+void nav_init_on_init(void);
+
+void nav_init_on_desc(void);
+
+bool nav_init_is_finished(void);
+
 void nav_init_on_inactive(void);
 
 void nav_init_on_activation(void);

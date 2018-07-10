@@ -10,6 +10,12 @@
 
 #include "nav_status_machine.h"
 
+void nav_takeoff_on_init(void);
+
+void nav_takeoff_on_desc(void);
+
+bool nav_takeoff_is_finished(void);
+
 void nav_takeoff_on_inactive(void);
 
 void nav_takeoff_on_activation(void);

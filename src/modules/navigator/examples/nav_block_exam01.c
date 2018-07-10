@@ -13,6 +13,18 @@ static float _r = 35.0f;
 static float _alt = -10.0f;
 static uint8_t _start_by_secs = 10;
 
+void nav_exam01_on_init(void)
+{
+}
+
+void nav_exam01_on_desc(void)
+{
+}
+
+bool nav_exam01_is_finished(void)
+{
+}
+
 void nav_exam01_on_inactive(void)
 {
 }

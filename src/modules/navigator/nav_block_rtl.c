@@ -37,12 +37,7 @@ static void rtl_landing(void);
 
 static void rtl_failsafe(void);
 
-void nav_rtl_on_inactive(void)
-{
-	rtl_loiter_time = 0;
-}
-
-void nav_rtl_on_activation(void)
+void nav_rtl_on_init(void)
 {
 	param_get("NAV_RTL_CLIMB_ALT", &param_rtl_climb_alt);
 	param_get("NAV_RTL_LOITER_ALT", &param_rtl_loiter_alt);
@@ -50,8 +45,25 @@ void nav_rtl_on_activation(void)
 	param_get("NAV_RTL_REACHED_VEL_Z", &param_rtl_reached_vel_z);
 	param_get("NAV_RTL_LANDDING_VEL_Z", &param_rtl_landing_vel_z);
 	param_get("NAV_RTL_LOITER_SECS", &param_rtl_loiter_secs);
+}
 
-	printf("climb %.f\n", param_rtl_climb_alt);
+void nav_rtl_on_desc(void)
+{
+
+}
+
+bool nav_rtl_is_finished(void)
+{
+
+}
+
+void nav_rtl_on_inactive(void)
+{
+	rtl_loiter_time = 0;
+}
+
+void nav_rtl_on_activation(void)
+{
 
 	_state = NAV_RTL_STOP;
 	rtl_stop();

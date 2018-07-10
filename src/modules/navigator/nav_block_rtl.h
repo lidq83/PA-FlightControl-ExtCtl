@@ -21,6 +21,12 @@ typedef enum NAV_RTL_STATE
 	NAV_RTL_FAILSAFE
 } nav_rtl_state_s;
 
+void nav_rtl_on_init(void);
+
+void nav_rtl_on_desc(void);
+
+bool nav_rtl_is_finished(void);
+
 void nav_rtl_on_inactive(void);
 
 void nav_rtl_on_activation(void);
