@@ -30,7 +30,7 @@ int param_init(void)
 	strncpy(_params[ind].param_name, "NAV_RTL_CLIMB_ALT", PARAM_NAME_SIZE);
 	_params[ind].param_type = PARAM_FLOAT32;
 	_params[ind].param_group = PARAM_NAVIGATOR;
-	_params[ind].f_default = -15.0;
+	_params[ind].f_default = -50.0;
 	_params[ind].f_value = -50.0;
 	ind++;
 
@@ -38,16 +38,16 @@ int param_init(void)
 	strncpy(_params[ind].param_name, "NAV_RTL_LOITER_ALT", PARAM_NAME_SIZE);
 	_params[ind].param_type = PARAM_FLOAT32;
 	_params[ind].param_group = PARAM_NAVIGATOR;
-	_params[ind].f_default = -10.0;
-	_params[ind].f_value = -10.0;
+	_params[ind].f_default = -40.0;
+	_params[ind].f_value = -40.0;
 	ind++;
 
 	//返航盘旋时间
 	strncpy(_params[ind].param_name, "NAV_RTL_LOITER_SECS", PARAM_NAME_SIZE);
 	_params[ind].param_type = PARAM_INT32;
 	_params[ind].param_group = PARAM_NAVIGATOR;
-	_params[ind].i_default = 30;
-	_params[ind].i_value = 30;
+	_params[ind].i_default = 10;
+	_params[ind].i_value = 10;
 	ind++;
 
 	//返航降落速度

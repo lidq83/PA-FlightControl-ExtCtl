@@ -14,13 +14,12 @@ void nav_init_on_init(void);
 
 void nav_init_on_desc(void);
 
-bool nav_init_is_finished(void);
-
 void nav_init_on_inactive(void);
 
 void nav_init_on_activation(void);
 
 void nav_init_on_active(void);
 
+bool nav_init_is_finished(void);
 
 #endif /* SRC_MODULES_NAVIGATOR_NAV_BLOCK_INIT_H_ */

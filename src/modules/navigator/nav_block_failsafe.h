@@ -14,12 +14,12 @@ void nav_failsafe_on_init(void);
 
 void nav_failsafe_on_desc(void);
 
-bool nav_failsafe_is_finished(void);
-
 void nav_failsafe_on_inactive(void);
 
 void nav_failsafe_on_activation(void);
 
 void nav_failsafe_on_active(void);
+
+bool nav_failsafe_is_finished(void);
 
 #endif /* SRC_MODULES_NAVIGATOR_NAV_BLOCK_FAILSAFE_H_ */

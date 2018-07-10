@@ -39,7 +39,7 @@ static int commander_run(void *arg)
 			}
 			else
 			{
-				printf("[cmd] Error 0x01.\n");
+				printf("[cmd] Error %x.\n", NAV_STATE_TAKEOFF);
 			}
 		}
 
@@ -51,7 +51,7 @@ static int commander_run(void *arg)
 			}
 			else
 			{
-				printf("[cmd] Error 0x02.\n");
+				printf("[cmd] Error %x.\n", NAV_STATE_FAILOFF);
 			}
 		}
 
@@ -63,7 +63,31 @@ static int commander_run(void *arg)
 			}
 			else
 			{
-				printf("[cmd] Error 0x04.\n");
+				printf("[cmd] Error %x.\n", NAV_STATE_RTL);
+			}
+		}
+
+		if (strcmp(cmd, "mission") == 0)
+		{
+			if (cmd_st_get_main_state() == MAIN_STATE_AUTO_FLY)
+			{
+				cmd_st_set_nav_state(NAV_STATE_MISSION);
+			}
+			else
+			{
+				printf("[cmd] Error %x.\n", NAV_STATE_MISSION);
+			}
+		}
+
+		if (strcmp(cmd, "loiter") == 0)
+		{
+			if (cmd_st_get_main_state() == MAIN_STATE_AUTO_FLY)
+			{
+				cmd_st_set_nav_state(NAV_STATE_LOITER);
+			}
+			else
+			{
+				printf("[cmd] Error %x.\n", NAV_STATE_LOITER);
 			}
 		}
 
@@ -75,7 +99,7 @@ static int commander_run(void *arg)
 			}
 			else
 			{
-				printf("[cmd] Error 0x80.\n");
+				printf("[cmd] Error %x.\n", NAV_STATE_EXAM01);
 			}
 		}
 

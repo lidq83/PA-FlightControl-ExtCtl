@@ -14,12 +14,12 @@ void nav_loiter_on_init(void);
 
 void nav_loiter_on_desc(void);
 
-bool nav_loiter_is_finished(void);
-
 void nav_loiter_on_inactive(void);
 
 void nav_loiter_on_activation(void);
 
 void nav_loiter_on_active(void);
+
+bool nav_loiter_is_finished(void);
 
 #endif /* SRC_MODULES_NAVIGATOR_NAV_BLOCK_LOITER_H_ */

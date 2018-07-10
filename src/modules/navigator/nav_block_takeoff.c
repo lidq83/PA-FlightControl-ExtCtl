@@ -17,10 +17,6 @@ void nav_takeoff_on_desc(void)
 {
 }
 
-bool nav_takeoff_is_finished(void)
-{
-}
-
 void nav_takeoff_on_inactive(void)
 {
 
@@ -49,4 +45,8 @@ void nav_takeoff_on_active(void)
 {
 //	ext_vehicle_pos_s *pos = navigator_get_curr_pos();
 //	printf("[pos: %6.3f %6.3f %6.3f][sp: %6.3f %6.3f %6.3f]\n", pos->x, pos->y, pos->z, _sp.sp_x, _sp.sp_y, _sp.sp_z);
+}
+
+bool nav_takeoff_is_finished(void)
+{
 }

@@ -21,10 +21,6 @@ void nav_exam01_on_desc(void)
 {
 }
 
-bool nav_exam01_is_finished(void)
-{
-}
-
 void nav_exam01_on_inactive(void)
 {
 }
@@ -72,9 +68,12 @@ void nav_exam01_on_active(void)
 
 	navigator_set_sp(&_sp);
 
-	//int circle = (int) ((_angle - M_PI / 2) / (2 * M_PI));
-	//int angle_dis = _angle * 180.0 / M_PI;
-	//angle_dis %= 360;
-	//printf("[exam01] circle %d angle: %4d\tsp: %+6.2f %+6.2f\n", circle, angle_dis, sp_x, sp_y);
+	int circle = (int) ((_angle - M_PI / 2) / (2 * M_PI));
+	int angle_dis = _angle * 180.0 / M_PI;
+	angle_dis %= 360;
+	printf("[exam01] circle %d angle: %4d\tsp: %+6.2f %+6.2f\n", circle, angle_dis, sp_x, sp_y);
 }
 
+bool nav_exam01_is_finished(void)
+{
+}

@@ -52,11 +52,6 @@ void nav_rtl_on_desc(void)
 
 }
 
-bool nav_rtl_is_finished(void)
-{
-
-}
-
 void nav_rtl_on_inactive(void)
 {
 	rtl_loiter_time = 0;
@@ -288,7 +283,7 @@ void rtl_landing()
 
 	_sp.sp_x = 0.0f;
 	_sp.sp_y = 0.0f;
-
+	_sp.sp_y = 0.0f;
 	_sp.vel_sp_z = param_rtl_landing_vel_z;
 
 	_sp.run_pos_control = true;
@@ -311,4 +306,9 @@ void rtl_failsafe()
 	_sp.run_yaw_control = false;
 
 	navigator_set_sp(&_sp);
+}
+
+bool nav_rtl_is_finished(void)
+{
+
 }

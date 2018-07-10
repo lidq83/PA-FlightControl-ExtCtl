@@ -15,12 +15,12 @@ void nav_exam01_on_init(void);
 
 void nav_exam01_on_desc(void);
 
-bool nav_exam01_is_finished(void);
-
 void nav_exam01_on_inactive(void);
 
 void nav_exam01_on_activation(void);
 
 void nav_exam01_on_active(void);
+
+bool nav_exam01_is_finished(void);
 
 #endif /* SRC_MODULES_NAVIGATOR_EXAMPLES_NAV_BLOCK_EXAM01_H_ */
