@@ -12,7 +12,9 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 #include <pthread.h>
+#include <param.h>
 #include <orb_manager.h>
 #include <uORB/topics/ext_sys_status.h>
 #include <uORB/topics/ext_vehicle_pos.h>

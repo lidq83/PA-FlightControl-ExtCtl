@@ -10,12 +10,12 @@
 static ext_vehicle_sp_s _sp = { 0 };
 static nav_rtl_state_s _state = NAV_RTL_STOP;
 
-static float rtl_climb_alt = -20.0f;
-static float rtl_loiter_alt = -10.0f;
-static int rtl_loiter_secs = 3;
-
-static float rtl_reached_vel_xy = 0.5f;
-static float rtl_reached_vel_z = 0.5f;
+static float param_rtl_climb_alt = 0.0f;
+static float param_rtl_loiter_alt = 0.0f;
+static float param_rtl_reached_vel_xy = 0.0f;
+static float param_rtl_reached_vel_z = 0.0f;
+static float param_rtl_landing_vel_z = 0.0f;
+static int param_rtl_loiter_secs = 0;
 
 static hrt_abstime rtl_loiter_time = 0;
 
@@ -44,6 +44,15 @@ void nav_rtl_on_inactive(void)
 
 void nav_rtl_on_activation(void)
 {
+	param_get("NAV_RTL_CLIMB_ALT", &param_rtl_climb_alt);
+	param_get("NAV_RTL_LOITER_ALT", &param_rtl_loiter_alt);
+	param_get("NAV_RTL_REACHED_VEL_XY", &param_rtl_reached_vel_xy);
+	param_get("NAV_RTL_REACHED_VEL_Z", &param_rtl_reached_vel_z);
+	param_get("NAV_RTL_LANDDING_VEL_Z", &param_rtl_landing_vel_z);
+	param_get("NAV_RTL_LOITER_SECS", &param_rtl_loiter_secs);
+
+	printf("climb %.f\n", param_rtl_climb_alt);
+
 	_state = NAV_RTL_STOP;
 	rtl_stop();
 
@@ -100,7 +109,7 @@ bool rtl_is_reached(void)
 	{
 		case NAV_RTL_STOP:
 		{
-			if (fabsf(pos->vx) < rtl_reached_vel_xy && fabsf(pos->vy) < rtl_reached_vel_xy && fabsf(pos->vz) < rtl_reached_vel_z)
+			if (fabsf(pos->vx) < param_rtl_reached_vel_xy && fabsf(pos->vy) < param_rtl_reached_vel_xy && fabsf(pos->vz) < param_rtl_reached_vel_z)
 			{
 				is_reached = true;
 			}
@@ -157,7 +166,7 @@ void rtl_reached_sw_state(void)
 	switch (_state)
 	{
 		case NAV_RTL_STOP:
-			if (pos->z > rtl_climb_alt)
+			if (pos->z > param_rtl_climb_alt)
 			{
 				_state = NAV_RTL_CLIMB;
 			}
@@ -209,7 +218,7 @@ void rtl_climb()
 
 	_sp.sp_x = pos->x;
 	_sp.sp_y = pos->y;
-	_sp.sp_z = rtl_climb_alt;
+	_sp.sp_z = param_rtl_climb_alt;
 
 	_sp.run_pos_control = true;
 	_sp.run_alt_control = true;
@@ -237,7 +246,7 @@ void rtl_to_loiter()
 {
 	_sp.sp_x = 0.0f;
 	_sp.sp_y = 0.0f;
-	_sp.sp_z = rtl_loiter_alt;
+	_sp.sp_z = param_rtl_loiter_alt;
 
 	_sp.run_pos_control = true;
 	_sp.run_alt_control = true;
@@ -248,11 +257,11 @@ void rtl_to_loiter()
 
 void rtl_loiter()
 {
-	rtl_loiter_time = hrt_absolute_time() + rtl_loiter_secs * 1000 * 1000;
+	rtl_loiter_time = hrt_absolute_time() + param_rtl_loiter_secs * 1000 * 1000;
 
 	_sp.sp_x = 0.0f;
 	_sp.sp_y = 0.0f;
-	_sp.sp_z = rtl_loiter_alt;
+	_sp.sp_z = param_rtl_loiter_alt;
 
 	_sp.run_pos_control = true;
 	_sp.run_alt_control = true;
@@ -268,7 +277,7 @@ void rtl_landing()
 	_sp.sp_x = 0.0f;
 	_sp.sp_y = 0.0f;
 
-	_sp.vel_sp_z = 0.3f;
+	_sp.vel_sp_z = param_rtl_landing_vel_z;
 
 	_sp.run_pos_control = true;
 	_sp.run_alt_control = false;

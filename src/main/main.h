@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <hrt.h>
+#include <param.h>
 #include <commander.h>
 #include <navigator.h>
 #include <extctl_main.h>

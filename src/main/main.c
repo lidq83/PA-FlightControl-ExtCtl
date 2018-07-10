@@ -13,6 +13,12 @@ int main(int argc, char *argv[])
 
 	hrt_init();
 
+	param_init();
+
+	param_save();
+
+	param_load();
+
 	orb_main(argc, argv);
 
 	extctl_main(argc, argv);
