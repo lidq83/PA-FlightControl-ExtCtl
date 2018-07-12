@@ -28,7 +28,7 @@ void nav_mission_on_activation(void)
 
 	_sp.sp_x = 30.0f;
 	_sp.sp_y = 30.0f;
-	_sp.sp_z = -90.0f;
+	_sp.sp_z = -40.0f;
 
 	_sp.run_pos_control = true;
 	_sp.run_alt_control = true;
