@@ -53,7 +53,7 @@ void nav_exam01_on_active(void)
 		return;
 	}
 
-	_angle += 0.005;
+	_angle += 0.05;
 
 	float sp_x = _r * sinf(_angle) + _r;
 	float sp_y = _r * cosf(_angle);
