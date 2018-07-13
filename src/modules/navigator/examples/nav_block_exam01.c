@@ -48,7 +48,7 @@ void nav_exam01_on_activation(void)
 void nav_exam01_on_active(void)
 {
 	ext_vehicle_pos_s *pos = navigator_get_curr_pos();
-	printf("%5.3f %5.3f\n", pos->z, pos->vz);
+	//printf("%5.3f %5.3f\n", pos->z, pos->vz);
 	if (_mode == 1)
 	{
 		if (!nav_block_is_reached_xyz(_sp.sp_x, _sp.sp_y, _sp.sp_z, pos->x, pos->y, pos->z))

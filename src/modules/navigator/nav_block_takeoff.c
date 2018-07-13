@@ -28,7 +28,7 @@ void nav_takeoff_on_activation(void)
 
 	_sp.sp_x = 0.0f;
 	_sp.sp_y = 0.0f;
-	_sp.sp_z = -10.0f;
+	_sp.sp_z = -50.0f;
 
 	_sp.vel_sp_x = 0.0f;
 	_sp.vel_sp_y = 0.0f;
