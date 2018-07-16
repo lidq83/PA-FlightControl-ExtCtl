@@ -24,7 +24,7 @@ void nav_mission_on_inactive(void)
 
 void nav_mission_on_activation(void)
 {
-	_sp.sp_yaw = M_PI / 4.0;
+	_sp.sp_yaw =M_PI / 4.0;
 
 	_sp.sp_x = 30.0f;
 	_sp.sp_y = 30.0f;
