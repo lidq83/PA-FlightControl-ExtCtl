@@ -19,6 +19,8 @@ int main(int argc, char *argv[])
 
 	param_load();
 
+	airline_init();
+
 	orb_main(argc, argv);
 
 	extctl_main(argc, argv);

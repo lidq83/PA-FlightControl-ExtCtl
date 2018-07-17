@@ -19,6 +19,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/src/lib/geo
 	${PROJECT_SOURCE_DIR}/src/lib/hrt
 	${PROJECT_SOURCE_DIR}/src/lib/param
+	${PROJECT_SOURCE_DIR}/src/lib/airline
 	${PROJECT_SOURCE_DIR}/src/modules/commander
 	${PROJECT_SOURCE_DIR}/src/modules/navigator
 	${PROJECT_SOURCE_DIR}/src/modules/extctl
@@ -30,6 +31,7 @@ add_subdirectory(src/main)
 add_subdirectory(src/lib/geo)
 add_subdirectory(src/lib/hrt)
 add_subdirectory(src/lib/param)
+add_subdirectory(src/lib/airline)
 add_subdirectory(src/modules/commander)
 add_subdirectory(src/modules/navigator)
 add_subdirectory(src/modules/extctl)

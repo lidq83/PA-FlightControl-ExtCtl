@@ -6,6 +6,7 @@ target_link_libraries(pa3extctl
 	geo
 	hrt
 	param
+	airline
 	commander
 	navigator
 	extctl

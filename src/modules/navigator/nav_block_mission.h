@@ -8,6 +8,7 @@
 #ifndef SRC_MODULES_NAVIGATOR_NAV_BLOCK_MISSION_H_
 #define SRC_MODULES_NAVIGATOR_NAV_BLOCK_MISSION_H_
 
+#include <airline.h>
 #include "nav_status_machine.h"
 
 void nav_mission_on_init(void);

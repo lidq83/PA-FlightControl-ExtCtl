@@ -30,7 +30,7 @@ void nav_exam01_on_inactive(void)
 
 void nav_exam01_on_activation(void)
 {
-	_mode = 1;
+	_mode = 4;
 
 	_angle = M_PI / 2;
 
@@ -60,8 +60,9 @@ void nav_exam01_on_active(void)
 
 	if (_mode == 2)
 	{
-		if (_angle > M_PI * 6 + M_PI / 2)
+		if (_angle > M_PI * 4 + M_PI / 2)
 		{
+			_mode = 3;
 			return;
 		}
 
@@ -84,6 +85,47 @@ void nav_exam01_on_active(void)
 //		int angle_dis = _angle * 180.0 / M_PI;
 //		angle_dis %= 360;
 //		printf("[exam01] circle %d angle: %4d\tsp: %+6.2f %+6.2f\n", circle, angle_dis, sp_x, sp_y);
+	}
+
+	if (_mode == 3)
+	{
+		_sp.sp_x = 0;
+		_sp.sp_y = 0;
+		_sp.sp_z = _alt;
+
+		_sp.run_pos_control = true;
+		_sp.run_alt_control = true;
+		_sp.run_yaw_control = false;
+
+		navigator_set_sp(&_sp);
+
+		if (!nav_block_is_reached_xyz(_sp.sp_x, _sp.sp_y, _sp.sp_z, pos->x, pos->y, pos->z))
+		{
+			return;
+		}
+		_angle = M_PI / 2;
+		_mode = 4;
+	}
+
+	if (_mode == 4)
+	{
+		if (_angle > M_PI * 4 + M_PI / 2)
+		{
+			_mode = 5;
+			return;
+		}
+		float a = 25.0f;
+		_angle += 0.005;
+		float p = a * cosf(3 * _angle);
+		_sp.sp_x = p * sinf(_angle);
+		_sp.sp_y = p * cosf(_angle);
+		_sp.sp_z = _alt;
+
+		_sp.run_pos_control = true;
+		_sp.run_alt_control = true;
+		_sp.run_yaw_control = false;
+
+		navigator_set_sp(&_sp);
 	}
 }
 
