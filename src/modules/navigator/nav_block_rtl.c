@@ -59,7 +59,7 @@ void nav_rtl_on_inactive(void)
 
 void nav_rtl_on_activation(void)
 {
-
+	nav_block_set_accept_params(2.0f, 2.0f, 2.0f * M_PI / 180.0f);
 	_state = NAV_RTL_STOP;
 	rtl_stop();
 

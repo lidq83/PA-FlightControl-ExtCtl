@@ -7,7 +7,7 @@
 
 #include "nav_block_mission.h"
 
-#define WP_MAX (100)
+#define WP_MAX (30)
 
 static ext_vehicle_sp_s _sp = { 0 };
 
@@ -25,7 +25,22 @@ static hrt_abstime _loiter_time = 0;
 
 void nav_mission_on_init(void)
 {
+
+}
+
+void nav_mission_on_desc(void)
+{
+}
+
+void nav_mission_on_inactive(void)
+{
+
+}
+
+void nav_mission_on_activation(void)
+{
 	int ret = airline_get_airline(_load_airline_id, &_airline);
+
 	if (ret < 0)
 	{
 		printf("[nav] get airline error.\n");
@@ -47,42 +62,16 @@ void nav_mission_on_init(void)
 		return;
 	}
 
-	for (; _load_airline_id < AIRLINE_MAXNUM;)
-	{
-		int cnt = airline_get_waypoint(&_airline, _load_waypoint_index, WP_MAX, &_waypoints[_wps_grp][_waypoint_cnt[_wps_grp]]);
-		if (cnt <= 0)
-		{
-			printf("[nav] get waypoint error.\n");
-			break;
-		}
-		_waypoint_cnt[_wps_grp] += cnt;
+	_waypoint_cnt[0] = 0;
+	_waypoint_cnt[1] = 0;
 
-		_wps_grp++;
+	_load_airline_id = 0;
+	_load_waypoint_index = 0;
 
-		if (cnt < WP_MAX)
-		{
-			_load_waypoint_index = 0;
-			_load_airline_id++;
+	_loiter_time = 0;
 
-			ret = airline_get_airline(_load_airline_id, &_airline);
-			if (ret < 0)
-			{
-				printf("[nav] get airline finished.\n");
-				break;
-			}
-
-			continue;
-		}
-		_load_waypoint_index += cnt;
-
-		if (_wps_grp < 2)
-		{
-			continue;
-		}
-
-		printf("[nav] get airline finished.\n");
-		break;
-	}
+	nav_mission_load_seque(0);
+	nav_mission_load_seque(1);
 
 	_wps_grp = 0;
 	_wps_ind = 0;
@@ -91,25 +80,12 @@ void nav_mission_on_init(void)
 //	{
 //		for (int j = 0; j < _waypoint_cnt[i]; j++)
 //		{
-//			printf("[nav] %f %f %f %f %d\n", _waypoints[i][j].x, _waypoints[i][j].y, _waypoints[i][j].z, _waypoints[i][j].yaw, _waypoints[i][j].accept_opt);
+//			printf("[nav] %d %d %f %f %f %f %d\n", i, j, _waypoints[i][j].x, _waypoints[i][j].y, _waypoints[i][j].z, _waypoints[i][j].yaw, _waypoints[i][j].accept_opt);
 //		}
 //	}
-}
 
-void nav_mission_on_desc(void)
-{
-}
-
-void nav_mission_on_inactive(void)
-{
-
-}
-
-void nav_mission_on_activation(void)
-{
-	if (_wps_ind >= _waypoint_cnt[_wps_grp])
+	if (nav_mission_is_finished())
 	{
-		printf("[nav][mis] error\n");
 		return;
 	}
 
@@ -118,6 +94,11 @@ void nav_mission_on_activation(void)
 
 void nav_mission_on_active(void)
 {
+	if (nav_mission_is_finished())
+	{
+		return;
+	}
+
 	ext_vehicle_pos_s *pos = navigator_get_curr_pos();
 
 	int acc_opt = 0;
@@ -145,7 +126,7 @@ void nav_mission_on_active(void)
 		}
 	}
 
-	if (_waypoints[_wps_grp][_wps_ind].loiter_secs == 0)
+	if (_waypoints[_wps_grp][_wps_ind].accept_opt == 0 || _waypoints[_wps_grp][_wps_ind].loiter_secs == 0)
 	{
 		_wps_ind++;
 		if (_wps_ind >= WP_MAX)
@@ -190,12 +171,23 @@ void nav_mission_on_active(void)
 
 bool nav_mission_is_finished(void)
 {
+	if (_wps_ind >= _waypoint_cnt[_wps_grp])
+	{
+		_wps_ind = 0;
+		_waypoint_cnt[_wps_grp] = 0;
+		return true;
+	}
 
+	if (_waypoint_cnt[0] == 0 && _waypoint_cnt[1] == 0)
+	{
+		return true;
+	}
+	return false;
 }
 
 int nav_mission_load_seque(int grp)
 {
-	printf("[nav] load next waypoints grp %d\n", grp);
+	//printf("[nav] load next waypoints grp %d\n", grp);
 
 	int ret = airline_get_airline(_load_airline_id, &_airline);
 	if (ret < 0)

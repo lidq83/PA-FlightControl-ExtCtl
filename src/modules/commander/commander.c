@@ -69,6 +69,10 @@ static int commander_run(void *arg)
 
 		if (strcmp(cmd, "mission") == 0)
 		{
+//			if (cmd_st_get_main_state() == MAIN_STATE_STANDBY)
+//			{
+//				cmd_st_set_main_state(MAIN_STATE_AUTO_FLY);
+//			}
 			if (cmd_st_get_main_state() == MAIN_STATE_AUTO_FLY)
 			{
 				cmd_st_set_nav_state(NAV_STATE_MISSION);

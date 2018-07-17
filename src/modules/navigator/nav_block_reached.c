@@ -7,9 +7,9 @@
 
 #include <nav_block_reached.h>
 
-static float _accept_xy = 10;
-static float _accept_z = 10;
-static float _accept_yaw = 10 * M_PI / 180.0;
+static float _accept_xy = 10.0;
+static float _accept_z = 10.0;
+static float _accept_yaw = 10.0 * M_PI / 180.0;
 
 static ext_vehicle_pos_s _pos;
 
@@ -34,7 +34,7 @@ float dis_xy(float sp_x, float sp_y, float pos_x, float pos_y)
 	return (float) sqrt(pow(sp_x - pos_x, 2) + pow(sp_y - pos_y, 2));
 }
 
-bool nav_block_set_accept_params(float accept_xy,float accept_z,float accept_yaw)
+bool nav_block_set_accept_params(float accept_xy, float accept_z, float accept_yaw)
 {
 	_accept_xy = accept_xy;
 	_accept_z = accept_z;

@@ -165,6 +165,11 @@ void nav_st_machine_run(void)
 		{
 			nav_block->p_on_active();
 		}
+
+		if (nav_state->state == NAV_STATE_MISSION && nav_block->p_is_finished())
+		{
+			nav_state->state = NAV_STATE_RTL;
+		}
 	}
 
 	_nav_init.p_on_desc();
