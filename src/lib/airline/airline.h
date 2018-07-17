@@ -71,4 +71,6 @@ int airline_get_waypoint(airline_s *airline, int start_index, int count, waypoin
 
 void airline_exam01(void);
 
+void airline_exam02(void);
+
 #endif /* SRC_LIB_AIRLINE_AIRLINE_H_ */

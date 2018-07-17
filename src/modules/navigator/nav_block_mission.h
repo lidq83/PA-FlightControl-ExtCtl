@@ -23,4 +23,8 @@ void nav_mission_on_active(void);
 
 bool nav_mission_is_finished(void);
 
+int nav_mission_load_seque(int grp);
+
+int nav_mission_set_yawpoint_to_sp(void);
+
 #endif /* SRC_MODULES_NAVIGATOR_NAV_BLOCK_MISSION_H_ */

@@ -9,7 +9,9 @@
 
 int airline_init(void)
 {
-	airline_exam01();
+	printf("way size %d\n", sizeof(waypoint_s));
+	//airline_exam01();
+	airline_exam02();
 
 	return 0;
 }
@@ -221,12 +223,6 @@ int airline_get_waypoint(airline_s *airline, int start_index, int count, waypoin
 void airline_exam01(void)
 {
 	printf("[airline] exam01\n");
-//	float r = 10.0f;
-//	for (float angle = M_PI / 2.0; angle < M_PI * 4 + M_PI / 2.0; angle += 0.01)
-//	{
-//		float x = _r * sinf(angle) + r;
-//		float y = _r * cosf(angle);
-//	}
 
 	airline_s airline;
 	airline.airline_id = 0;
@@ -275,8 +271,64 @@ void airline_exam01(void)
 	waypoints[3].accept_radius_xy = 1.0;
 	waypoints[3].accept_radius_z = 1.0;
 	waypoints[3].accept_yaw = 1.5 * M_PI / 180.0;
-	waypoints[3].loiter_secs = -1;
+	waypoints[3].loiter_secs = 10;
 
 	airline_save(&airline, waypoints);
+}
 
+void airline_exam02(void)
+{
+	printf("[airline] exam02\n");
+
+	float r = 10.0f;
+	int cnt = 0;
+	for (float angle = M_PI / 2.0; angle < M_PI * 4 + M_PI / 2.0; angle += 0.01)
+	{
+		cnt++;
+	}
+
+	airline_s airline;
+	airline.airline_id = 0;
+	airline.waypoint_count = cnt + 2;
+	waypoint_s waypoints[airline.waypoint_count];
+
+	printf("[nav] exam02 %d\n", cnt);
+
+	memset(&waypoints[0], 0, sizeof(waypoint_s) * airline.waypoint_count);
+
+	int i = 0;
+	waypoints[i].is_local_sp = true;
+	waypoints[i].x = r * 2;
+	waypoints[i].y = 0.0;
+	waypoints[i].z = -10.0;
+	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z;
+	waypoints[i].accept_radius_xy = 1.0;
+	waypoints[i].accept_radius_z = 1.0;
+	waypoints[i].loiter_secs = 10;
+	i++;
+
+	for (float angle = M_PI / 2.0; angle < M_PI * 4 + M_PI / 2.0 && i < airline.waypoint_count; angle += 0.01, i++)
+	{
+		float x = r * sinf(angle) + r;
+		float y = r * cosf(angle);
+
+		waypoints[i].is_local_sp = true;
+		waypoints[i].x = x;
+		waypoints[i].y = y;
+		waypoints[i].z = -10.0;
+		waypoints[i].accept_opt = 0;
+		waypoints[i].loiter_secs = 0;
+	}
+
+	waypoints[i].is_local_sp = true;
+	waypoints[i].x = 0.0;
+	waypoints[i].y = 0.0;
+	waypoints[i].z = -10.0;
+	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z;
+	waypoints[i].accept_radius_xy = 1.0;
+	waypoints[i].accept_radius_z = 1.0;
+	waypoints[i].loiter_secs = -1;
+	i++;
+
+	airline_save(&airline, waypoints);
 }
