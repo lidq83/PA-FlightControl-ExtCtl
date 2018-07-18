@@ -15,12 +15,12 @@ static nav_state_block_s _nav_rtl;
 static nav_state_block_s _nav_failoff;
 static nav_state_block_s _nav_failsafe;
 
-#ifdef __NAV_EXAMPLE_
-static nav_state_block_s _nav_exam01;
-#endif
+static int param_mis_fin_do = 0;
 
 void nav_st_machine_init(void)
 {
+	param_get("NAV_MIS_FIN_DO", &param_mis_fin_do);
+
 	_nav_init.p_on_init = nav_init_on_init;
 	_nav_init.p_on_desc = nav_init_on_desc;
 	_nav_init.p_on_inactive = nav_init_on_inactive;
@@ -69,15 +69,6 @@ void nav_st_machine_init(void)
 	_nav_failsafe.p_on_activation = nav_failsafe_on_activation;
 	_nav_failsafe.p_on_active = nav_failsafe_on_active;
 	_nav_failsafe.p_is_finished = nav_failsafe_is_finished;
-
-#ifdef __NAV_EXAMPLE_
-	_nav_exam01.p_on_init = nav_exam01_on_init;
-	_nav_exam01.p_on_desc = nav_exam01_on_desc;
-	_nav_exam01.p_on_inactive = nav_exam01_on_inactive;
-	_nav_exam01.p_on_activation = nav_exam01_on_activation;
-	_nav_exam01.p_on_active = nav_exam01_on_active;
-	_nav_exam01.p_is_finished = nav_exam01_is_finished;
-#endif
 }
 
 void nav_st_machine_run(void)
@@ -144,12 +135,6 @@ void nav_st_machine_run(void)
 				nav_block = &_nav_failoff;
 				break;
 
-#ifdef __NAV_EXAMPLE_
-			case NAV_STATE_EXAM01:
-				nav_block = &_nav_exam01;
-				break;
-#endif
-
 			default:
 				nav_block = &_nav_failsafe;
 				break;
@@ -168,7 +153,14 @@ void nav_st_machine_run(void)
 
 		if (nav_state->state == NAV_STATE_MISSION && nav_block->p_is_finished())
 		{
-			nav_state->state = NAV_STATE_RTL;
+			if (param_mis_fin_do == 1)
+			{
+				nav_state->state = NAV_STATE_LOITER;
+			}
+			else if (param_mis_fin_do == 2)
+			{
+				nav_state->state = NAV_STATE_RTL;
+			}
 		}
 	}
 

@@ -25,12 +25,6 @@
 #include <uORB/topics/main_state.h>
 #include <uORB/topics/nav_state.h>
 
-#define __NAV_EXAMPLE_
-
-#ifdef __NAV_EXAMPLE_
-#include <examples/nav_block_exam01.h>
-#endif
-
 typedef struct nav_state_block_s
 {
 	void (*p_on_init)(void);

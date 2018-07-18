@@ -39,6 +39,14 @@ void nav_mission_on_inactive(void)
 
 void nav_mission_on_activation(void)
 {
+	_waypoint_cnt[0] = 0;
+	_waypoint_cnt[1] = 0;
+
+	_load_airline_id = 0;
+	_load_waypoint_index = 0;
+
+	_loiter_time = 0;
+
 	int ret = airline_get_airline(_load_airline_id, &_airline);
 
 	if (ret < 0)
@@ -61,14 +69,6 @@ void nav_mission_on_activation(void)
 		printf("[nav] malloc _waypoints[1] error.\n");
 		return;
 	}
-
-	_waypoint_cnt[0] = 0;
-	_waypoint_cnt[1] = 0;
-
-	_load_airline_id = 0;
-	_load_waypoint_index = 0;
-
-	_loiter_time = 0;
 
 	nav_mission_load_seque(0);
 	nav_mission_load_seque(1);
@@ -228,6 +228,11 @@ int nav_mission_load_seque(int grp)
 
 int nav_mission_set_yawpoint_to_sp(void)
 {
+	if (_wps_ind >= _waypoint_cnt[_wps_grp])
+	{
+		return -1;
+	}
+
 	nav_block_set_accept_params(_waypoints[_wps_grp][_wps_ind].accept_radius_xy, _waypoints[_wps_grp][_wps_ind].accept_radius_z, _waypoints[_wps_grp][_wps_ind].accept_yaw);
 	//printf("nav_mission_set_yawpoint_to_sp %d %d\n", _wps_grp, _wps_ind);
 	if (_waypoints[_wps_grp][_wps_ind].is_local_sp)

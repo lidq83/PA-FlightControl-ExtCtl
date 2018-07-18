@@ -74,6 +74,14 @@ int param_init(void)
 	_params[ind].f_value = 0.5;
 	ind++;
 
+	//任务完成后动作,0: 无  1:悬停  2:返航
+	strncpy(_params[ind].param_name, "NAV_MIS_FIN_DO", PARAM_NAME_SIZE);
+	_params[ind].param_type = PARAM_INT32;
+	_params[ind].param_group = PARAM_NAVIGATOR;
+	_params[ind].i_default = 2;
+	_params[ind].i_value = 2;
+	ind++;
+
 	_param_head.param_count = ind;
 	for (int i = 0; i < _param_head.param_count; i++)
 	{
