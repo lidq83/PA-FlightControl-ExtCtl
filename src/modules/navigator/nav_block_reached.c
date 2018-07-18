@@ -43,6 +43,16 @@ bool nav_block_set_accept_params(float accept_xy, float accept_z, float accept_y
 
 bool nav_block_is_reached_xyz(float sp_x, float sp_y, float sp_z, float pos_x, float pos_y, float pos_z)
 {
+	if (_accept_xy < ACC_MIN_XY)
+	{
+		_accept_xy = ACC_MIN_XY;
+	}
+
+	if (_accept_z < ACC_MIN_Z)
+	{
+		_accept_z = ACC_MIN_Z;
+	}
+
 	if (dis_xy(sp_x, sp_y, pos_x, pos_y) <= _accept_xy && dis_z(sp_z, pos_z) < _accept_z)
 	{
 		return true;
@@ -53,6 +63,11 @@ bool nav_block_is_reached_xyz(float sp_x, float sp_y, float sp_z, float pos_x, f
 
 bool nav_block_is_reached_xy(float sp_x, float sp_y, float pos_x, float pos_y)
 {
+	if (_accept_xy < ACC_MIN_XY)
+	{
+		_accept_xy = ACC_MIN_XY;
+	}
+
 	if (dis_xy(sp_x, sp_y, pos_x, pos_y) <= _accept_xy)
 	{
 		return true;
@@ -63,6 +78,11 @@ bool nav_block_is_reached_xy(float sp_x, float sp_y, float pos_x, float pos_y)
 
 bool nav_block_is_reached_z(float sp_z, float pos_z)
 {
+	if (_accept_z < ACC_MIN_Z)
+	{
+		_accept_z = ACC_MIN_Z;
+	}
+
 	if (dis_z(sp_z, pos_z) <= _accept_z)
 	{
 		return true;
@@ -73,6 +93,11 @@ bool nav_block_is_reached_z(float sp_z, float pos_z)
 
 bool nav_block_is_reached_yaw(float sp_yaw, float pos_yaw)
 {
+	if (_accept_yaw < ACC_MIN_YAW)
+	{
+		_accept_yaw = ACC_MIN_YAW;
+	}
+
 	if (dis_yaw(sp_yaw, pos_yaw) <= _accept_yaw)
 	{
 		return true;

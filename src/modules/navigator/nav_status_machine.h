@@ -10,7 +10,7 @@
 
 #include <navigator.h>
 #include <orb_manager.h>
-
+#include <nav_block_reached.h>
 #include <nav_block_init.h>
 #include <nav_block_takeoff.h>
 #include <nav_block_mission.h>

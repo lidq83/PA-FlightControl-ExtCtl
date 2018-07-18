@@ -95,18 +95,6 @@ static int commander_run(void *arg)
 			}
 		}
 
-		if (strcmp(cmd, "exam01") == 0)
-		{
-			if (cmd_st_get_main_state() == MAIN_STATE_AUTO_FLY)
-			{
-				cmd_st_set_nav_state(NAV_STATE_EXAM01);
-			}
-			else
-			{
-				printf("[cmd] Error %x.\n", NAV_STATE_EXAM01);
-			}
-		}
-
 		usleep(100 * 1000);
 	}
 }

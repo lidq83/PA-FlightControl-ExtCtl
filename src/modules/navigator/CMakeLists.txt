@@ -10,7 +10,6 @@ add_library(navigator
 	nav_block_rtl.c
 	nav_block_failoff.c
 	nav_block_failsafe.c
-	examples/nav_block_exam01.c
 )
 
 target_link_libraries(navigator

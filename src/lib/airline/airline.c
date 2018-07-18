@@ -139,7 +139,7 @@ int airline_get_airline(int airline_id, airline_s *airline)
 	FILE *fp = fopen(path, "r");
 	if (fp == NULL)
 	{
-		printf("[airline] get can not open file %s\n", path);
+		//printf("[airline] get can not open file %s\n", path);
 		return -1;
 	}
 	fseek(fp, 0, SEEK_SET);
@@ -183,7 +183,7 @@ int airline_get_waypoint(airline_s *airline, int start_index, int count, waypoin
 	FILE *fp = fopen(path, "r");
 	if (fp == NULL)
 	{
-		printf("[airline] save can not open file %s\n", path);
+		//printf("[airline] save can not open file %s\n", path);
 		return -1;
 	}
 
@@ -206,7 +206,6 @@ int airline_get_waypoint(airline_s *airline, int start_index, int count, waypoin
 	for (int i = 0; i < count; i++)
 	{
 		len = fread(&waypoints[i], sizeof(waypoint_s), 1, fp);
-		//printf("%f %f %f\n", waypoints[i].x, waypoints[i].y, waypoints[i].z);
 		if (len != 1)
 		{
 			printf("[airline] load read file error %s\n", path);
@@ -231,8 +230,6 @@ float dis_xy(float sp_x, float sp_y, float pos_x, float pos_y)
 
 void airline_exam01(void)
 {
-	printf("[airline] exam01\n");
-
 	float alt = -10.0f;
 	float alt2 = -20.0f;
 	float yaw = 0.0 * M_PI / 180.0;
@@ -292,7 +289,6 @@ void airline_exam01(void)
 
 void airline_exam02(void)
 {
-	printf("[airline] exam02\n");
 	float alt = -10.0f;
 	// 2m/s
 	float v = 5.0f;
@@ -326,8 +322,6 @@ void airline_exam02(void)
 			cnt++;
 		}
 	}
-
-	printf("exam02 cnt %d\n", cnt);
 
 	airline_s airline;
 	airline.airline_id = 1;

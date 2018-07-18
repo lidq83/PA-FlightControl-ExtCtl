@@ -138,7 +138,6 @@ void nav_mission_on_active(void)
 		return;
 	}
 
-//	printf("loiter secs %d\n", _waypoints[_wps_grp][_wps_ind].loiter_secs);
 	if (_waypoints[_wps_grp][_wps_ind].loiter_secs > 0)
 	{
 		hrt_abstime now = hrt_absolute_time();
@@ -180,14 +179,12 @@ bool nav_mission_is_finished(void)
 	{
 		return true;
 	}
-	//printf("finish %d %d %d %d\n", _wps_ind, _wps_grp, _waypoint_cnt[0], _waypoint_cnt[1]);
 	return false;
 }
 
 int nav_mission_load_seque(int grp)
 {
 	_waypoint_cnt[grp] = 0;
-	//printf("[nav] load next waypoints grp %d\n", grp);
 
 	int ret = airline_get_airline(_load_airline_id, &_airline);
 	if (ret < 0)
@@ -218,11 +215,6 @@ int nav_mission_load_seque(int grp)
 		break;
 	}
 
-//	for (int j = 0; j < _waypoint_cnt[grp]; j++)
-//	{
-//		printf("[nav] %d %d %f %f %f %f %d\n", grp, j, _waypoints[grp][j].x, _waypoints[grp][j].y, _waypoints[grp][j].z, _waypoints[grp][j].yaw, _waypoints[grp][j].accept_opt);
-//	}
-
 	return 0;
 }
 
@@ -234,7 +226,6 @@ int nav_mission_set_yawpoint_to_sp(void)
 	}
 
 	nav_block_set_accept_params(_waypoints[_wps_grp][_wps_ind].accept_radius_xy, _waypoints[_wps_grp][_wps_ind].accept_radius_z, _waypoints[_wps_grp][_wps_ind].accept_yaw);
-	//printf("nav_mission_set_yawpoint_to_sp %d %d\n", _wps_grp, _wps_ind);
 	if (_waypoints[_wps_grp][_wps_ind].is_local_sp)
 	{
 		_sp.sp_yaw = _waypoints[_wps_grp][_wps_ind].yaw;
@@ -242,15 +233,12 @@ int nav_mission_set_yawpoint_to_sp(void)
 		_sp.sp_x = _waypoints[_wps_grp][_wps_ind].x;
 		_sp.sp_y = _waypoints[_wps_grp][_wps_ind].y;
 		_sp.sp_z = _waypoints[_wps_grp][_wps_ind].z;
-
-		//printf("%f %f %f\n", _waypoints[_wps_grp][_wps_ind].x, _waypoints[_wps_grp][_wps_ind].y, _waypoints[_wps_grp][_wps_ind].z);
 	}
 
 	_sp.run_pos_control = true;
 	_sp.run_alt_control = true;
 	_sp.run_yaw_control = true;
 
-	//printf("%f %f %f\n", _sp.sp_x, _sp.sp_y, _sp.sp_z);
 	navigator_set_sp(&_sp);
 
 	return 0;
