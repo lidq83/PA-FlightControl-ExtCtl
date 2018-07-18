@@ -289,7 +289,7 @@ void airline_exam02(void)
 {
 	float alt = -10.0f;
 	// 2m/s
-	float v = 5.0f;
+	float v = 2.0f;
 	// 10hz
 	float rate = 25.0f;
 	float step = 0.001;
