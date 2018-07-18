@@ -15,7 +15,7 @@
 
 #define PARAM_NUM			(0x400)
 #define PARAM_NAME_SIZE		(0x40)
-#define PARAM_SAVE_PATH		"/data/work/workspace/pa/096.PA-FlightControl/rootfs/extctl_params.dat"
+#define PARAM_SAVE_PATH		"/data/work/workspace/pa/PA-FlightControl/rootfs/extctl_params.dat"
 
 typedef enum PARAM_GROUP
 {

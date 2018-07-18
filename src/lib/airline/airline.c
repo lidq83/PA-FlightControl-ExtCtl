@@ -9,8 +9,6 @@
 
 int airline_init(void)
 {
-	printf("way size %d\n", sizeof(waypoint_s));
-
 	airline_exam01();
 	airline_exam02();
 
@@ -39,7 +37,7 @@ int airline_save(airline_s *airline, waypoint_s *waypoints)
 
 	char path[AIRLINE_PATH_SIZE];
 	snprintf(path, AIRLINE_PATH_SIZE, "%s/%04d", AIRLINE_PATH, airline->airline_id);
-	printf("[airline] save %s\n", path);
+
 	FILE *fp = fopen(path, "w+");
 	if (fp == NULL)
 	{

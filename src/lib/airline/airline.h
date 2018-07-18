@@ -17,7 +17,7 @@
 #include <string.h>
 
 #define AIRLINE_PATH_SIZE			(256)
-#define AIRLINE_PATH				"/data/work/workspace/pa/096.PA-FlightControl/rootfs"
+#define AIRLINE_PATH				"/data/work/workspace/pa/PA-FlightControl/rootfs"
 #define AIRLINE_MAXNUM				(100)
 #define AIRLINE_WAYPOINT_MAXNUM		(10000)
 
