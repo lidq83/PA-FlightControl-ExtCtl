@@ -239,6 +239,8 @@ int nav_mission_set_yawpoint_to_sp(void)
 	_sp.run_alt_control = true;
 	_sp.run_yaw_control = true;
 
+	printf("[nav mis] set sp %f %f %f\n", _sp.sp_x, _sp.sp_y, _sp.sp_z);
+
 	navigator_set_sp(&_sp);
 
 	return 0;

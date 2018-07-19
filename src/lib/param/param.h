@@ -13,9 +13,8 @@
 #include <string.h>
 #include <stdint.h>
 
-#define PARAM_NUM			(0x400)
-#define PARAM_NAME_SIZE		(0x40)
-#define PARAM_SAVE_PATH		"/data/work/workspace/pa/PA-FlightControl/rootfs/extctl_params.dat"
+#define PARAM_NUM			(2048)
+#define PARAM_NAME_SIZE		(256)
 
 typedef enum PARAM_GROUP
 {
@@ -63,7 +62,7 @@ typedef struct param_s
 
 } param_s;
 
-int param_init(void);
+int param_init(const char *path);
 
 int param_load(void);
 

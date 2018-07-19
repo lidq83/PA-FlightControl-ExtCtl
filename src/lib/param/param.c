@@ -7,12 +7,19 @@
 
 #include <param.h>
 
+static char _param_save_path[PARAM_NAME_SIZE] = { 0 };
+
 static param_head_s _param_head;
 
 static param_s *_params = NULL;
 
-int param_init(void)
+int param_init(const char *path)
 {
+	if (path != NULL)
+	{
+		strcpy(_param_save_path, path);
+	}
+
 	if (_params == NULL)
 	{
 		_params = malloc(sizeof(param_s) * PARAM_NUM);
@@ -98,7 +105,7 @@ int param_load(void)
 		return -1;
 	}
 
-	FILE *fp = fopen(PARAM_SAVE_PATH, "r");
+	FILE *fp = fopen(_param_save_path, "r");
 	if (fp == NULL)
 	{
 		printf("[param] open params file error.\n");
@@ -147,7 +154,7 @@ int param_save(void)
 		return -1;
 	}
 
-	FILE *fp = fopen(PARAM_SAVE_PATH, "w+");
+	FILE *fp = fopen(_param_save_path, "w+");
 	if (fp == NULL)
 	{
 		printf("[param] open params file error.\n");

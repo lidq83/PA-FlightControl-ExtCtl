@@ -7,19 +7,21 @@
 
 #include <main.h>
 
+#define ROOTFS "/data/work/workspace/pa/PA-FlightControl/rootfs/"
+
 int main(int argc, char *argv[])
 {
 	printf("[PA3] Start...\n");
 
 	hrt_init();
 
-	param_init();
+	param_init(ROOTFS "extctl_params.dat");
 
 	param_save();
 
 	param_load();
 
-	airline_init();
+	airline_init(ROOTFS "airline");
 
 	orb_main(argc, argv);
 

@@ -15,9 +15,11 @@
 #include <fcntl.h>
 #include <math.h>
 #include <string.h>
+#include <dirent.h>
+#include <unistd.h>
+#include <sys/stat.h>
 
 #define AIRLINE_PATH_SIZE			(256)
-#define AIRLINE_PATH				"/data/work/workspace/pa/PA-FlightControl/rootfs"
 #define AIRLINE_MAXNUM				(100)
 #define AIRLINE_WAYPOINT_MAXNUM		(10000)
 
@@ -59,7 +61,7 @@ typedef struct waypoint_s
 
 } waypoint_s;
 
-int airline_init(void);
+int airline_init(const char *path);
 
 int airline_save(airline_s *airline, waypoint_s *waypoints);
 
@@ -68,9 +70,5 @@ int airline_load(int airline_id, airline_s *airline, waypoint_s *waypoints);
 int airline_get_airline(int airline_id, airline_s *airline);
 
 int airline_get_waypoint(airline_s *airline, int start_index, int count, waypoint_s *waypoints);
-
-void airline_exam01(void);
-
-void airline_exam02(void);
 
 #endif /* SRC_LIB_AIRLINE_AIRLINE_H_ */
