@@ -18,7 +18,6 @@ float dis_xy(float sp_x, float sp_y, float pos_x, float pos_y)
 void airline_exam00(int airline_id)
 {
 	float alt = -10.0f;
-	float alt2 = -20.0f;
 	float yaw = 0.0 * M_PI / 180.0;
 	int secs = 2;
 	airline_s airline;
@@ -40,23 +39,23 @@ void airline_exam00(int airline_id)
 	waypoints[i].is_local_sp = true;
 	waypoints[i].x = 30.0;
 	waypoints[i].y = 0.0;
-	waypoints[i].z = alt2;
+	waypoints[i].z = alt;
 	waypoints[i].yaw = yaw;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z | WP_ACCEPT_OPT_YAW;
 	waypoints[i].loiter_secs = secs;
 	i++;
 
 	waypoints[i].is_local_sp = true;
-	waypoints[i].x = -15.0;
+	waypoints[i].x = -15;
 	waypoints[i].y = -25.9;
-	waypoints[i].z = alt2;
+	waypoints[i].z = alt;
 	waypoints[i].yaw = 0.0;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z | WP_ACCEPT_OPT_YAW;
 	waypoints[i].loiter_secs = secs;
 	i++;
 
 	waypoints[i].is_local_sp = true;
-	waypoints[i].x = -15.0;
+	waypoints[i].x = -15;
 	waypoints[i].y = 25.9;
 	waypoints[i].z = alt;
 	waypoints[i].yaw = 0.0;
@@ -97,11 +96,11 @@ void airline_exam01(int airline_id)
 	//loiter secs
 	int secs = 3;
 
-	float r = 30.0f;
+	float r = 15.0f;
 	int cnt = 0;
 	float r_x = 0.0f;
 	float r_y = 0.0f;
-	for (float angle = M_PI / 2.0; angle < M_PI * 4.0 + M_PI / 2.0; angle += step)
+	for (float angle = M_PI / 2.0; angle < M_PI * 2.0 + M_PI / 2.0; angle += step)
 	{
 		float x = r * sinf(angle) + r;
 		float y = r * cosf(angle);
@@ -153,7 +152,7 @@ void airline_exam01(int airline_id)
 	i++;
 
 	bool first = true;
-	for (float angle = M_PI / 2.0; angle < M_PI * 4.0 + M_PI / 2.0 && i < airline.waypoint_count; angle += step)
+	for (float angle = M_PI / 2.0; angle < M_PI * 2.0 + M_PI / 2.0 && i < airline.waypoint_count; angle += step)
 	{
 		float x = r * sinf(angle) + r;
 		float y = r * cosf(angle);
@@ -220,7 +219,7 @@ void airline_exam02(int airline_id)
 	int cnt = 0;
 	float r_x = 0.0f;
 	float r_y = 0.0f;
-	for (float angle = M_PI / 2.0; angle < M_PI * 4.0 + M_PI / 2.0; angle += step)
+	for (float angle = M_PI / 2.0; angle < M_PI + M_PI / 2.0; angle += step)
 	{
 		float p = r * cosf(3 * angle);
 		float x = p * sinf(angle);
@@ -259,7 +258,7 @@ void airline_exam02(int airline_id)
 	i++;
 
 	bool first = true;
-	for (float angle = M_PI / 2.0; angle < M_PI * 4.0 + M_PI / 2.0 && i < airline.waypoint_count; angle += step)
+	for (float angle = M_PI / 2.0; angle < M_PI + M_PI / 2.0 && i < airline.waypoint_count; angle += step)
 	{
 		float p = r * cosf(3 * angle);
 		float x = p * sinf(angle);
@@ -298,7 +297,7 @@ void airline_exam02(int airline_id)
 	}
 
 	waypoints[i].is_local_sp = true;
-	waypoints[i].x = r * 2;
+	waypoints[i].x = 0.0;
 	waypoints[i].y = 0.0;
 	waypoints[i].z = alt;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z;
@@ -308,7 +307,7 @@ void airline_exam02(int airline_id)
 	airline_save(&airline, waypoints);
 }
 
-//阿基米德螺旋线5圈
+//阿基米德螺旋线4圈
 void airline_exam03(int airline_id)
 {
 	float alt = -10.0f;
@@ -325,7 +324,7 @@ void airline_exam03(int airline_id)
 	int cnt = 0;
 	float r_x = 0.0f;
 	float r_y = 0.0f;
-	for (float angle = 0.0; angle < M_PI * 10.0; angle += step)
+	for (float angle = 0.0; angle < M_PI * 8.0 + M_PI / 2.0; angle += step)
 	{
 		float r = a + b * angle;
 		float x = r * sinf(angle);
@@ -349,7 +348,7 @@ void airline_exam03(int airline_id)
 
 	airline_s airline;
 	airline.airline_id = airline_id;
-	airline.waypoint_count = cnt + 2;
+	airline.waypoint_count = cnt + 3;
 	waypoint_s waypoints[airline.waypoint_count];
 
 	memset(waypoints, 0, sizeof(waypoint_s) * airline.waypoint_count);
@@ -364,7 +363,7 @@ void airline_exam03(int airline_id)
 	i++;
 
 	bool first = true;
-	for (float angle = 0.0; angle < M_PI * 10.0 && i < airline.waypoint_count; angle += step)
+	for (float angle = 0.0; angle < M_PI * 8.0 + M_PI / 2.0 && i < airline.waypoint_count; angle += step)
 	{
 		float r = a + b * angle;
 		float x = r * sinf(angle);
@@ -401,6 +400,14 @@ void airline_exam03(int airline_id)
 			i++;
 		}
 	}
+
+	waypoints[i].is_local_sp = true;
+	waypoints[i].x = r_x;
+	waypoints[i].y = r_y;
+	waypoints[i].z = alt;
+	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z;
+	waypoints[i].loiter_secs = secs;
+	i++;
 
 	waypoints[i].is_local_sp = true;
 	waypoints[i].x = 0.0;
