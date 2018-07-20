@@ -25,20 +25,6 @@ static hrt_abstime _loiter_time = 0;
 
 void nav_mission_on_init(void)
 {
-
-}
-
-void nav_mission_on_desc(void)
-{
-}
-
-void nav_mission_on_inactive(void)
-{
-
-}
-
-void nav_mission_on_activation(void)
-{
 	_waypoint_cnt[0] = 0;
 	_waypoint_cnt[1] = 0;
 
@@ -75,7 +61,20 @@ void nav_mission_on_activation(void)
 
 	_wps_grp = 0;
 	_wps_ind = 0;
+}
 
+void nav_mission_on_desc(void)
+{
+
+}
+
+void nav_mission_on_inactive(void)
+{
+
+}
+
+void nav_mission_on_activation(void)
+{
 	if (nav_mission_is_finished())
 	{
 		return;
