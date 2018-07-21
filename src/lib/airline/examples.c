@@ -49,7 +49,7 @@ void airline_exam00(int airline_id)
 	waypoints[i].x = 0.0;
 	waypoints[i].y = -5.77;
 	waypoints[i].z = alt;
-	waypoints[i].yaw = 0.0;
+	waypoints[i].yaw = yaw;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z | WP_ACCEPT_OPT_YAW;
 	waypoints[i].loiter_secs = secs;
 	i++;
@@ -58,7 +58,7 @@ void airline_exam00(int airline_id)
 	waypoints[i].x = 0.0;
 	waypoints[i].y = 5.77;
 	waypoints[i].z = alt;
-	waypoints[i].yaw = 0.0;
+	waypoints[i].yaw = yaw;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z | WP_ACCEPT_OPT_YAW;
 	waypoints[i].loiter_secs = secs;
 	i++;
@@ -67,7 +67,7 @@ void airline_exam00(int airline_id)
 	waypoints[i].x = 10.0;
 	waypoints[i].y = 0.0;
 	waypoints[i].z = alt;
-	waypoints[i].yaw = 0.0;
+	waypoints[i].yaw = yaw;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z | WP_ACCEPT_OPT_YAW;
 	waypoints[i].loiter_secs = secs;
 	i++;
@@ -76,7 +76,7 @@ void airline_exam00(int airline_id)
 	waypoints[i].x = 0.0;
 	waypoints[i].y = 0.0;
 	waypoints[i].z = alt;
-	waypoints[i].yaw = 0.0;
+	waypoints[i].yaw = yaw;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z | WP_ACCEPT_OPT_YAW;
 	waypoints[i].loiter_secs = secs;
 	i++;
@@ -95,7 +95,7 @@ void airline_exam01(int airline_id)
 	float step = 0.001;
 	//loiter secs
 	int secs = 3;
-
+	float yaw = 0.0 * M_PI / 180.0;
 	float r = 5.0f;
 	int cnt = 0;
 	float r_x = 0.0f;
@@ -133,6 +133,7 @@ void airline_exam01(int airline_id)
 	waypoints[i].x = 0.0;
 	waypoints[i].y = 0.0;
 	waypoints[i].z = alt;
+	waypoints[i].yaw = yaw;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z;
 	waypoints[i].accept_radius_xy = 1.0;
 	waypoints[i].accept_radius_z = 1.0;
@@ -144,6 +145,7 @@ void airline_exam01(int airline_id)
 	waypoints[i].x = r * 2;
 	waypoints[i].y = 0.0;
 	waypoints[i].z = alt;
+	waypoints[i].yaw = yaw;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z;
 	waypoints[i].accept_radius_xy = 1.0;
 	waypoints[i].accept_radius_z = 1.0;
@@ -168,6 +170,7 @@ void airline_exam01(int airline_id)
 			waypoints[i].x = r_x;
 			waypoints[i].y = r_y;
 			waypoints[i].z = alt;
+			waypoints[i].yaw = yaw;
 			waypoints[i].accept_opt = 0;
 			waypoints[i].loiter_secs = 0;
 			i++;
@@ -183,6 +186,7 @@ void airline_exam01(int airline_id)
 			waypoints[i].x = r_x;
 			waypoints[i].y = r_y;
 			waypoints[i].z = alt;
+			waypoints[i].yaw = yaw;
 			waypoints[i].accept_opt = 0;
 			waypoints[i].loiter_secs = 0;
 			i++;
@@ -193,6 +197,7 @@ void airline_exam01(int airline_id)
 	waypoints[i].x = r * 2;
 	waypoints[i].y = 0.0;
 	waypoints[i].z = alt;
+	waypoints[i].yaw = yaw;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z;
 	waypoints[i].accept_radius_xy = 1.0;
 	waypoints[i].accept_radius_z = 1.0;
@@ -214,7 +219,7 @@ void airline_exam02(int airline_id)
 	float step = 0.001;
 	//loiter secs
 	int secs = 3;
-
+	float yaw = 0.0 * M_PI / 180.0;
 	float r = 10.0f;
 	int cnt = 0;
 	float r_x = 0.0f;
@@ -253,6 +258,7 @@ void airline_exam02(int airline_id)
 	waypoints[i].x = 0.0;
 	waypoints[i].y = 0.0;
 	waypoints[i].z = alt;
+	waypoints[i].yaw = yaw;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z;
 	waypoints[i].loiter_secs = secs;
 	i++;
@@ -275,6 +281,7 @@ void airline_exam02(int airline_id)
 			waypoints[i].x = r_x;
 			waypoints[i].y = r_y;
 			waypoints[i].z = alt;
+			waypoints[i].yaw = yaw;
 			waypoints[i].accept_opt = 0;
 			waypoints[i].loiter_secs = 0;
 			i++;
@@ -290,6 +297,7 @@ void airline_exam02(int airline_id)
 			waypoints[i].x = r_x;
 			waypoints[i].y = r_y;
 			waypoints[i].z = alt;
+			waypoints[i].yaw = yaw;
 			waypoints[i].accept_opt = 0;
 			waypoints[i].loiter_secs = 0;
 			i++;
@@ -300,6 +308,7 @@ void airline_exam02(int airline_id)
 	waypoints[i].x = 0.0;
 	waypoints[i].y = 0.0;
 	waypoints[i].z = alt;
+	waypoints[i].yaw = yaw;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z;
 	waypoints[i].loiter_secs = secs;
 	i++;
@@ -318,6 +327,7 @@ void airline_exam03(int airline_id)
 	float step = 0.001;
 	//loiter secs
 	int secs = 3;
+	float yaw = 0.0 * M_PI / 180.0;
 	float circle = 3;
 	float a = 1.0f;
 	float b = 0.2f;
@@ -358,6 +368,7 @@ void airline_exam03(int airline_id)
 	waypoints[i].x = 0.0;
 	waypoints[i].y = 0.0;
 	waypoints[i].z = alt;
+	waypoints[i].yaw = yaw;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z;
 	waypoints[i].loiter_secs = secs;
 	i++;
@@ -380,6 +391,7 @@ void airline_exam03(int airline_id)
 			waypoints[i].x = r_x;
 			waypoints[i].y = r_y;
 			waypoints[i].z = alt;
+			waypoints[i].yaw = yaw;
 			waypoints[i].accept_opt = 0;
 			waypoints[i].loiter_secs = 0;
 			i++;
@@ -395,6 +407,7 @@ void airline_exam03(int airline_id)
 			waypoints[i].x = r_x;
 			waypoints[i].y = r_y;
 			waypoints[i].z = alt;
+			waypoints[i].yaw = yaw;
 			waypoints[i].accept_opt = 0;
 			waypoints[i].loiter_secs = 0;
 			i++;
@@ -405,6 +418,7 @@ void airline_exam03(int airline_id)
 	waypoints[i].x = r_x;
 	waypoints[i].y = r_y;
 	waypoints[i].z = alt;
+	waypoints[i].yaw = yaw;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z;
 	waypoints[i].loiter_secs = secs;
 	i++;
@@ -413,6 +427,7 @@ void airline_exam03(int airline_id)
 	waypoints[i].x = 0.0;
 	waypoints[i].y = 0.0;
 	waypoints[i].z = alt;
+	waypoints[i].yaw = yaw;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z;
 	waypoints[i].loiter_secs = secs;
 	i++;
