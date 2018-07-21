@@ -177,7 +177,7 @@ void cmd_st_auto_fly(void)
 	if (!_ext_state.homed)
 	{
 		printf("[cmd machine] not homed.\n");
-		_main_state.state = MAIN_STATE_FAILSAFE;
+		_main_state.state = MAIN_STATE_END;
 		return;
 	}
 
@@ -194,7 +194,7 @@ void cmd_st_auto_fly(void)
 			cmd_st_pub_disarm();
 		}
 		_wasland = _ext_state.landed;
-		_main_state.state = MAIN_STATE_STANDBY;
+		_main_state.state = MAIN_STATE_END;
 	}
 }
 
