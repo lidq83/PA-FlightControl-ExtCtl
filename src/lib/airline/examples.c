@@ -37,7 +37,7 @@ void airline_exam00(int airline_id)
 	i++;
 
 	waypoints[i].is_local_sp = true;
-	waypoints[i].x = 30.0;
+	waypoints[i].x = 10.0;
 	waypoints[i].y = 0.0;
 	waypoints[i].z = alt;
 	waypoints[i].yaw = yaw;
@@ -46,8 +46,8 @@ void airline_exam00(int airline_id)
 	i++;
 
 	waypoints[i].is_local_sp = true;
-	waypoints[i].x = -15;
-	waypoints[i].y = -25.9;
+	waypoints[i].x = 0.0;
+	waypoints[i].y = -5.77;
 	waypoints[i].z = alt;
 	waypoints[i].yaw = 0.0;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z | WP_ACCEPT_OPT_YAW;
@@ -55,8 +55,8 @@ void airline_exam00(int airline_id)
 	i++;
 
 	waypoints[i].is_local_sp = true;
-	waypoints[i].x = -15;
-	waypoints[i].y = 25.9;
+	waypoints[i].x = 0.0;
+	waypoints[i].y = 5.77;
 	waypoints[i].z = alt;
 	waypoints[i].yaw = 0.0;
 	waypoints[i].accept_opt = WP_ACCEPT_OPT_XY | WP_ACCEPT_OPT_Z | WP_ACCEPT_OPT_YAW;
@@ -64,7 +64,7 @@ void airline_exam00(int airline_id)
 	i++;
 
 	waypoints[i].is_local_sp = true;
-	waypoints[i].x = 30.0;
+	waypoints[i].x = 10.0;
 	waypoints[i].y = 0.0;
 	waypoints[i].z = alt;
 	waypoints[i].yaw = 0.0;
@@ -89,14 +89,14 @@ void airline_exam01(int airline_id)
 {
 	float alt = -10.0f;
 	// 2m/s
-	float v = 2.0f;
+	float v = 1.0f;
 	// 10hz
 	float rate = 10.0f;
 	float step = 0.001;
 	//loiter secs
 	int secs = 3;
 
-	float r = 15.0f;
+	float r = 5.0f;
 	int cnt = 0;
 	float r_x = 0.0f;
 	float r_y = 0.0f;
@@ -208,14 +208,14 @@ void airline_exam02(int airline_id)
 {
 	float alt = -10.0f;
 	// 2m/s
-	float v = 2.0f;
+	float v = 1.0f;
 	// 10hz
 	float rate = 10.0f;
 	float step = 0.001;
 	//loiter secs
 	int secs = 3;
 
-	float r = 25.0f;
+	float r = 10.0f;
 	int cnt = 0;
 	float r_x = 0.0f;
 	float r_y = 0.0f;
@@ -312,19 +312,19 @@ void airline_exam03(int airline_id)
 {
 	float alt = -10.0f;
 	// 2m/s
-	float v = 2.0f;
+	float v = 1.0f;
 	// 10hz
 	float rate = 10.0f;
 	float step = 0.001;
 	//loiter secs
 	int secs = 3;
-
+	float circle = 3;
 	float a = 1.0f;
-	float b = 0.5f;
+	float b = 0.2f;
 	int cnt = 0;
 	float r_x = 0.0f;
 	float r_y = 0.0f;
-	for (float angle = 0.0; angle < M_PI * 8.0 + M_PI / 2.0; angle += step)
+	for (float angle = 0.0; angle < M_PI * 2.0 * circle + M_PI / 2.0; angle += step)
 	{
 		float r = a + b * angle;
 		float x = r * sinf(angle);
@@ -363,7 +363,7 @@ void airline_exam03(int airline_id)
 	i++;
 
 	bool first = true;
-	for (float angle = 0.0; angle < M_PI * 8.0 + M_PI / 2.0 && i < airline.waypoint_count; angle += step)
+	for (float angle = 0.0; angle < M_PI * 2.0 * circle + M_PI / 2.0 && i < airline.waypoint_count; angle += step)
 	{
 		float r = a + b * angle;
 		float x = r * sinf(angle);

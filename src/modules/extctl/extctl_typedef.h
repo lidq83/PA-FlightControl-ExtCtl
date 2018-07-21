@@ -39,12 +39,12 @@
 #include <uORB/topics/ext_sys_status.h>
 #include <uORB/topics/ext_cmd.h>
 
-#define __USE_SOCKET
+//#define __USE_SOCKET
 
 #ifdef __USE_SOCKET
 #define UNIX_DOMAIN 		"/tmp/UNIX.domain"
 #else
-#define DEV_NAME			"/dev/ttyUSB0"
+#define DEV_NAME			"/dev/ttyAMA0"
 #endif
 
 #define DEV_BAUDRATE		(B115200)

@@ -7,7 +7,7 @@
 
 #include <main.h>
 
-#define ROOTFS "/data/work/workspace/pa/PA-FlightControl/rootfs/"
+#define ROOTFS "./"
 
 int main(int argc, char *argv[])
 {
