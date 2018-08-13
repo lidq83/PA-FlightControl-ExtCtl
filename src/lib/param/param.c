@@ -28,7 +28,7 @@ int param_init(const char *path)
 			printf("[params] malloc error.\n");
 			return -1;
 		}
-		printf("[params] malloc size %d.\n", sizeof(param_s) * PARAM_NUM);
+		printf("[params] malloc size %ld.\n", sizeof(param_s) * PARAM_NUM);
 	}
 
 	int ind = 0;
