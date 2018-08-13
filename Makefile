@@ -17,26 +17,18 @@ all: mkbuild uorb_msg pa3extctl
 rpi: mkbuild uorb_msg_rpi pa3rpi_extctl
 
 mkbuild:
-	@mkdir -p build
-	@mkdir -p build/uORB
-	@mkdir -p build/msg
-	@mkdir -p build/rpi/lib
-	@mkdir -p build/rpi/uORB
+	@if [ ! -e $(PWD)/build/CMakeCache.txt ]; then mkdir -p $(PWD)/build; fi
+	@if [ ! -e $(PWD)/build/uORB/uORB.h ]; then mkdir -p build/uORB  && mkdir -p build/msg && cp src/modules/uORB/uORB.h build/uORB  && cp src/modules/uORB/uORBTopics.h build/uORB;fi
 
 uorb_msg:
-	@cp src/modules/uORB/uORB.h build/uORB
-	@cp src/modules/uORB/uORBTopics.h build/uORB
-	@cd build/msg && cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/Toolchain-native.cmake ../../msg -G$(PA_CMAKE_GENERATOR) && ${PA_MAKE} uorb_headers && $(PA_MAKE) uorb_sources
-	@cp -rf build/msg/uORB build/
+	@if [ ! -e $(PWD)/build/uORB/topics/ext_cmd.h ]; then cd build/msg && cmake  ../../msg -G$(PA_CMAKE_GENERATOR) && ${PA_MAKE} uorb_headers && $(PA_MAKE) uorb_sources; fi
+	@if [ ! -e $(PWD)/build/uORB/topics/ext_cmd.h ]; then cp -rf build/msg/uORB build/; fi
 	
 uorb_msg_rpi:
-	@cp src/modules/uORB/uORB.h build/uORB
-	@cp src/modules/uORB/uORBTopics.h build/uORB
 	@cd build/msg && cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/Toolchain-arm-linux-gnueabihf.cmake ../../msg  -G$(PA_CMAKE_GENERATOR) && $(PA_MAKE) uorb_headers && $(PA_MAKE) uorb_sources
-	@cp -rf build/msg/uORB build/
-
+	
 pa3extctl:
-	@cd build && cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/Toolchain-native.cmake ../ -G$(PA_CMAKE_GENERATOR) && $(PA_MAKE) pa3extctl_output ${SILENT}
+	@cd build && cmake ../ -G$(PA_CMAKE_GENERATOR) && $(PA_MAKE) pa3extctl_output ${SILENT}
 
 pa3rpi_extctl:
 	@cd build && cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/Toolchain-arm-linux-gnueabihf.cmake ../ -G$(PA_CMAKE_GENERATOR) && $(PA_MAKE) pa3extctl_output ${SILENT}
