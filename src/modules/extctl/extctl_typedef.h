@@ -39,7 +39,7 @@
 #include <uORB/topics/ext_sys_status.h>
 #include <uORB/topics/ext_cmd.h>
 
-#define __USE_SOCKET
+//#define __USE_SOCKET
 
 #ifdef __USE_SOCKET
 #define UNIX_DOMAIN 		"/tmp/UNIX.domain"

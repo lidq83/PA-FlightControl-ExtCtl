@@ -1,6 +1,7 @@
 #!/bin/bash
 rm -vf ./build/rpi/lib/*
 rm -vf ./build/rpi/pa3extctl
+mkdir -p ./build/rpi/lib/
 find ./build/ -name '*.so' | xargs -i cp -rvf {} ./build/rpi/lib/
 cp ./build/pa3extctl ./build/rpi/
 

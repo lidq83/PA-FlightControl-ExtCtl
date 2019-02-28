@@ -14,7 +14,7 @@ endif
 
 all: mkbuild uorb_msg pa3extctl
 
-rpi: mkbuild uorb_msg_rpi pa3rpi_extctl
+rpi: mkbuild uorb_msg uorb_msg_rpi pa3rpi_extctl
 
 mkbuild:
 	@if [ ! -e $(PWD)/build/CMakeCache.txt ]; then mkdir -p $(PWD)/build; fi
